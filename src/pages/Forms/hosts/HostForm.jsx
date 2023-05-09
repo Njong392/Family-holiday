@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { useUpdateHost } from "./useUpdateHost"
+
 
 export default function HostForm(){
     const[hobby, setHobby] = useState([])
@@ -10,12 +12,40 @@ export default function HostForm(){
     const[language, setLanguage] = useState([])
     const[languageInput, setLanguageInput] = useState('')
 
+    const [numberOfPeople, setNumberOfPeople] = useState('')
+    const [cuisine, setCuisine] = useState('')
+    const [bio, setBio] = useState('')
+    const [image, setImage] = useState(null)
+    const [imageBase64, setImageBase64] = useState('')
+    const { updateHost,setError, error, isLoading, success } = useUpdateHost()
+
+
+    //convert image file to base64
+    const setFileToBase64= (file) => {
+        const reader = new FileReader()
+        if(file) {
+            reader.readAsDataURL(file)
+        }
+        reader.onloadend = () => {
+            setImageBase64(reader.result)
+        }
+    }
+
+    //receive file from form
+    const handleImage = (e) => {
+        const file = e.target.files[0]
+        setImage(file)
+        setFileToBase64(file)
+    }
+
 
     // to handle adding/deleting hobbies
     function getHobbies(e){
         e.preventDefault()
         setHobby(hobby.concat(hobbyInput))
         setHobbyInput('')
+        console.log(hobby)
+        console.log(numberOfPeople)
     }
 
     function deleteHobbies(id){
@@ -51,6 +81,21 @@ export default function HostForm(){
         })
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        // if(hobby.length === 0){
+        //     setError('There must be at least one hobby')
+        // }else if(language.length === 0){
+        //     setError('There must be at least one language set ')
+        // } else if(allergy || cuisine || bio || image){
+        //     setError('Oops. You left out a field')
+        // }else{
+            
+        // }
+        await updateHost({hobby,allergy, language,numberOfPeople, cuisine, bio,image: imageBase64  })
+
+    }
+
 
     return(
         <main aria-label="Main Section" className="font-poppins">
@@ -63,7 +108,7 @@ export default function HostForm(){
                         <p className="text-sm text-lightgray">Remember that the more detail and personality you fill in, the easier it will be to connect with guest families.</p>
                         <p className="text-sm text-blue mt-4">*Please fill in all fields correctly and carefully</p>
 
-                        <form action="#" className=" grid grid-cols-6 gap-6 mt-4">
+                        <form action="#" className=" grid grid-cols-6 gap-6 mt-4" onSubmit={handleSubmit}>
 
 
                             <div className="col-span-6">
@@ -76,6 +121,8 @@ export default function HostForm(){
                                 id="number_of_people"
                                 name="number_of_people"
                                 className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                                value={numberOfPeople}
+                                onChange={e => setNumberOfPeople(e.target.value)}
                                 />
                             </div>
 
@@ -196,7 +243,10 @@ export default function HostForm(){
                             <div className="col-span-6">
                                 <label htmlFor="cuisine-select" className="block font-medium text-deepgray">What kind of cuisine is common in your household?</label>
 
-                                <select name="cuisine" id="cuisine-select" className="mt-1 w-full rounded border-gray-200 bg-white text-deepgray shadow-sm" >
+                                <select name="cuisine" id="cuisine-select" className="mt-1 w-full rounded border-gray-200 bg-white text-deepgray shadow-sm" 
+                                value={cuisine}
+                                onChange={e => setCuisine(e.target.value)}
+                                >
                                     <option value="">--Please choose an option--</option>
                                     <option value="african cuisine">African</option>
                                     <option value="american cuisine">American</option>
@@ -219,9 +269,10 @@ export default function HostForm(){
                                 id="about"
                                 name="about"
                                 className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
-                                >
+                                value={bio}
+                                onChange={e => setBio(e.target.value)}
+                                />
                                 
-                                </textarea>
                             </div>
 
                             <div className="col-span-6">
@@ -231,9 +282,11 @@ export default function HostForm(){
 
                                 <input
                                 type="file"
-                                id="profile_image"
-                                name="profile_image"
+                                id="image"
+                                name="image"
                                 className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                                accept="image/*"
+                                onChange={handleImage}
                                 />
                             </div>
 
@@ -282,16 +335,25 @@ export default function HostForm(){
 
                             <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                                 <button
-                                className="inline-block shrink-0 rounded-md bg-blue px-12 py-3 text-sm font-medium text-snow transition hover:bg-transparent hover:text-blue border-2 hover:border-blue focus:outline-none focus:ring active:text-blue-500"
+                                className="inline-block shrink-0 rounded-md bg-blue px-12 py-3 text-sm font-medium text-snow transition hover:bg-transparent hover:text-blue border-2 hover:border-blue focus:outline-none focus:ring active:text-blue-500
+                                active:text-blue-500 disabled:opacity-50"
+                                disabled={isLoading}
                                 >
                                 Submit
                                 </button>
                             </div>
+
+                            
                         </form>
+                        {error && <p className='text-red text-sm mt-4 font-bold'>{error}</p>}
+                        {success && <p className='text-green text-sm mt-4 font-bold'>{success}</p>}
                     </div>
+                    
                 </main>
 
             </div>
         </main>
+
+        
     )
 }

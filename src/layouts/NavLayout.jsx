@@ -1,11 +1,11 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuthContext } from '../hooks/useAuthContext'
 
 
 export default function Navbar(){
    const[modal, setModal] = useState(false)
-   const { dispatch } = useAuthContext()
+   const { user, dispatch } = useAuthContext()
 
 
    function handleModal(){
@@ -23,6 +23,31 @@ export default function Navbar(){
         //dispatch LOGOUT action
         dispatch({type: 'LOGOUT'})
    }
+
+   const fetchUser = async () => {
+           
+        const response = await fetch('http://localhost:4000/api/user/'+ user.id, {
+            headers: {
+            'Authorization': `Bearer ${user.token}`
+            }
+        })
+
+        const json = await response.json()
+
+        if(response.ok){
+            dispatch({type: 'SET_USER', payload: json})
+        }
+
+    }
+
+   useEffect(() => {
+        
+
+        if(user){
+            fetchUser()
+            console.log(user)
+        }
+   }, [])
 
     return(
         <div>
@@ -42,7 +67,9 @@ export default function Navbar(){
                     >
                         <NavLink className="text-deepgray active:text-blue hover:text-blue font-bold" to="/guest_form">Become a guest</NavLink>
                         <NavLink className="text-deepgray active:text-blue hover:text-blue font-bold" to="/host_form">Become a host</NavLink>
-                        <a className="text-deepgray active:text-blue hover:text-blue font-bold" href="">Learn more</a>
+                        {user && (
+                            <a className="text-deepgray active:text-blue hover:text-blue font-bold" href="">{user.first_name}</a>
+                        )}
                     </nav>
 
 
@@ -76,11 +103,13 @@ export default function Navbar(){
                     <button href="#" className="md:block shrink-0 hidden"
                     onClick={showModal}>
                         <span className="sr-only">Profile</span>
-                        <img
-                        alt="Man"
-                        src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                        className="h-10 w-10 rounded-full object-cover"
-                        />
+                        {user && (
+                            <img
+                            alt="Man"
+                            src={user.form}
+                            className="h-10 w-10 rounded-full object-cover"
+                            />
+                        )}
                     </button>
 
                     <div className={modal ? "absolute bg-white rounded p-2 right-14 -bottom-20 border-2 border-blue" : "absolute bg-white rounded p-2 right-14 -bottom-20 border-2 border-blue hidden"} >
@@ -90,7 +119,7 @@ export default function Navbar(){
                                 <NavLink to="/">Edit your profile</NavLink></li>
                             <li className='flex gap-1 items-center'> 
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className='fill-deepgray w-4 h-4'><path fill="none" d="M0 0h24v24H0z"></path><path d="M1.99805 21.0003V19.0003L3.99805 19.0001V4.83489C3.99805 4.35161 4.34367 3.93748 4.81916 3.85102L14.2907 2.12892C14.6167 2.06965 14.9291 2.28589 14.9884 2.61191C14.9948 2.64733 14.998 2.68325 14.998 2.71924V4.00014L18.998 4.00032C19.5503 4.00032 19.998 4.44803 19.998 5.00032V19.0001L21.998 19.0003V21.0003H17.998V6.00032L14.998 6.00014V21.0003H1.99805ZM11.998 11.0003H9.99805V13.0003H11.998V11.0003Z"></path></svg>
-                                <button onClick={handleClick}>Log out</button>
+                                <NavLink onClick={handleClick} to='/'>Log out</NavLink>
                             </li>
                         </ul>
                         <button 
@@ -114,7 +143,7 @@ export default function Navbar(){
         </header>
 
         
-        <Outlet/>
+        <Outlet user={user}/>
         
         </div>
     )

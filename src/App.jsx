@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import SignUp from './pages/Signup/Register'
-import Login from './pages/Login/Login'
-import Home from './pages/Home/Home'
-import HostDetails from './pages/Details/HostDetails'
-import Navbar from './layouts/NavLayout'
-import GuestDetails from './pages/Details/GuestDetails'
+import SignUp from './pages/signup/Register'
+import Login from './pages/login/Login'
+import Home from './pages/home/Home'
+import HostDetails from './pages/details/HostDetails'
+import GuestDetails from './pages/details/GuestDetails'
 import Footer from './layouts/FooterLayout'
-import GuestForm from './pages/Forms/GuestForm'
-import HostForm from './pages/Forms/HostForm'
+import GuestForm from './pages/forms/guests/GuestForm'
+import HostForm from './pages/forms/hosts/HostForm'
 import { useAuthContext } from './hooks/useAuthContext'
+import Navbar from './Layouts/NavLayout'
 
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
           
           <Route path='/login' element={!user ?<Login /> : <Navigate to='/'/>}/>
           
-          <Route path='/' element={<Navbar/>} >
+          <Route path='/' element={<Navbar />} >
             <Route path='/' element={<Footer />}>
               <Route 
                 index 

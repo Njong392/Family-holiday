@@ -8,8 +8,18 @@ export const authReducer = (state, action) => {
             return {
                 user: action.payload
             }
+        case 'SET_USER':
+            return{
+                user: action.payload
+            }
+        case 'UPDATE_USER':
+            return{
+                user: state
+            }
         case 'LOGOUT':
-            return {user: null}
+            return {
+                user: null
+            }
         
         default:
             return state
@@ -21,6 +31,7 @@ export const AuthContextProvider = ({ children }) => {
         user: null
     })
 
+    //TODO: use cookies instead of localStorage
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'))
 
@@ -30,8 +41,6 @@ export const AuthContextProvider = ({ children }) => {
     }, [])
 
     console.log('AuthContext state', state)
-
-    //TODO: check if user exists in localstorage, log them in
 
     return(
         <AuthContext.Provider value={{...state, dispatch}}>
