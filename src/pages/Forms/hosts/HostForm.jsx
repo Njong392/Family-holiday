@@ -17,7 +17,7 @@ export default function HostForm(){
     const [bio, setBio] = useState('')
     const [image, setImage] = useState(null)
     const [imageBase64, setImageBase64] = useState('')
-    const { updateHost,setError, error, isLoading, success } = useUpdateHost()
+    const { updateHost,setError, error, isLoading, success, isSubmitted } = useUpdateHost()
 
 
     //convert image file to base64
@@ -338,6 +338,7 @@ export default function HostForm(){
                                 className="inline-block shrink-0 rounded-md bg-blue px-12 py-3 text-sm font-medium text-snow transition hover:bg-transparent hover:text-blue border-2 hover:border-blue focus:outline-none focus:ring active:text-blue-500
                                 active:text-blue-500 disabled:opacity-50"
                                 disabled={isLoading}
+                                
                                 >
                                 Submit
                                 </button>

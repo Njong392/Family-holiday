@@ -5,7 +5,11 @@ export const useUpdateHost = () => {
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(null)
     const [success, setSuccess] = useState(null)
-    const { user, dispatch} = useAuthContext()
+    const {
+        state: { user},
+        dispatch,
+      } = useAuthContext();
+    const [isSubmitted, setIsSubmitted] = useState(null)
 
     const updateHost = async ({hobby,allergy, language,numberOfPeople, cuisine, bio, image}) => {
 
@@ -33,16 +37,18 @@ export const useUpdateHost = () => {
             setIsLoading(false)
             setError(json.error)
             setSuccess('')
+            setIsSubmitted(false)
         }
         if(response.ok){
-            dispatch({type: 'UPDATE_USER', payload: json})
+            dispatch({type: 'UPDATE_USER_DETAILS', payload: json})
             setIsLoading(false)
             setError(false)
+            setIsSubmitted(true)
             if(setError){
                 setSuccess('We got your profile information ready!')
             }
         }
     }
 
-    return { updateHost,setError, error, isLoading, success }
+    return { updateHost,setError, error, isLoading, success, isSubmitted }
 }

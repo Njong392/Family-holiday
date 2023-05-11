@@ -1,9 +1,11 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useUpdateHost } from '../pages/forms/hosts/useUpdateHost';
 
 export default function Navbar() {
   const [modal, setModal] = useState(false);
+  const {isSubmitted} = useUpdateHost()
   const {
     state: { user, userDetails },
     dispatch,
@@ -43,7 +45,7 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && userDetails) {
       fetchUser();
       //console.log(userDetails);
     }
@@ -74,6 +76,7 @@ export default function Navbar() {
               <NavLink
                 className="text-deepgray active:text-blue hover:text-blue font-bold"
                 to="/host_form"
+                
               >
                 Become a host
               </NavLink>
@@ -131,7 +134,13 @@ export default function Navbar() {
               onClick={showModal}
             >
               <span className="sr-only">Profile</span>
-              {userDetails && (
+              {!userDetails ? (
+                <img
+                  alt="Man"
+                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+              ): (
                 <img
                   alt="Man"
                   src={userDetails.form[0].image.url}
