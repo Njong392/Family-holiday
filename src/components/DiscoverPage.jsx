@@ -23,7 +23,7 @@ export default function DiscoverPage(){
                 </section>
 
                 <section className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
-                    <Link className="group" to='/details'>
+                    <Link className="group" to='/host_details'>
                         <img
                             alt="Lava"
                             src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFtaWx5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"

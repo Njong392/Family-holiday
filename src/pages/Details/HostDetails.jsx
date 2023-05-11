@@ -1,3 +1,4 @@
+import AccomodationList from "../../components/AccommodationList";
 
 
 export default function HostDetails(){
@@ -51,29 +52,7 @@ export default function HostDetails(){
                     </div>
                 </div>
 
-                <h3 className="text-3xl font-bold text-blue mt-12">Our Gallery</h3>
-                <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 md:gap-8 mt-4">
-                    
-                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhY2h8ZW58MHx8MHx8&w=1000&q=80" alt="" 
-                        className="w-full rounded-tl-xl rounded-bl-xl object-cover shadow-xl h-[100%]"/>
-                    
-
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 md:gap-4">
-                        <img src="https://plus.unsplash.com/premium_photo-1670560071294-d42d6ee5c531?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8b3V0ZG9yc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" alt="" 
-                        className="h-56 w-full object-cover shadow-xl"/>
-
-                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhY2h8ZW58MHx8MHx8&w=1000&q=80" alt="" 
-                        className="h-56 w-full object-cover rounded-tr-xl shadow-xl"/>
-
-                        <img src="https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8YmVkcm9vbXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" alt="" 
-                        className="h-56 w-full object-cover shadow-xl"/>
-
-                        <img src="https://plus.unsplash.com/premium_photo-1670560071294-d42d6ee5c531?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8b3V0ZG9yc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" alt="" 
-                        className="h-56 w-full object-cover rounded-br-xl shadow-xl"/>
-                            
-                    </div>
-
-                </section>
+                <AccomodationList />
 
                 {/* <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 md:gap-8 mt-12 text-deepgray">
 
