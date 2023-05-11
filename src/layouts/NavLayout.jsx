@@ -45,9 +45,9 @@ export default function Navbar() {
   useEffect(() => {
     if (user) {
       fetchUser();
-      console.log(userDetails);
+      //console.log(userDetails);
     }
-  }, []);
+  }, [user]);
 
   return (
     <div>
@@ -77,14 +77,14 @@ export default function Navbar() {
               >
                 Become a host
               </NavLink>
-              {userDetails && (
+             
                 <a
                   className="text-deepgray active:text-blue hover:text-blue font-bold"
                   href=""
                 >
-                  {userDetails.first_name}
+                  Learn more
                 </a>
-              )}
+              
             </nav>
 
             <div className="md:flex items-center gap-4 hidden">
