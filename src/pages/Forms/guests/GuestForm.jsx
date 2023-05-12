@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useAuthContext } from "../../../hooks/useAuthContext"
 
 
 export default function GuestForm(){
@@ -11,6 +12,11 @@ export default function GuestForm(){
     
     const[language, setLanguage] = useState([])
     const[languageInput, setLanguageInput] = useState('')
+
+    const {
+        state: { user, userDetails },
+        dispatch,
+      } = useAuthContext();
 
 
     // to handle adding/deleting hobbies
@@ -52,6 +58,29 @@ export default function GuestForm(){
             return oldLanguage.filter((_, i) => i !== id)
         })
     }
+
+
+
+    const fetchUser = async () => {
+        const response = await fetch('http://localhost:4000/api/user/' + user.id, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+    
+        const json = await response.json();
+    
+        if (response.ok) {
+          dispatch({ type: 'SET_USER_DETAILS', payload: json });
+        }
+      };
+    
+      useEffect(() => {
+    
+            fetchUser();
+          //console.log(userDetails);
+        
+      }, []);
    
     return(
         <main aria-label="Main Section" className="font-poppins">

@@ -5,11 +5,12 @@ import { useUpdateHost } from '../pages/forms/hosts/useUpdateHost';
 
 export default function Navbar() {
   const [modal, setModal] = useState(false);
-  const {isSubmitted} = useUpdateHost()
+  //const {isSubmitted} = useUpdateHost()
   const {
     state: { user, userDetails },
     dispatch,
   } = useAuthContext();
+
 
   console.log('user: ', user);
   console.log('userdetails: ', userDetails);
@@ -46,10 +47,10 @@ export default function Navbar() {
 
   useEffect(() => {
 
-      fetchUser();
+        fetchUser();
       //console.log(userDetails);
     
-  }, []);
+  },[]);
 
   return (
     <div>
@@ -83,7 +84,7 @@ export default function Navbar() {
              
                 <NavLink
                   className="text-deepgray active:text-blue hover:text-blue font-bold"
-                  href=""
+                  to="/"
                 >
                   Learn more
                 </NavLink>
@@ -129,7 +130,6 @@ export default function Navbar() {
             </div>
 
             <button
-              href="#"
               className="md:block shrink-0 hidden"
               onClick={showModal}
             >

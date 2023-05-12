@@ -8,7 +8,7 @@ import Footer from './layouts/FooterLayout';
 import GuestForm from './pages/forms/guests/GuestForm';
 import HostForm from './pages/forms/hosts/HostForm';
 import { useAuthContext } from './hooks/useAuthContext';
-import Navbar from './Layouts/NavLayout';
+import Navbar from './layouts/NavLayout';
 import Accommodation from './pages/accommodation/accommodation';
 
 function App() {
