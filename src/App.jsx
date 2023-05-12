@@ -8,7 +8,8 @@ import Footer from './layouts/FooterLayout';
 import GuestForm from './pages/forms/guests/GuestForm';
 import HostForm from './pages/forms/hosts/HostForm';
 import { useAuthContext } from './hooks/useAuthContext';
-import Navbar from './layouts/NavLayout';
+import Navbar from './Layouts/NavLayout';
+import Accommodation from './pages/accommodation/accommodation';
 
 function App() {
   const {
@@ -37,6 +38,8 @@ function App() {
               />
 
               <Route path="/host_details" element={<HostDetails />} />
+
+              <Route path="/accommodation" element={<Accommodation />} />
 
               <Route path="/guest_details" element={<GuestDetails />} />
 

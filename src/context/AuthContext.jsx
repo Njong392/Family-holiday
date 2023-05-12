@@ -8,23 +8,35 @@ export const authReducer = (state, action) => {
       return {
         ...state,
         user: action.payload,
-      };
+      }
+    case 'GET_HOSTS':
+        return{
+            ...state,
+            hosts: action.payload
+        }
+    // case 'GET_HOST':
+    //   return {
+    //     ...state,
+    //     host: action.payload
+        
+    //   }
     case 'SET_USER_DETAILS':
       return {
         ...state,
         userDetails: action.payload,
-      };
+      }
     case 'UPDATE_USER_DETAILS':
       return {
         ...state,
         userDetails: action.payload,
-      };
+      }
     case 'LOGOUT':
       return {
         ...state,
         userDetails: null,
         user: null,
-      };
+        hosts: null,
+      }
 
     default:
       return state;
@@ -35,6 +47,7 @@ export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
     userDetails: null,
+    hosts: null,
   });
 
   //TODO: use cookies instead of localStorage

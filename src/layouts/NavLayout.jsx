@@ -45,11 +45,11 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    if (user && userDetails) {
+
       fetchUser();
       //console.log(userDetails);
-    }
-  }, [user]);
+    
+  }, []);
 
   return (
     <div>
@@ -81,12 +81,12 @@ export default function Navbar() {
                 Become a host
               </NavLink>
              
-                <a
+                <NavLink
                   className="text-deepgray active:text-blue hover:text-blue font-bold"
                   href=""
                 >
                   Learn more
-                </a>
+                </NavLink>
               
             </nav>
 

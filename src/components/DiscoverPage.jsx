@@ -1,8 +1,35 @@
 import { Link } from 'react-router-dom'
 import { useAuthContext } from '../hooks/useAuthContext'
+import { useEffect } from 'react'
 
-export default function DiscoverPage(){
-    
+export default function DiscoverPage({hostFamily}){
+
+    // const {
+    //     state: {user, host},
+    //     dispatch
+    // } = useAuthContext()
+
+    // const fetchHost = async (e) => {
+
+    //     const response = await fetch('http://localhost:4000/api/user/' + e.currentTarget.id, {
+    //         headers: {
+    //             Authorization: `Bearer ${user.token}`
+    //         }
+    //     })
+
+    //     const json = await response.json()
+
+    //     if(response.ok){
+    //         dispatch({type: 'GET_HOST', payload: json})
+    //         console.log(host)
+    //     }
+
+    //     useEffect(() => {
+    //         fetchHost()
+    //     }, [])
+
+    // }
+
     return(
         <main aria-label="Main Section" className="font-poppins">
             <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 rounded lg:bg-snow mt-5 lg:shadow-md">
@@ -23,191 +50,45 @@ export default function DiscoverPage(){
                 </section>
 
                 <section className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
-                    <Link className="group" to='/host_details'>
-                        <img
-                            alt="Lava"
-                            src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFtaWx5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                            className="h-56 w-full rounded-xl object-cover shadow-xl transition"
-                        />
-
-                        <div className="p-4">
-                            
-                            <h3 className="text-2xl font-bold text-blue">
-                                Michael Michaelson
-                            </h3>
-                            <div className='flex items-center gap-1'>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                </svg>
-                                <p className="text-sm font-bold text-blue">New York, USA</p>
-
-                            </div>
-
-                            <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
-                            dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
-                            sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
-                            voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
-                            Molestias explicabo corporis voluptatem?
-                            </p>
-                        </div>
-                    </Link>
-
-                    <Link className="group" to='/'>
-                        <img
-                            alt="Lava"
-                            src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFtaWx5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                            className="h-56 w-full rounded-xl object-cover shadow-xl transition"
-                        />
-
-                        <div className="p-4">
-                            
-                            <h3 className="text-2xl font-bold text-blue">
-                                Michael Michaelson
-                            </h3>
-                            <div className='flex items-center gap-1'>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                </svg>
-                                <p className="text-sm font-bold text-blue">New York, USA</p>
-
-                            </div>
-
-                            <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
-                            dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
-                            sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
-                            voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
-                            Molestias explicabo corporis voluptatem?
-                            </p>
-                        </div>
-                    </Link>
-
-                    <Link className="group" to='/details'>
-                        <img
-                            alt="Lava"
-                            src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFtaWx5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                            className="h-56 w-full rounded-xl object-cover shadow-xl transition"
-                        />
-
-                        <div className="p-4">
-                            
-                            <h3 className="text-2xl font-bold text-blue">
-                                Michael Michaelson
-                            </h3>
-                            <div className='flex items-center gap-1'>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                </svg>
-                                <p className="text-sm font-bold text-blue">New York, USA</p>
-
-                            </div>
-
-                            <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
-                            dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
-                            sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
-                            voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
-                            Molestias explicabo corporis voluptatem?
-                            </p>
-                        </div>
-                    </Link>
-
-                    <Link className="group" to='/'>
-                        <img
-                            alt="Lava"
-                            src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFtaWx5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                            className="h-56 w-full rounded-xl object-cover shadow-xl transition"
-                        />
-
-                        <div className="p-4">
-                            
-                            <h3 className="text-2xl font-bold text-blue">
-                                Michael Michaelson
-                            </h3>
-                            <div className='flex items-center gap-1'>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                </svg>
-                                <p className="text-sm font-bold text-blue">New York, USA</p>
-
-                            </div>
-
-                            <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
-                            dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
-                            sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
-                            voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
-                            Molestias explicabo corporis voluptatem?
-                            </p>
-                        </div>
-                    </Link>
-
-                    <Link className="group" to='/'>
-                        <img
-                            alt="Lava"
-                            src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFtaWx5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                            className="h-56 w-full rounded-xl object-cover shadow-xl transition"
-                        />
-
-                        <div className="p-4">
-                            
-                            <h3 className="text-2xl font-bold text-blue">
-                                Michael Michaelson
-                            </h3>
-                            <div className='flex items-center gap-1'>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                </svg>
-                                <p className="text-sm font-bold text-blue">New York, USA</p>
-
-                            </div>
-
-                            <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
-                            dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
-                            sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
-                            voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
-                            Molestias explicabo corporis voluptatem?
-                            </p>
-                        </div>
-                    </Link>
-
-                    <Link className="group" to='/'>
-                        <img
-                            alt="Lava"
-                            src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFtaWx5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                            className="h-56 w-full rounded-xl object-cover shadow-xl transition"
-                        />
-
-                        <div className="p-4">
-                            
-                            <h3 className="text-2xl font-bold text-blue">
-                                Michael Michaelson
-                            </h3>
-                            <div className='flex items-center gap-1'>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                </svg>
-                                <p className="text-sm font-bold text-blue">New York, USA</p>
-
-                            </div>
-
-                            <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae
-                            dolores, possimus pariatur animi temporibus nesciunt praesentium dolore
-                            sed nulla ipsum eveniet corporis quidem, mollitia itaque minus soluta,
-                            voluptates neque explicabo tempora nisi culpa eius atque dignissimos.
-                            Molestias explicabo corporis voluptatem?
-                            </p>
-                        </div>
-                    </Link>
+                    {hostFamily && hostFamily.map((host) => {
+                        return host.form.length !== 0 ? (
+                            (
+                                <Link className="group"
+                                to="/host_details" key={host._id}
+                                id={host._id}
+                                
+                                >
+                                <img
+                                    alt="Lava"
+                                    src={host.form[0].image.url}
+                                    className="h-56 w-full rounded-xl object-cover shadow-xl transition"
+                                />
+        
+                                <div className="p-4">
+                                    
+                                    <h3 className="text-2xl font-bold text-blue">
+                                       {host.first_name}
+                                    </h3>
+                                    <div className='flex items-center gap-1'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                                        </svg>
+                                        <p className="text-sm font-bold text-blue">New York, USA</p>
+        
+                                    </div>
+        
+                                    <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
+                                    {host.form[0].bio}
+                                    </p>
+                                </div>
+                            </Link>
+                            )
+                        ) : (
+                            <p key={host._id} className='hidden'></p>
+                        )
+                    })}
+                
 
                 </section>
 
