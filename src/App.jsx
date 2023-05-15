@@ -7,14 +7,41 @@ import GuestDetails from './pages/details/GuestDetails';
 import Footer from './layouts/FooterLayout';
 import GuestForm from './pages/forms/guests/GuestForm';
 import HostForm from './pages/forms/hosts/HostForm';
-import { useAuthContext } from './hooks/useAuthContext';
+//import { useAuthContext } from './hooks/useAuthContext';
+import { useAuthContext } from './hooks/useAuthContext.jsx'
 import Navbar from './layouts/NavLayout';
 import Accommodation from './pages/accommodation/accommodation';
+import {useEffect} from "react";
 
 function App() {
   const {
-    state: { user },
+    state: { user, userDetails },
+      dispatch
   } = useAuthContext();
+
+  console.log('user: ', user);
+  console.log('userdetails: ', userDetails);
+
+  const fetchUser = async () => {
+    const response = await fetch('http://localhost:4000/api/user/' + user.id, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+
+    const json = await response.json();
+
+    if (response.ok) {
+      dispatch({ type: 'SET_USER_DETAILS', payload: json });
+    }
+  };
+
+  useEffect(() => {
+
+    fetchUser();
+    //console.log(userDetails);
+
+  },[]);
 
   return (
     <div className="App">
@@ -30,7 +57,7 @@ function App() {
             element={!user ? <Login /> : <Navigate to="/" />}
           />
 
-          <Route path="/" element={<Navbar />}>
+          <Route path="/" element={<Navbar user={user} userDetails={userDetails}/>}>
             <Route path="/" element={<Footer />}>
               <Route
                 index

@@ -3,17 +3,14 @@ import { useState, useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useUpdateHost } from '../pages/forms/hosts/useUpdateHost';
 
-export default function Navbar() {
+export default function Navbar({user, userDetails}) {
   const [modal, setModal] = useState(false);
   //const {isSubmitted} = useUpdateHost()
-  const {
-    state: { user, userDetails },
-    dispatch,
-  } = useAuthContext();
+  // const {
+  //   state: { user, userDetails },
+  //   dispatch,
+  // } = useAuthContext();
 
-
-  console.log('user: ', user);
-  console.log('userdetails: ', userDetails);
 
   function handleModal() {
     setModal(false);
@@ -31,26 +28,7 @@ export default function Navbar() {
     dispatch({ type: 'LOGOUT' });
   };
 
-  const fetchUser = async () => {
-    const response = await fetch('http://localhost:4000/api/user/' + user.id, {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    });
 
-    const json = await response.json();
-
-    if (response.ok) {
-      dispatch({ type: 'SET_USER_DETAILS', payload: json });
-    }
-  };
-
-  useEffect(() => {
-
-        fetchUser();
-      //console.log(userDetails);
-    
-  },[]);
 
   return (
     <div>
@@ -129,25 +107,25 @@ export default function Navbar() {
               </a>
             </div>
 
-            <button
-              className="md:block shrink-0 hidden"
-              onClick={showModal}
-            >
-              <span className="sr-only">Profile</span>
-              {!userDetails ? (
-                <img
-                  alt="Man"
-                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                  className="h-10 w-10 rounded-full object-cover"
-                />
-              ): (
-                <img
-                  alt="Man"
-                  src={userDetails.form[0].image.url}
-                  className="h-10 w-10 rounded-full object-cover"
-                />
-              )}
-            </button>
+            {/*<button*/}
+            {/*  className="md:block shrink-0 hidden"*/}
+            {/*  onClick={showModal}*/}
+            {/*>*/}
+            {/*  <span className="sr-only">Profile</span>*/}
+            {/*  {!userDetails ? (*/}
+            {/*    <img*/}
+            {/*      alt="Man"*/}
+            {/*      src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"*/}
+            {/*      className="h-10 w-10 rounded-full object-cover"*/}
+            {/*    />*/}
+            {/*  ): (*/}
+            {/*    <img*/}
+            {/*      alt="Man"*/}
+            {/*      src={userDetails.form[0].image.url}*/}
+            {/*      className="h-10 w-10 rounded-full object-cover"*/}
+            {/*    />*/}
+            {/*  )}*/}
+            {/*</button>*/}
 
             <div
               className={
