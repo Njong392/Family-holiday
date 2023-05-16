@@ -84,17 +84,39 @@ export default function HostForm(){
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        // if(hobby.length === 0){
-        //     setError('There must be at least one hobby')
-        // }else if(language.length === 0){
-        //     setError('There must be at least one language set ')
-        // } else if(allergy || cuisine || bio || image){
-        //     setError('Oops. You left out a field')
-        // }else{
-            
-        // }
-        await updateHost({hobby,allergy, language,adults,children, cuisine, bio,image: imageBase64  })
+        if(adults < 0){
+            setError('Number of adults must be greater than 0')
+        }
 
+        else if(children < 0){
+            setError('Number of children must be greater than 0')
+        }
+
+        else if(hobby.length === 0){
+            setError('There must be at least one hobby. If there are none, enter \"none\"')
+        }
+
+        else if(language.length === 0) {
+            setError('There must be at least one language set ')
+        }
+        else if(allergy.length === 0){
+            setError('If there are no allergies, enter \"none\"')
+        }
+
+        else if(!cuisine || !bio || !image || !adults || !children){
+            setError('Oops. You left out a field. Please fill in everything in one go.')
+        }
+        else{
+            await updateHost({hobby,allergy, language,adults,children, cuisine, bio,image: imageBase64  })
+            setCuisine('')
+            setChildren('')
+            setAdults('')
+            setBio('')
+            setImage('')
+            setAllergy([])
+            setHobby([])
+            setLanguage([])
+        }
 
     }
 
@@ -264,14 +286,15 @@ export default function HostForm(){
                                 onChange={e => setCuisine(e.target.value)}
                                 >
                                     <option value="">--Please choose an option--</option>
-                                    <option value="african cuisine">African</option>
-                                    <option value="american cuisine">American</option>
-                                    <option value="italian">Italian</option>
-                                    <option value="french">French</option>
+                                    <option value="African">African</option>
+                                    <option value="American">American</option>
+                                    <option value="Italian">Italian</option>
+                                    <option value="French">French</option>
                                     <option value="Japanese">Japanese</option>
                                     <option value="Chinese">Chinese</option>
                                     <option value="Thai">Thai</option>
                                     <option value="Indian">Indian</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
 
