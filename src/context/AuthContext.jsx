@@ -14,12 +14,12 @@ export const authReducer = (state, action) => {
             ...state,
             hosts: action.payload
         }
-    // case 'GET_HOST':
-    //   return {
-    //     ...state,
-    //     host: action.payload
+    case 'GET_HOST':
+      return {
+        ...state,
+        host: action.payload
         
-    //   }
+      }
     case 'SET_USER_DETAILS':
       return {
         ...state,
@@ -36,6 +36,7 @@ export const authReducer = (state, action) => {
         userDetails: null,
         user: null,
         hosts: null,
+        host: null
       }
 
     default:
@@ -48,6 +49,7 @@ export const AuthContextProvider = ({ children }) => {
     user: null,
     userDetails: null,
     hosts: null,
+    host: null
   });
 
   //TODO: use cookies instead of localStorage
@@ -60,7 +62,6 @@ export const AuthContextProvider = ({ children }) => {
     }
   }, []);
 
-  console.log('AuthContext state', state);
 
   return (
     <AuthContext.Provider value={{ state, dispatch }}>

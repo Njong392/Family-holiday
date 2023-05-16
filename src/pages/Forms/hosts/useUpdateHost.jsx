@@ -9,9 +9,9 @@ export const useUpdateHost = () => {
         state: { user},
         dispatch,
       } = useAuthContext();
-    const [isSubmitted, setIsSubmitted] = useState(null)
+    const [isSubmitted, setIsSubmitted] = useState(false)
 
-    const updateHost = async ({hobby,allergy, language,numberOfPeople, cuisine, bio, image}) => {
+    const updateHost = async ({hobby,allergy, language,adults,children, cuisine, bio, image}) => {
 
         setIsLoading(false)
         setError(null)
@@ -27,7 +27,7 @@ export const useUpdateHost = () => {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${user.token}`
                 },
-                body: JSON.stringify({hobby,  allergy, language,numberOfPeople, cuisine, bio, image})
+                body: JSON.stringify({hobby,  allergy, language,adults,children, cuisine, bio, image})
             }
         )
 

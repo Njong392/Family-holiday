@@ -4,31 +4,13 @@ import { useEffect } from 'react'
 
 export default function DiscoverPage({hostFamily}){
 
-    // const {
-    //     state: {user, host},
-    //     dispatch
-    // } = useAuthContext()
+    const {
+        state: {user, host},
+        dispatch
+    } = useAuthContext()
 
-    // const fetchHost = async (e) => {
+    //fetch particular host from backend
 
-    //     const response = await fetch('http://localhost:4000/api/user/' + e.currentTarget.id, {
-    //         headers: {
-    //             Authorization: `Bearer ${user.token}`
-    //         }
-    //     })
-
-    //     const json = await response.json()
-
-    //     if(response.ok){
-    //         dispatch({type: 'GET_HOST', payload: json})
-    //         console.log(host)
-    //     }
-
-    //     useEffect(() => {
-    //         fetchHost()
-    //     }, [])
-
-    // }
 
     return(
         <main aria-label="Main Section" className="font-poppins">
@@ -50,13 +32,12 @@ export default function DiscoverPage({hostFamily}){
                 </section>
 
                 <section className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
-                    {hostFamily && hostFamily.map((host) => {
+                    {user && hostFamily && hostFamily.map((host) => {
                         return host.form.length !== 0 ? (
                             (
                                 <Link className="group"
-                                to="/host_details" key={host._id}
+                                to={`/host_details/${host._id}`} key={host._id}
                                 id={host._id}
-                                
                                 >
                                 <img
                                     alt="Lava"

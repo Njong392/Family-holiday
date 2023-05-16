@@ -1,7 +1,46 @@
+import { useParams } from "react-router-dom";
 import AccomodationList from "../../components/AccommodationList";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import {useEffect} from "react";
 
 
 export default function HostDetails(){
+    const {state: {user, host}, dispatch} = useAuthContext()
+
+    const {id} = useParams()
+
+    // if(host){
+    //     host._id = useParams()
+    //
+    // } else{
+    //     console.log('no user id')
+    // }
+
+    const fetchHost = async () => {
+        const response = await fetch('http://localhost:4000/api/user/' + id, {
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            }
+        })
+
+        const json = await response.json()
+
+        if(response.ok){
+            dispatch({type: 'GET_HOST', payload: json})
+            console.log(host)
+        }
+
+    }
+
+    useEffect(() => {
+        fetchHost()
+        console.log(id)
+
+
+    }, [user?.id,host?.id])
+
+
+
     return(
         <main aria-label="Main Section" className="font-poppins">
             <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 rounded mt-5">
@@ -28,28 +67,70 @@ export default function HostDetails(){
 
                         </div>
 
-                        <h3 className="text-xl font-bold text-blue mt-4">
-                                Michael Michaelson
-                        </h3>
+                        {host && (
+                            <h3 className="text-2xl font-bold text-blue mt-4">
+                            {host.first_name} <span>{host.last_name}</span>
+                            </h3>
+                        )}
+
                         <div className='flex items-center gap-1'>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                             </svg>
-                            <p className="text-sm font-bold text-blue">New York, USA</p>
+                            {host && ( <p className="text-sm font-bold text-blue">{host.city}, <span>{host.country}</span></p>)}
 
-                        </div>
-
-                        <div className="mt-1 text-deepgray">
-                            <p className="text-sm"><span className="font-bold">Number of family members:</span> 3, 4-32 years old</p>
-                            <p className="text-sm"><span className="font-bold">Laguage(s) spoken:</span> English and French</p>
                         </div>
 
                         <div className="mt-4">
-                        <h3 className="text-xl font-bold text-blue">About Us</h3>
-                        <p className="leading-relaxed">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore error voluptatum corporis ex corrupti numquam architecto vitae omnis, ratione fuga earum necessitatibus quam repellendus placeat rerum cum. Commodi molestias ex dicta officia praesentium dolore eveniet provident, laudantium mollitia, iure possimus. Cum, nihil! Earum, odit? Aliquam ipsa sint consectetur quas dolor?</p>
+                            <h3 className="text-xl font-bold text-blue">About Us</h3>
+                            <p className="leading-relaxed line-clamp-3">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore error voluptatum corporis ex corrupti numquam architecto vitae omnis, ratione fuga earum necessitatibus quam repellendus placeat rerum cum. Commodi molestias ex dicta officia praesentium dolore eveniet provident, laudantium mollitia, iure possimus. Cum, nihil! Earum, odit? Aliquam ipsa sint consectetur quas dolor?</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md: grid-cols-3 mt-4 gap-4">
+                            <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                                <p className="text-sm"><span className="font-bold">Adults:</span> 2</p>
+                                <p className="text-sm"><span className="font-bold">Children: </span> 4</p>
+                                <div className="child">
+                                    <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">composition</p>
+                                </div>
+                            </div>
+
+                            <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                                <p>Peanuts, lavender, honey</p>
+                                <div className="child">
+                                    <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">allergy(ies)</p>
+                                </div>
+                            </div>
+
+                            <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                                <p>Skiing, cooking</p>
+                                <div className="child">
+                                    <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">hobby(ies)</p>
+                                </div>
+                            </div>
+
+                            <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                                <p>Italian</p>
+                                <div className="child">
+                                    <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">Cuisine</p>
+                                </div>
+                            </div>
+
+                            <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                                <p>English, French</p>
+                                <div className="child">
+                                    <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">Language(s)</p>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
                     </div>
-                    </div>
+
+
                 </div>
 
                 <AccomodationList />

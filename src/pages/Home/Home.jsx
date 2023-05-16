@@ -2,7 +2,7 @@ import DiscoverPage from "../../components/DiscoverPage";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useEffect } from "react";
 
-export default function Home(){
+export default function Home(fetchHost){
     const {state: {user, hosts}, dispatch} = useAuthContext()
 
     const fetchHosts = async () => {
@@ -28,7 +28,7 @@ export default function Home(){
   
     return(
        <>
-            <DiscoverPage hostFamily={hosts}/>
+            <DiscoverPage hostFamily={hosts} />
     
         
        </>

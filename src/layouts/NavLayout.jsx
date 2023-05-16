@@ -5,7 +5,8 @@ import { useUpdateHost } from '../pages/forms/hosts/useUpdateHost';
 
 export default function Navbar({user, userDetails}) {
   const [modal, setModal] = useState(false);
-  //const {isSubmitted} = useUpdateHost()
+
+  const {isSubmitted} = useUpdateHost()
   // const {
   //   state: { user, userDetails },
   //   dispatch,
@@ -107,25 +108,25 @@ export default function Navbar({user, userDetails}) {
               </a>
             </div>
 
-            {/*<button*/}
-            {/*  className="md:block shrink-0 hidden"*/}
-            {/*  onClick={showModal}*/}
-            {/*>*/}
-            {/*  <span className="sr-only">Profile</span>*/}
-            {/*  {!userDetails ? (*/}
-            {/*    <img*/}
-            {/*      alt="Man"*/}
-            {/*      src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"*/}
-            {/*      className="h-10 w-10 rounded-full object-cover"*/}
-            {/*    />*/}
-            {/*  ): (*/}
-            {/*    <img*/}
-            {/*      alt="Man"*/}
-            {/*      src={userDetails.form[0].image.url}*/}
-            {/*      className="h-10 w-10 rounded-full object-cover"*/}
-            {/*    />*/}
-            {/*  )}*/}
-            {/*</button>*/}
+            <button
+              className="md:block shrink-0 hidden"
+              onClick={showModal}
+            >
+              <span className="sr-only">Profile</span>
+              {userDetails && isSubmitted ? (
+                <img
+                  alt="Man"
+                  src={userDetails.form[0].image.url}
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+              ): (
+                <img
+                  alt="Man"
+                  src= "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+              )}
+            </button>
 
             <div
               className={

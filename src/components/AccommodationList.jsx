@@ -4,7 +4,7 @@ export default function AccomodationList(){
     return(
         <>
             <h3 className="text-3xl font-bold text-blue mt-12">Accommodations</h3>
-                <section className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:gap-8 mt-4">
+                <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-8 mt-4">
                 <Link className="group" to='/host_details'>
                         <img
                             alt="Lava"

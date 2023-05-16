@@ -12,7 +12,9 @@ export default function HostForm(){
     const[language, setLanguage] = useState([])
     const[languageInput, setLanguageInput] = useState('')
 
-    const [numberOfPeople, setNumberOfPeople] = useState('')
+
+    const [children, setChildren] = useState('')
+    const [adults, setAdults] = useState('')
     const [cuisine, setCuisine] = useState('')
     const [bio, setBio] = useState('')
     const [image, setImage] = useState(null)
@@ -44,8 +46,7 @@ export default function HostForm(){
         e.preventDefault()
         setHobby(hobby.concat(hobbyInput))
         setHobbyInput('')
-        console.log(hobby)
-        console.log(numberOfPeople)
+
     }
 
     function deleteHobbies(id){
@@ -92,7 +93,8 @@ export default function HostForm(){
         // }else{
             
         // }
-        await updateHost({hobby,allergy, language,numberOfPeople, cuisine, bio,image: imageBase64  })
+        await updateHost({hobby,allergy, language,adults,children, cuisine, bio,image: imageBase64  })
+
 
     }
 
@@ -110,19 +112,33 @@ export default function HostForm(){
 
                         <form action="#" className=" grid grid-cols-6 gap-6 mt-4" onSubmit={handleSubmit}>
 
-
-                            <div className="col-span-6">
-                                <label htmlFor="Number_of_people" className="block font-medium text-deepgray">
-                                Number of family members in the household
+                            <div className="col-span-6 md:col-span-3">
+                                <label htmlFor="adults" className="block font-medium text-deepgray">
+                                    Number of adults in the family (18+)
                                 </label>
 
                                 <input
-                                type="number"
-                                id="number_of_people"
-                                name="number_of_people"
-                                className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
-                                value={numberOfPeople}
-                                onChange={e => setNumberOfPeople(e.target.value)}
+                                    type="number"
+                                    id="adults"
+                                    name="adults"
+                                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                                    value={adults}
+                                    onChange={e => setAdults(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="col-span-6 md:col-span-3">
+                                <label htmlFor="children" className="block font-medium text-deepgray">
+                                    Number of children (less than 18 years old)
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="children"
+                                    name="children"
+                                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                                    value={children}
+                                    onChange={e => setChildren(e.target.value)}
                                 />
                             </div>
 
