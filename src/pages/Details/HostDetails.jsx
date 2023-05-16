@@ -47,11 +47,13 @@ export default function HostDetails(){
             <h3 className="text-3xl font-bold text-blue mt-12">Host Profile</h3>
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 md:gap-8 mt-4">
                     <div>
-                        <img
-                            alt="Lava"
-                            src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFtaWx5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                            className="h-[100%] w-full rounded-xl object-cover shadow-xl"
-                        />
+                        {host && (
+                            <img
+                                alt="Lava"
+                                src= {host.form[0].image.url}
+                                className="h-full w-full rounded-xl object-cover shadow-xl"
+                            />
+                        )}
 
                     </div>
 
@@ -89,8 +91,14 @@ export default function HostDetails(){
 
                         <div className="grid grid-cols-1 md: grid-cols-3 mt-4 gap-4">
                             <div className="parent border-2 border-blue rounded-lg p-2 relative">
-                                <p className="text-sm"><span className="font-bold">Adults:</span> 2</p>
-                                <p className="text-sm"><span className="font-bold">Children: </span> 4</p>
+                                {host && (
+                                    <p className="text-sm"><span className="font-bold">Adults:</span> {host.form[0].adults}</p>
+                                )}
+
+                                {host && (
+                                    <p className="text-sm"><span className="font-bold">Children: </span> {host.form[0].children}</p>
+                                )}
+
                                 <div className="child">
                                     <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">composition</p>
                                 </div>
@@ -111,7 +119,9 @@ export default function HostDetails(){
                             </div>
 
                             <div className="parent border-2 border-blue rounded-lg p-2 relative">
-                                <p>Italian</p>
+                                {host && (
+                                    <p>{host.form[0].cuisine}</p>
+                                )}
                                 <div className="child">
                                     <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">Cuisine</p>
                                 </div>
