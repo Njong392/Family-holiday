@@ -50,7 +50,7 @@ export default function HostDetails(){
                         {host && (
                             <img
                                 alt="Lava"
-                                src= {host.form[0].image.url}
+                                src= {host.host[0].image.url}
                                 className="h-full w-full rounded-xl object-cover shadow-xl"
                             />
                         )}
@@ -92,11 +92,11 @@ export default function HostDetails(){
                         <div className="grid grid-cols-1 md: grid-cols-3 mt-4 gap-4">
                             <div className="parent border-2 border-blue rounded-lg p-2 relative">
                                 {host && (
-                                    <p className="text-sm"><span className="font-bold">Adults:</span> {host.form[0].adults}</p>
+                                    <p className="text-sm"><span className="font-bold">Adults:</span> {host.host[0].adults}</p>
                                 )}
 
                                 {host && (
-                                    <p className="text-sm"><span className="font-bold">Children: </span> {host.form[0].children}</p>
+                                    <p className="text-sm"><span className="font-bold">Children: </span> {host.host[0].children}</p>
                                 )}
 
                                 <div className="child">
@@ -120,7 +120,7 @@ export default function HostDetails(){
 
                             <div className="parent border-2 border-blue rounded-lg p-2 relative">
                                 {host && (
-                                    <p>{host.form[0].cuisine}</p>
+                                    <p>{host.host[0].cuisine}</p>
                                 )}
                                 <div className="child">
                                     <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">Cuisine</p>
