@@ -84,11 +84,11 @@ export default function HostForm(){
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(adults < 0){
+        if(adults < 0 || NaN){
             setError('Number of adults must be greater than 0')
         }
 
-        else if(children < 0){
+        else if(children < 0 || NaN){
             setError('Number of children must be greater than 0')
         }
 

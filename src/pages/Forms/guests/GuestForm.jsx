@@ -13,12 +13,6 @@ export default function GuestForm(){
     const[language, setLanguage] = useState([])
     const[languageInput, setLanguageInput] = useState('')
 
-    const {
-        state: { user, userDetails },
-        dispatch,
-      } = useAuthContext();
-
-
     // to handle adding/deleting hobbies
     function getHobbies(e){
         e.preventDefault()
@@ -61,26 +55,7 @@ export default function GuestForm(){
 
 
 
-    const fetchUser = async () => {
-        const response = await fetch('http://localhost:4000/api/user/' + user.id, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
-    
-        const json = await response.json();
-    
-        if (response.ok) {
-          dispatch({ type: 'SET_USER_DETAILS', payload: json });
-        }
-      };
-    
-      useEffect(() => {
-    
-            fetchUser();
-          //console.log(userDetails);
-        
-      }, []);
+
    
     return(
         <main aria-label="Main Section" className="font-poppins">
@@ -295,37 +270,37 @@ export default function GuestForm(){
                                 />
                             </div>
 
-                            <div className="col-span-6">
-                                <label htmlFor="more_info" className="block font-medium text-deepgray">What other information would you like to provide to the host?</label>
+                            {/*<div className="col-span-6">*/}
+                            {/*    <label htmlFor="more_info" className="block font-medium text-deepgray">What other information would you like to provide to the host?</label>*/}
 
-                                <ul className="text-deepgray">
-                                    <li>
-                                        <input type="checkbox" id="option1" name="option1" value="smoking"/>
-                                        <label htmlFor="smoking"> Not comfortable with smoking</label>
-                                    </li>
+                            {/*    <ul className="text-deepgray">*/}
+                            {/*        <li>*/}
+                            {/*            <input type="checkbox" id="option1" name="option1" value="smoking"/>*/}
+                            {/*            <label htmlFor="smoking"> Not comfortable with smoking</label>*/}
+                            {/*        </li>*/}
 
-                                    <li>
-                                        <input type="checkbox" id="option2" name="option2" value="cleaning" />
-                                        <label htmlFor="cleaning"> Can clean up after themselves</label>
-                                    </li>
+                            {/*        <li>*/}
+                            {/*            <input type="checkbox" id="option2" name="option2" value="cleaning" />*/}
+                            {/*            <label htmlFor="cleaning"> Can clean up after themselves</label>*/}
+                            {/*        </li>*/}
 
-                                    <li>
-                                        <input type="checkbox" id="option3" name="option3" value="meals" />
-                                        <label htmlFor="meals"> Ready to pay extra for home cooked meals</label>
-                                    </li>
+                            {/*        <li>*/}
+                            {/*            <input type="checkbox" id="option3" name="option3" value="meals" />*/}
+                            {/*            <label htmlFor="meals"> Ready to pay extra for home cooked meals</label>*/}
+                            {/*        </li>*/}
 
-                                    <li>
-                                        <input type="checkbox" id="option4" name="option4" value="tour" />
-                                        <label htmlFor="tour"> Ready to pay extra for tours</label>
-                                    </li>
+                            {/*        <li>*/}
+                            {/*            <input type="checkbox" id="option4" name="option4" value="tour" />*/}
+                            {/*            <label htmlFor="tour"> Ready to pay extra for tours</label>*/}
+                            {/*        </li>*/}
 
-                                    
-                                    <li>
-                                        <input type="checkbox" id="option6" name="option6" value="pets" />
-                                        <label htmlFor="pets"> Ready to pay extra for pets</label>
-                                    </li>
-                                </ul>
-                            </div>
+                            {/*        */}
+                            {/*        <li>*/}
+                            {/*            <input type="checkbox" id="option6" name="option6" value="pets" />*/}
+                            {/*            <label htmlFor="pets"> Ready to pay extra for pets</label>*/}
+                            {/*        </li>*/}
+                            {/*    </ul>*/}
+                            {/*</div>*/}
 
 
 

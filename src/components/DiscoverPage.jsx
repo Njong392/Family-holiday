@@ -33,7 +33,7 @@ export default function DiscoverPage({hostFamily}){
 
                 <section className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
                     {user && hostFamily && hostFamily.map((host) => {
-                        return host.form.length !== 0 ? (
+                        return host.host.length !== 0 ? (
                             (
                                 <Link className="group"
                                 to={`/host_details/${host._id}`} key={host._id}
@@ -41,7 +41,7 @@ export default function DiscoverPage({hostFamily}){
                                 >
                                 <img
                                     alt="Lava"
-                                    src={host.form[0].image.url}
+                                    src={host.host[0].image.url}
                                     className="h-56 w-full rounded-xl object-cover shadow-xl transition"
                                 />
         
@@ -60,7 +60,7 @@ export default function DiscoverPage({hostFamily}){
                                     </div>
         
                                     <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
-                                    {host.form[0].bio}
+                                    {host.host[0].bio}
                                     </p>
                                 </div>
                             </Link>
