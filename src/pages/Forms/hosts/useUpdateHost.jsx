@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../../../hooks/useAuthContext";
 
-export const useUpdateHost = () => {
+export const useUpdateUser = () => {
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(null)
     const [success, setSuccess] = useState(null)
@@ -11,7 +11,7 @@ export const useUpdateHost = () => {
       } = useAuthContext();
     const [isSubmitted, setIsSubmitted] = useState(false)
 
-    const updateHost = async ({hobby,allergy, language,adults,children, cuisine, bio, image}) => {
+    const updateUser = async ({hobby,allergy, language,adults,children, cuisine, bio, image}) => {
 
         setIsLoading(false)
         setError(null)
@@ -50,5 +50,5 @@ export const useUpdateHost = () => {
         }
     }
 
-    return { updateHost,setError, error, isLoading, success, isSubmitted }
+    return { updateUser,setError, error, isLoading, success, isSubmitted }
 }
