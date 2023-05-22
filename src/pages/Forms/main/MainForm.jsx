@@ -1,23 +1,52 @@
-import { useState, useEffect } from "react"
-import { useAuthContext } from "../../../hooks/useAuthContext"
+import { useState } from "react"
+import { useUpdateUser } from "./useUpdateUser"
 
 
-export default function GuestForm(){
-
+export default function HostForm(){
     const[hobby, setHobby] = useState([])
     const[hobbyInput, setHobbyInput] = useState('')
 
     const[allergy, setAllergy] = useState([])
     const[allergyInput, setAllergyInput] = useState('')
-    
+
     const[language, setLanguage] = useState([])
     const[languageInput, setLanguageInput] = useState('')
+
+
+    const [children, setChildren] = useState('')
+    const [adults, setAdults] = useState('')
+    const [cuisine, setCuisine] = useState('')
+    const [bio, setBio] = useState('')
+    const [image, setImage] = useState(null)
+    const [imageBase64, setImageBase64] = useState('')
+    const { updateUser,setError, error, isLoading, success, isSubmitted } = useUpdateUser()
+
+
+    //convert image file to base64
+    const setFileToBase64= (file) => {
+        const reader = new FileReader()
+        if(file) {
+            reader.readAsDataURL(file)
+        }
+        reader.onloadend = () => {
+            setImageBase64(reader.result)
+        }
+    }
+
+    //receive file from form
+    const handleImage = (e) => {
+        const file = e.target.files[0]
+        setImage(file)
+        setFileToBase64(file)
+    }
+
 
     // to handle adding/deleting hobbies
     function getHobbies(e){
         e.preventDefault()
         setHobby(hobby.concat(hobbyInput))
         setHobbyInput('')
+
     }
 
     function deleteHobbies(id){
@@ -53,63 +82,88 @@ export default function GuestForm(){
         })
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        if(adults < 0 || NaN){
+            setError('Number of adults must be greater than 0')
+        }
+
+        else if(children < 0 || NaN){
+            setError('Number of children must be greater than 0')
+        }
+
+        else if(hobby.length === 0){
+            setError('There must be at least one hobby. If there are none, enter \"none\"')
+        }
+
+        else if(language.length === 0) {
+            setError('There must be at least one language set ')
+        }
+        else if(allergy.length === 0){
+            setError('If there are no allergies, enter \"none\"')
+        }
+
+        else if(!cuisine || !bio || !image || !adults || !children){
+            setError('Oops. You left out a field. Please fill in everything in one go.')
+        }
+        else{
+            await updateUser({hobby,allergy, language,adults,children, cuisine, bio,image: imageBase64  })
+            setCuisine('')
+            setChildren('')
+            setAdults('')
+            setBio('')
+            setImage('')
+            setAllergy([])
+            setHobby([])
+            setLanguage([])
+        }
+
+    }
 
 
-
-   
     return(
         <main aria-label="Main Section" className="font-poppins">
             <div className="mx-auto max-w-screen-xl py-16 rounded mt-5 lg:grid lg:min-h-screen lg:grid-cols-12">
-                <main className="grid col-span-8 lg:border-2 py-5 px-8 lg:shadow-xl lg:border-blue rounded">
-                    <div className="max-w-xl lg:max-w-3xl">
+            <main className="grid col-span-8 lg:border-2 py-5 px-8 lg:shadow-xl lg:border-blue rounded">
+            <div className="max-w-xl lg:max-w-3xl">
                     
                     
-                        <h3 className="text-3xl font-bold text-blue mt-4">Want to become a guest?</h3>
-                        <p className="text-sm text-lightgray">Remember that the more detail and personality you fill in, the easier it will be to connect with host families.</p>
+                        <h3 className="text-3xl font-bold text-blue mt-4">We Need General Information About Your Family</h3>
+                        <p className="text-sm text-lightgray">Remember that the more detail and personality you fill in, the easier it will be to connect with guest families.</p>
                         <p className="text-sm text-blue mt-4">*Please fill in all fields correctly and carefully</p>
 
-                        <form action="#" className=" grid grid-cols-6 gap-6 mt-4">
+                        <form action="#" className=" grid grid-cols-6 gap-6 mt-4" onSubmit={handleSubmit}>
 
-
-                            <div className="col-span-6">
-                                <label htmlFor="Number_of_people" className="block font-medium text-deepgray">
-                                Number of travelling guests
-                                </label>
-
-                                <input
-                                type="number"
-                                id="number_of_people"
-                                name="number_of_people"
-                                className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
-                                />
-                            </div>
-
-                            
                             <div className="col-span-6 md:col-span-3">
-                                <label htmlFor="duration_start" className="block font-medium text-deepgray">
-                                Preffered duration of stay is from:
+                                <label htmlFor="adults" className="block font-medium text-deepgray">
+                                    Number of adults in the family (18+)
                                 </label>
 
                                 <input
-                                type="date"
-                                id="duration_start"
-                                name="duration_start"
-                                className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                                    type="number"
+                                    id="adults"
+                                    name="adults"
+                                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                                    value={adults}
+                                    onChange={e => setAdults(e.target.value)}
                                 />
                             </div>
 
                             <div className="col-span-6 md:col-span-3">
-                                <label htmlFor="duration_end" className="block font-medium text-deepgray">
-                                to:
+                                <label htmlFor="children" className="block font-medium text-deepgray">
+                                    Number of children (less than 18 years old)
                                 </label>
 
                                 <input
-                                type="date"
-                                id="duration_end"
-                                name="duration_end"
-                                className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                                    type="number"
+                                    id="children"
+                                    name="children"
+                                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                                    value={children}
+                                    onChange={e => setChildren(e.target.value)}
                                 />
                             </div>
+
 
                             <div className="col-span-6 md:col-span-3">
                                 
@@ -154,7 +208,7 @@ export default function GuestForm(){
                                     <label htmlFor="Allergies" className="block font-medium text-deepgray">
                                     What allergy(ies) could your family members have?
                                     </label>
-                                    <p className="text-xs text-lightgray">This is to inform hosts beforehand of substances that could cause any health complications</p>
+                                    <p className="text-xs text-lightgray">This is to inform guests beforehand of substances that could cause any health complications</p>
 
                                     <div className="flex items-center gap-2">
                                         <input
@@ -190,10 +244,9 @@ export default function GuestForm(){
                             <div className="col-span-6 md:col-span-3">
                                 
                                     <label htmlFor="Languages" className="block font-medium text-deepgray">
-                                    What language(s) does your family speak?
+                                    What language(s) is/are spoken in your household?
                                     </label>
                                     
-
                                     <div className="flex items-center gap-2">
                                         <input
                                         type="text"
@@ -226,35 +279,39 @@ export default function GuestForm(){
                             </div>
 
                             <div className="col-span-6">
-                                <label htmlFor="cuisine-select" className="block font-medium text-deepgray">What kind of cuisine are you looking forward to?</label>
-                                <p className="text-xs text-lightgray">This is in the case where the host chooses to add home cooked meals to the standard accomodation. Some hosts may charge extra for this.</p>
+                                <label htmlFor="cuisine-select" className="block font-medium text-deepgray">What kind of cuisine is common in your household?</label>
 
-                                <select name="cuisine" id="cuisine-select" className="mt-1 w-full rounded border-gray-200 bg-white text-deepgray shadow-sm" >
+                                <select name="cuisine" id="cuisine-select" className="mt-1 w-full rounded border-gray-200 bg-white text-deepgray shadow-sm" 
+                                value={cuisine}
+                                onChange={e => setCuisine(e.target.value)}
+                                >
                                     <option value="">--Please choose an option--</option>
-                                    <option value="african cuisine">African</option>
-                                    <option value="american cuisine">American</option>
-                                    <option value="italian">Italian</option>
-                                    <option value="french">French</option>
+                                    <option value="African">African</option>
+                                    <option value="American">American</option>
+                                    <option value="Italian">Italian</option>
+                                    <option value="French">French</option>
                                     <option value="Japanese">Japanese</option>
                                     <option value="Chinese">Chinese</option>
                                     <option value="Thai">Thai</option>
                                     <option value="Indian">Indian</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
 
                             <div className="col-span-6">
                                 <label htmlFor="about" className="block font-medium text-deepgray">
-                            Write at least 100 words about your family.
+                               Write at least 100 words about your family.
                                 </label>
-                                <p className="text-lightgray text-xs">Quick into time! This is the most important part of your profile. What would make you a good guest family? What kind of culture do you want to know more about? What are those things that bring your family together? Answering questions like these persnoalizes your profile even more.</p>
+                                <p className="text-lightgray text-xs">This is the most important part of your profile. What would make you a good host family? What are those things that bring your family together? Make this part count!</p>
 
                                 <textarea
                                 id="about"
                                 name="about"
                                 className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
-                                >
+                                value={bio}
+                                onChange={e => setBio(e.target.value)}
+                                />
                                 
-                                </textarea>
                             </div>
 
                             <div className="col-span-6">
@@ -264,65 +321,79 @@ export default function GuestForm(){
 
                                 <input
                                 type="file"
-                                id="profile_image"
-                                name="profile_image"
+                                id="image"
+                                name="image"
                                 className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                                accept="image/*"
+                                onChange={handleImage}
                                 />
                             </div>
 
-                            {/*<div className="col-span-6">*/}
-                            {/*    <label htmlFor="more_info" className="block font-medium text-deepgray">What other information would you like to provide to the host?</label>*/}
+                            
+                            {/* <div className="col-span-6">
+                                <label htmlFor="more_info" className="block font-medium text-deepgray">What other information would you like to provide to the guest?</label>
 
-                            {/*    <ul className="text-deepgray">*/}
-                            {/*        <li>*/}
-                            {/*            <input type="checkbox" id="option1" name="option1" value="smoking"/>*/}
-                            {/*            <label htmlFor="smoking"> Not comfortable with smoking</label>*/}
-                            {/*        </li>*/}
+                                <ul className="text-deepgray">
+                                    <li>
+                                        <input type="checkbox" id="option1" name="option1" value="smoking"/>
+                                        <label htmlFor="smoking"> No smoking</label>
+                                    </li>
 
-                            {/*        <li>*/}
-                            {/*            <input type="checkbox" id="option2" name="option2" value="cleaning" />*/}
-                            {/*            <label htmlFor="cleaning"> Can clean up after themselves</label>*/}
-                            {/*        </li>*/}
+                                    <li>
+                                        <input type="checkbox" id="option2" name="option2" value="cleaning" />
+                                        <label htmlFor="cleaning"> Host must clean up after themselves</label>
+                                    </li>
 
-                            {/*        <li>*/}
-                            {/*            <input type="checkbox" id="option3" name="option3" value="meals" />*/}
-                            {/*            <label htmlFor="meals"> Ready to pay extra for home cooked meals</label>*/}
-                            {/*        </li>*/}
+                                    <li>
+                                        <input type="checkbox" id="option3" name="option3" value="meals" />
+                                        <label htmlFor="meals"> Additional cost will be incurred for home cooked meals</label>
+                                    </li>
 
-                            {/*        <li>*/}
-                            {/*            <input type="checkbox" id="option4" name="option4" value="tour" />*/}
-                            {/*            <label htmlFor="tour"> Ready to pay extra for tours</label>*/}
-                            {/*        </li>*/}
+                                    <li>
+                                        <input type="checkbox" id="option4" name="option4" value="tour" />
+                                        <label htmlFor="tour"> Additional cost will be incurred for city tours</label>
+                                    </li>
 
-                            {/*        */}
-                            {/*        <li>*/}
-                            {/*            <input type="checkbox" id="option6" name="option6" value="pets" />*/}
-                            {/*            <label htmlFor="pets"> Ready to pay extra for pets</label>*/}
-                            {/*        </li>*/}
-                            {/*    </ul>*/}
-                            {/*</div>*/}
+                                    <li>
+                                        <input type="checkbox" id="option5" name="option5" value="pets" />
+                                        <label htmlFor="pets"> No pets</label>
+                                    </li>
 
-
-
+                                    <li>
+                                        <input type="checkbox" id="option6" name="option6" value="pets" />
+                                        <label htmlFor="pets"> Additional costs will be incurred for pets</label>
+                                    </li>
+                                </ul>
+                            </div> */}
 
                             <div className="col-span-6">
                                 <p className="text-sm text-lightgray">
-                                *This information will be made public for potential hosts to view.
+                                *This information will be made public for potential guests to view. However, after receving a guest, you can make your profile page 'unavailaible' for further reservations.
                                 </p>
                             </div>
 
                             <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                                 <button
-                                className="inline-block shrink-0 rounded-md bg-blue px-12 py-3 text-sm font-medium text-snow transition hover:bg-transparent hover:text-blue border-2 hover:border-blue focus:outline-none focus:ring active:text-blue-500"
+                                className="inline-block shrink-0 rounded-md bg-blue px-12 py-3 text-sm font-medium text-snow transition hover:bg-transparent hover:text-blue border-2 hover:border-blue focus:outline-none focus:ring active:text-blue-500
+                                active:text-blue-500 disabled:opacity-50"
+                                disabled={isLoading}
+                                
                                 >
                                 Submit
                                 </button>
                             </div>
+
+                            
                         </form>
+                        {error && <p className='text-red text-sm mt-4 font-bold'>{error}</p>}
+                        {success && <p className='text-green text-sm mt-4 font-bold'>{success}</p>}
                     </div>
+                    
                 </main>
 
             </div>
         </main>
+
+        
     )
 }
