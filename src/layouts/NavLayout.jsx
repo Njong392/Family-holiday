@@ -1,17 +1,17 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useParams} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
-import { useUpdateHost } from '../pages/forms/hosts/useUpdateHost';
 
-export default function Navbar({user, userDetails}) {
+
+export default function Navbar() {
   const [modal, setModal] = useState(false);
 
-  const {isSubmitted} = useUpdateHost()
-  // const {
-  //   state: { user, userDetails },
-  //   dispatch,
-  // } = useAuthContext();
-
+  const {id} = useParams()
+  const {
+    state: { user, userDetails },
+    dispatch,
+  } = useAuthContext();
+ 
 
   function handleModal() {
     setModal(false);
@@ -29,6 +29,36 @@ export default function Navbar({user, userDetails}) {
     dispatch({ type: 'LOGOUT' });
   };
 
+  //fetch user from backend for navbar
+  const fetchUser = async () => {
+    const response = await fetch('http://localhost:4000/api/user/' + user.id, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+
+    const json = await response.json();
+
+    if (response.ok) {
+      dispatch({ type: 'SET_USER_DETAILS', payload: json });
+    }
+  };
+
+  
+
+  useEffect(() => {
+
+    if(user){
+      fetchUser();
+
+      //console.log(userDetails);
+    }
+    else{
+      console.log('no user')
+    }
+
+  },[user, id]);
+
 
 
   return (
@@ -37,7 +67,7 @@ export default function Navbar({user, userDetails}) {
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8 rounded lg:bg-snow mt-5 lg:shadow-md">
           <div className="flex items-center justify-between gap-4 lg:gap-10 ">
             <div className="flex lg:w-0 lg:flex-1">
-              <NavLink to="/signup">
+              <NavLink to="/">
                 <span className="sr-only">Logo</span>
                 <span className="inline-block h-8 w-28 rounded-lg bg-blue"></span>
               </NavLink>
@@ -48,13 +78,17 @@ export default function Navbar({user, userDetails}) {
               className="hidden gap-8 text-sm font-medium md:flex"
             >
               <NavLink
-                className="text-deepgray active:text-blue hover:text-blue font-bold"
+                className="text-deepgray active:text-blue hover:text-blue font-bold hidden"
                 to="/guest_form"
               >
                 Become a guest
               </NavLink>
               <NavLink
-                className="text-deepgray active:text-blue hover:text-blue font-bold"
+                className={
+                  user ? 
+                  "text-deepgray active:text-blue hover:text-blue font-bold"
+                  : "hidden"
+                }
                 to="/host_form"
                 
               >
@@ -70,7 +104,9 @@ export default function Navbar({user, userDetails}) {
               
             </nav>
 
-            <div className="md:flex items-center gap-4 hidden">
+            <div className={
+              user ? "md:flex items-center gap-4 hidden" : "items-center gap-4 sm:hidden"
+            }>
               <a href="#" className="block shrink-0 p-2.5 text-deepgray">
                 <span className="sr-only">Notifications</span>
                 <svg
@@ -113,7 +149,7 @@ export default function Navbar({user, userDetails}) {
               onClick={showModal}
             >
               <span className="sr-only">Profile</span>
-              {userDetails && isSubmitted ? (
+              {user && userDetails ? (
                 <img
                   alt="Man"
                   src={userDetails.form[0].image.url}
@@ -123,7 +159,7 @@ export default function Navbar({user, userDetails}) {
                 <img
                   alt="Man"
                   src= "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                  className="h-10 w-10 rounded-full object-cover"
+                  className="h-10 w-10 rounded-full object-cover hidden"
                 />
               )}
             </button>
@@ -131,8 +167,8 @@ export default function Navbar({user, userDetails}) {
             <div
               className={
                 modal
-                  ? 'absolute bg-white rounded p-2 right-14 -bottom-20 border-2 border-blue'
-                  : 'absolute bg-white rounded p-2 right-14 -bottom-20 border-2 border-blue hidden'
+                  ? 'absolute bg-white rounded p-2 right-2 -bottom-16 border-2 border-blue'
+                  : 'hidden'
               }
             >
               <ul>
@@ -145,7 +181,11 @@ export default function Navbar({user, userDetails}) {
                     <path fill="none" d="M0 0h24v24H0z"></path>
                     <path d="M14.2558 21.7442L12 24L9.74416 21.7442C5.30941 20.7204 2 16.7443 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12C22 16.7443 18.6906 20.7204 14.2558 21.7442ZM6.02332 15.4163C7.49083 17.6069 9.69511 19 12.1597 19C14.6243 19 16.8286 17.6069 18.2961 15.4163C16.6885 13.9172 14.5312 13 12.1597 13C9.78821 13 7.63095 13.9172 6.02332 15.4163ZM12 11C13.6569 11 15 9.65685 15 8C15 6.34315 13.6569 5 12 5C10.3431 5 9 6.34315 9 8C9 9.65685 10.3431 11 12 11Z"></path>
                   </svg>
-                  <NavLink to="/">Edit your profile</NavLink>
+                  {user && <NavLink to={`/host_details/${user.id}`}>View your profile</NavLink>}
+                </li>
+                <li className="flex gap-1 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="fill-deepgray w-4 h-4"><path d="M7.24264 17.9964H3V13.7538L14.435 2.31877C14.8256 1.92825 15.4587 1.92825 15.8492 2.31877L18.6777 5.1472C19.0682 5.53772 19.0682 6.17089 18.6777 6.56141L7.24264 17.9964ZM3 19.9964H21V21.9964H3V19.9964Z"></path></svg>
+                <NavLink>Edit your profile</NavLink>
                 </li>
                 <li className="flex gap-1 items-center">
                   <svg
