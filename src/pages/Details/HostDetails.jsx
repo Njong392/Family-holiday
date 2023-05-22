@@ -5,16 +5,9 @@ import {useEffect} from "react";
 
 
 export default function HostDetails(){
-    const {state: {user, host}, dispatch} = useAuthContext()
+    const {state: {user, host, userDetails}, dispatch} = useAuthContext()
 
     const {id} = useParams()
-
-    // if(host){
-    //     host._id = useParams()
-    //
-    // } else{
-    //     console.log('no user id')
-    // }
 
     const fetchHost = async () => {
         const response = await fetch('http://localhost:4000/api/user/' + id, {
@@ -37,7 +30,7 @@ export default function HostDetails(){
         console.log(id)
 
 
-    }, [user?.id,host?.id])
+    }, [user?.id,host?.id, userDetails])
 
 
 
@@ -50,7 +43,7 @@ export default function HostDetails(){
                         {host && (
                             <img
                                 alt="Lava"
-                                src= {host.host[0].image.url}
+                                src= {host.form[0].image.url}
                                 className="h-full w-full rounded-xl object-cover shadow-xl"
                             />
                         )}
@@ -89,14 +82,14 @@ export default function HostDetails(){
                             <p className="leading-relaxed line-clamp-3">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore error voluptatum corporis ex corrupti numquam architecto vitae omnis, ratione fuga earum necessitatibus quam repellendus placeat rerum cum. Commodi molestias ex dicta officia praesentium dolore eveniet provident, laudantium mollitia, iure possimus. Cum, nihil! Earum, odit? Aliquam ipsa sint consectetur quas dolor?</p>
                         </div>
 
-                        <div className="grid grid-cols-1 md: grid-cols-3 mt-4 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 mt-4 gap-4">
                             <div className="parent border-2 border-blue rounded-lg p-2 relative">
                                 {host && (
-                                    <p className="text-sm"><span className="font-bold">Adults:</span> {host.host[0].adults}</p>
+                                    <p className="text-sm"><span className="font-bold">Adults:</span> {host.form[0].adults}</p>
                                 )}
 
                                 {host && (
-                                    <p className="text-sm"><span className="font-bold">Children: </span> {host.host[0].children}</p>
+                                    <p className="text-sm"><span className="font-bold">Children: </span> {host.form[0].children}</p>
                                 )}
 
                                 <div className="child">
@@ -120,7 +113,7 @@ export default function HostDetails(){
 
                             <div className="parent border-2 border-blue rounded-lg p-2 relative">
                                 {host && (
-                                    <p>{host.host[0].cuisine}</p>
+                                    <p>{host.form[0].cuisine}</p>
                                 )}
                                 <div className="child">
                                     <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">Cuisine</p>
