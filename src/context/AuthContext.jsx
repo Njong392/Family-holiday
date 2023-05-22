@@ -1,4 +1,5 @@
 import { createContext, useReducer, useEffect } from 'react';
+import { redirect } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
@@ -59,6 +60,8 @@ export const AuthContextProvider = ({ children }) => {
     if (user) {
       dispatch({ type: 'LOGIN', payload: user });
       
+    }else{
+      redirect('/login')
     }
   }, []);
 
