@@ -1,60 +1,180 @@
-import AccomodationList from "../../components/AccommodationList";
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import AccomodationList from '../../components/AccommodationList';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
+export default function UserProfile() {
+  const { state: { user, host, userDetails }, dispatch } = useAuthContext();
 
-export default function HostDetails(){
-    return(
-        <main aria-label="Main Section" className="font-poppins">
-            <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 rounded mt-5">
-            <h3 className="text-3xl font-bold text-blue mt-12">Host Profile</h3>
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 md:gap-8 mt-4">
-                    <div>
-                        <img
-                            alt="Lava"
-                            src="https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZmFtaWx5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-                            className="h-[100%] w-full rounded-xl object-cover shadow-xl"
-                        />
+  const { id } = useParams();
 
-                    </div>
+  const fetchHost = async () => {
+    const response = await fetch(`http://localhost:4000/api/user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
 
-                    <div>
-                        <div  className="flex gap-2 justify-end">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-9 h-9 text-deepgray">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
-                            </svg>
+    const json = await response.json();
 
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-9 h-9 text-deepgray">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
-                            </svg>
+    if (response.ok) {
+      dispatch({ type: 'GET_HOST', payload: json });
+      console.log(host);
+    }
+  };
 
-                        </div>
+  useEffect(() => {
+    fetchHost();
+    console.log(id);
+  }, [user?.id, host?.id, userDetails]);
 
-                        <h3 className="text-xl font-bold text-blue mt-4">
-                                Michael Michaelson
-                        </h3>
-                        <div className='flex items-center gap-1'>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                            </svg>
-                            <p className="text-sm font-bold text-blue">New York, USA</p>
+  return (
+    <main aria-label="Main Section" className="font-poppins">
+      <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 rounded mt-5">
+        <h3 className="text-3xl font-bold text-blue mt-12">Family Profile</h3>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 md:gap-8 mt-4">
+          <div>
+            {host && (
+            <img
+              alt="Lava"
+              src={host.form[0].image.url}
+              className="h-full w-full rounded-xl object-cover shadow-xl"
+            />
+            )}
 
-                        </div>
+          </div>
 
-                        <div className="mt-1 text-deepgray">
-                            <p className="text-sm"><span className="font-bold">Number of family members:</span> 3, 4-32 years old</p>
-                            <p className="text-sm"><span className="font-bold">Laguage(s) spoken:</span> English and French</p>
-                        </div>
+          <div>
+            <div className="flex gap-2 justify-end">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-9 h-9 text-deepgray">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+              </svg>
 
-                        <div className="mt-4">
-                        <h3 className="text-xl font-bold text-blue">About Us</h3>
-                        <p className="leading-relaxed">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Inventore error voluptatum corporis ex corrupti numquam architecto vitae omnis, ratione fuga earum necessitatibus quam repellendus placeat rerum cum. Commodi molestias ex dicta officia praesentium dolore eveniet provident, laudantium mollitia, iure possimus. Cum, nihil! Earum, odit? Aliquam ipsa sint consectetur quas dolor?</p>
-                    </div>
-                    </div>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-9 h-9 text-deepgray">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+              </svg>
+
+            </div>
+
+            {host && (
+              <h3 className="text-2xl font-bold text-blue mt-4">
+                {host.first_name}
+                {' '}
+                <span>{host.last_name}</span>
+              </h3>
+            )}
+
+            <div className="flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-blue">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+              </svg>
+              {host && (
+                <p className="text-sm font-bold text-blue">
+                  {host.city}
+                  ,
+                  {' '}
+                  <span>{host.country}</span>
+                </p>
+              )}
+
+            </div>
+
+            <div className="mt-4">
+              <h3 className="text-xl font-bold text-blue">About Us</h3>
+              {host && (
+                <p className="leading-relaxed line-clamp-3">{host.form[0].bio}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 mt-4 gap-4">
+              <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                {host && (
+                  <p className="text-sm">
+                    <span className="font-bold">Adults:</span>
+                    {' '}
+                    {host.form[0].adults}
+                  </p>
+                )}
+
+                {host && (
+                  <p className="text-sm">
+                    <span className="font-bold">Children: </span>
+                    {' '}
+                    {host.form[0].children}
+                  </p>
+                )}
+
+                <div className="child">
+                  <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">composition</p>
                 </div>
+              </div>
 
-                <AccomodationList />
+              <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                {host && host.form[0].allergy.map((a) => (
+                  <span key={a}>
+                    {a}
+                    {' '}
+                  </span>
+                ))}
+                <div className="child">
+                  <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">allergy(ies)</p>
+                </div>
+              </div>
 
-                {/* <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 md:gap-8 mt-12 text-deepgray">
+              <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                {host && host.form[0].hobby.map((h) => (
+                  <span key={h}>
+                    {h}
+                    {' '}
+                  </span>
+                ))}
+                <div className="child">
+                  <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">hobby(ies)</p>
+                </div>
+              </div>
+
+              <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                {host && (
+                <p>{host.form[0].cuisine}</p>
+                )}
+                <div className="child">
+                  <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">Cuisine</p>
+                </div>
+              </div>
+
+              <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                {host && host.form[0].language.map((l) => (
+                  <span key={l}>
+                    {l}
+                    {' '}
+                  </span>
+                ))}
+                <div className="child">
+                  <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">Language(s)</p>
+                </div>
+              </div>
+
+              <div className="parent border-2 border-blue rounded-lg p-2 relative">
+                {host && host.form[0].pet.map((p) => (
+                  <span key={p.name}>
+                    {p}
+                    {' '}
+                  </span>
+                ))}
+                <div className="child">
+                  <p className="bg-blue text-white text-sm w-24 px-1 rounded-sm absolute -top-3 -right-3">Pet(s)</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <AccomodationList />
+
+        {/* <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 md:gap-8 mt-12 text-deepgray">
 
                     <div className="border-2 p-4 rounded-xl border-blue shadow-xl">
                         <h3 className="text-2xl font-bold">$50 <span className="text-sm ">night</span></h3>
@@ -72,7 +192,6 @@ export default function HostDetails(){
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-lightgray">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-
 
                                     <p>0</p>
 
@@ -94,7 +213,6 @@ export default function HostDetails(){
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
 
-
                                     <p>0</p>
 
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-lightgray">
@@ -115,7 +233,6 @@ export default function HostDetails(){
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
 
-
                                     <p>0</p>
 
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-lightgray">
@@ -130,15 +247,15 @@ export default function HostDetails(){
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2 md:gap-8">
-                        <div className="bg-snow p-4 rounded-xl shadow-xl">        
+                        <div className="bg-snow p-4 rounded-xl shadow-xl">
                             <div className="flex gap-1 items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="fill-deepgray h-6 w-6"><path fill="none" d="M0 0h24v24H0z"></path><path d="M2 11H22V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V11ZM17 3H21C21.5523 3 22 3.44772 22 4V9H2V4C2 3.44772 2.44772 3 3 3H7V1H9V3H15V1H17V3Z"></path></svg>
                                  <p className="text-center text-sm font-extrabold text-deepgray">Duration of stay</p>
                             </div>
                             <p className=" mt-2">04/2023 - 07/2023</p>
                          </div>
- 
-                        <div className="bg-snow p-4 rounded-xl shadow-xl">    
+
+                        <div className="bg-snow p-4 rounded-xl shadow-xl">
                           <div className="flex gap-1 items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="fill-deepgray h-6 w-6"><path fill="none" d="M0 0h24v24H0z" ></path><path d="M20 20.0001C20 20.5524 19.5523 21.0001 19 21.0001H5C4.44772 21.0001 4 20.5524 4 20.0001V11.0001L1 11.0001L11.3273 1.61162C11.7087 1.26488 12.2913 1.26488 12.6727 1.61162L23 11.0001L20 11.0001V20.0001ZM7.5 13.0001C7.5 15.4854 9.51472 17.5001 12 17.5001C14.4853 17.5001 16.5 15.4854 16.5 13.0001H14.5C14.5 14.3808 13.3807 15.5001 12 15.5001C10.6193 15.5001 9.5 14.3808 9.5 13.0001H7.5Z"></path></svg>
                                 <p className="text-center text-sm font-extrabold text-deepgray">Cuisine</p>
@@ -179,15 +296,11 @@ export default function HostDetails(){
                            <p className="mt-2">- Fees don't include cleaning</p>
                         </div>
 
-
-
-                        
-
                     </div>
                 </section> */}
 
-            </div>
+      </div>
 
-        </main>
-    )
+    </main>
+  );
 }

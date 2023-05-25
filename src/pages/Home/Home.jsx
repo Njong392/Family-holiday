@@ -1,36 +1,29 @@
-import DiscoverPage from "../../components/DiscoverPage";
-import { useAuthContext } from "../../hooks/useAuthContext";
-import { useEffect } from "react";
+import { useEffect } from 'react';
+import DiscoverPage from '../../components/DiscoverPage';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
-export default function Home(){
-    const {state: {user, hosts}, dispatch} = useAuthContext()
+export default function Home() {
+  const { state: { user, hosts }, dispatch } = useAuthContext();
 
-    const fetchHosts = async () => {
-        const response = await fetch('http://localhost:4000/api/user', {
-            headers: {
-                'Authorization': `Bearer ${user.token}`
-            }
-        })
-        const json = await response.json()
+  const fetchHosts = async () => {
+    const response = await fetch('http://localhost:4000/api/user', {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+    const json = await response.json();
 
-        if(response.ok){
-            dispatch({type: 'GET_HOSTS', payload: json})
-        }
+    if (response.ok) {
+      dispatch({ type: 'GET_HOSTS', payload: json });
     }
+  };
 
+  useEffect(() => {
+    fetchHosts();
+    console.log(hosts);
+  }, []);
 
-    useEffect(() => {
-        
-            fetchHosts()
-            console.log(hosts)
-        
-    }, [])
-  
-    return(
-       <>
-            <DiscoverPage hostFamily={hosts}/>
-    
-        
-       </>
-    )
+  return (
+    <DiscoverPage hostFamily={hosts} />
+  );
 }
