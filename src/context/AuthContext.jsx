@@ -1,37 +1,36 @@
-import { createContext, useReducer, useEffect } from 'react';
-import { redirect } from 'react-router-dom';
+import { createContext, useReducer, useEffect } from "react";
+import { redirect } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export const authReducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN':
+    case "LOGIN":
       return {
         ...state,
         user: action.payload,
       };
-    case 'GET_HOSTS':
+    case "GET_HOSTS":
       return {
         ...state,
         hosts: action.payload,
       };
-    case 'GET_HOST':
+    case "GET_HOST":
       return {
         ...state,
         host: action.payload,
-
       };
-    case 'GET_USER_DETAILS':
+    case "GET_USER_DETAILS":
       return {
         ...state,
         userDetails: action.payload,
       };
-    case 'UPDATE_USER_DETAILS':
+    case "UPDATE_USER_DETAILS":
       return {
         ...state,
         userDetails: action.payload,
       };
-    case 'LOGOUT':
+    case "LOGOUT":
       return {
         ...state,
         userDetails: null,
@@ -55,12 +54,12 @@ export function AuthContextProvider({ children }) {
 
   // TODO: use cookies instead of localStorage
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (user) {
-      dispatch({ type: 'LOGIN', payload: user });
+      dispatch({ type: "LOGIN", payload: user });
     } else {
-      redirect('/login');
+      redirect("/login");
     }
   }, []);
 

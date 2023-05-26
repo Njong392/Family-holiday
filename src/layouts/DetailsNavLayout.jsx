@@ -1,4 +1,4 @@
-import { NavLink, Outlet} from 'react-router-dom';
+import { NavLink, Outlet } from "react-router-dom";
 
 const DetailsNavLayout = () => {
   return (
@@ -17,23 +17,20 @@ const DetailsNavLayout = () => {
               aria-label="Site Nav"
               className="gap-8 text-sm font-medium md:flex"
             >
-              
-
               <NavLink
                 className="text-deepgray active:text-blue hover:text-blue font-bold"
                 to="/"
               >
                 Learn more
               </NavLink>
-
             </nav>
           </div>
         </div>
       </header>
 
-      <Outlet/>
+      <Outlet />
     </div>
-  )
-}
+  );
+};
 
-export default DetailsNavLayout
+export default DetailsNavLayout;

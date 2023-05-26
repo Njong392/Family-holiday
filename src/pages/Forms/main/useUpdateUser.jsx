@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { redirect } from 'react-router-dom';
-import { useAuthContext } from '../../../hooks/useAuthContext';
+import { useState } from "react";
+import { redirect } from "react-router-dom";
+import { useAuthContext } from "../../../hooks/useAuthContext";
 
 export const useUpdateUser = () => {
   const [error, setError] = useState(null);
@@ -13,19 +13,35 @@ export const useUpdateUser = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const updateUser = async ({
-    hobby, allergy, language, adults, children,pet, cuisine, bio, image,
+    hobby,
+    allergy,
+    language,
+    adults,
+    children,
+    pet,
+    cuisine,
+    bio,
+    image,
   }) => {
     setIsLoading(false);
     setError(null);
 
     const response = await fetch(`http://localhost:4000/api/user/${user.id}`, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `Bearer ${user.token}`,
       },
       body: JSON.stringify({
-        hobby, allergy, language, adults, children,pet, cuisine, bio, image,
+        hobby,
+        allergy,
+        language,
+        adults,
+        children,
+        pet,
+        cuisine,
+        bio,
+        image,
       }),
     });
 
@@ -34,22 +50,27 @@ export const useUpdateUser = () => {
     if (!response.ok) {
       setIsLoading(false);
       setError(json.error);
-      setSuccess('');
+      setSuccess("");
       setIsSubmitted(false);
     }
     if (response.ok) {
-      dispatch({ type: 'UPDATE_USER_DETAILS', payload: json });
+      dispatch({ type: "UPDATE_USER_DETAILS", payload: json });
       setIsLoading(false);
       setError(false);
       setIsSubmitted(true);
       if (setError) {
-        setSuccess('We got your profile information ready!');
+        setSuccess("We got your profile information ready!");
       }
-      return redirect('/');
+      return redirect("/");
     }
   };
 
   return {
-    updateUser, setError, error, isLoading, success, isSubmitted,
+    updateUser,
+    setError,
+    error,
+    isLoading,
+    success,
+    isSubmitted,
   };
 };
