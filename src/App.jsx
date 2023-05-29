@@ -19,15 +19,15 @@ function App() {
     state: { user, userDetails, hosts, host },
   } = useUserContext();
 
-  // const {
-  //   state: {accommodations}
-  // } = useAccommodationContext()
+  const {
+    accommodations
+  } = useAccommodationContext()
 
   console.log("user: ", user);
   console.log("userdetails: ", userDetails);
   console.log("hosts: ", hosts);
   console.log("host: ", host);
-  //console.log("accommodations:", accommodations)
+  console.log("accommodations:", accommodations)
 
   return (
     <div className="App">

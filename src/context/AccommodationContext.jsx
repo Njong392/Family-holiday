@@ -33,8 +33,6 @@ export const AccommodationContextProvider = ({ children }) => {
     accommodation: null,
   });
 
-  console.log(state);
-
   return (
     <AccommodationContext.Provider value={{ ...state, dispatch }}>
       {children}
