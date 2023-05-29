@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import DiscoverPage from "../../components/DiscoverPage";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useUserContext } from "../../hooks/useUserContext";
 
 export default function Home() {
   const {
     state: { user, hosts },
     dispatch,
-  } = useAuthContext();
+  } = useUserContext();
 
   const fetchHosts = async () => {
     const response = await fetch("http://localhost:4000/api/user", {

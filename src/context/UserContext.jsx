@@ -1,7 +1,7 @@
 import { createContext, useReducer, useEffect } from "react";
 import { redirect } from "react-router-dom";
 
-export const AuthContext = createContext();
+export const UserContext = createContext();
 
 export const authReducer = (state, action) => {
   switch (action.type) {
@@ -44,7 +44,7 @@ export const authReducer = (state, action) => {
   }
 };
 
-export function AuthContextProvider({ children }) {
+export function UserContextProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
     userDetails: null,
@@ -64,10 +64,10 @@ export function AuthContextProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ state, dispatch }}>
+    <UserContext.Provider value={{ state, dispatch }}>
       {children}
-    </AuthContext.Provider>
+    </UserContext.Provider>
   );
 }
 
-export default AuthContextProvider;
+export default UserContextProvider;

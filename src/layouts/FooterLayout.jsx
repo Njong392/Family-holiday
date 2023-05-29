@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useUserContext } from "../hooks/useUserContext";
 
 export default function Footer() {
   const {
     state: { user },
-  } = useAuthContext();
+  } = useUserContext();
 
   return (
     <div>

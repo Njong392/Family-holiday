@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { redirect } from "react-router-dom";
-import { useAuthContext } from "../../../hooks/useAuthContext";
+import { useUserContext } from "../../../hooks/useUserContext";
 
 export const useUpdateUser = () => {
   const [error, setError] = useState(null);
@@ -9,7 +9,7 @@ export const useUpdateUser = () => {
   const {
     state: { user },
     dispatch,
-  } = useAuthContext();
+  } = useUserContext();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const updateUser = async ({

@@ -1,6 +1,6 @@
 import { CountryDropdown } from "react-country-region-selector";
 import { useParams } from "react-router-dom";
-import { useAuthContext } from "../../../hooks/useAuthContext";
+import { useUserContext } from "../../../hooks/useUserContext";
 import { useEffect, useState, useRef } from "react";
 import UserDetails from "../main/UserDetails";
 
@@ -8,7 +8,7 @@ const Edit = () => {
   const {
     state: { user, userDetails },
     dispatch,
-  } = useAuthContext();
+  } = useUserContext();
   const [firstName, setFirstName] = useState({});
 
   const { id } = useParams();

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useUserContext } from "../hooks/useUserContext";
 
 export default function DiscoverPage({ hostFamily }) {
   const {
     state: { user },
-  } = useAuthContext();
+  } = useUserContext();
 
   return (
     <main aria-label="Main Section" className="font-poppins">

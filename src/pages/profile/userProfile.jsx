@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import AccomodationList from "../../components/AccommodationList";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useUserContext } from "../../hooks/useUserContext";
 
 export default function UserProfile() {
   const {
     state: { user, host, userDetails },
     dispatch,
-  } = useAuthContext();
+  } = useUserContext();
 
   const { id } = useParams();
 

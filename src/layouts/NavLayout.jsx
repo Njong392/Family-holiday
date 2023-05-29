@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { useUserContext } from "../hooks/useUserContext";
 
 export default function Navbar() {
   const [modal, setModal] = useState(false);
@@ -10,7 +10,7 @@ export default function Navbar() {
   const {
     state: { user, userDetails },
     dispatch,
-  } = useAuthContext();
+  } = useUserContext();
 
   //if modal is visible, hide it
   function handleModal() {
@@ -248,7 +248,7 @@ export default function Navbar() {
                   </svg>
                 </NavLink>
               </li>
-              <li classNmae="py-1">
+              <li className="py-1">
                 <a
                   href="#"
                   className="flex justify-end gap-2 items-center"
@@ -264,10 +264,10 @@ export default function Navbar() {
                   </svg>
                 </a>
               </li>
-              <li classNmae="py-1">
+              <li className="py-1">
                 <a
                   href="#"
-                  classNmae="flex justify-end gap-2 items-center"
+                  className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
                   <span>Notifications</span>
@@ -280,10 +280,10 @@ export default function Navbar() {
                   </svg>
                 </a>
               </li>
-              <li classNmae="py-1">
+              <li className="py-1">
                 <a
                   href="#"
-                  classNmae="flex justify-end gap-2 items-center"
+                  className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
                   <span>View your profile</span>
@@ -297,10 +297,10 @@ export default function Navbar() {
                   </svg>
                 </a>
               </li>
-              <li classNmae="py-1">
+              <li className="py-1">
                 <a
                   href="#"
-                  classNmae="flex justify-end gap-2 items-center"
+                  className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
                   <span>Edit your profile</span>
@@ -313,11 +313,11 @@ export default function Navbar() {
                   </svg>
                 </a>
               </li>
-              <li classNmae="py-1">
+              <li className="py-1">
                 <Link
                   onClick={handleClick}
                   to="/"
-                  classNmae="flex justify-end gap-2 items-center"
+                  className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
                   <span>Log out</span>
@@ -331,10 +331,10 @@ export default function Navbar() {
                   </svg>
                 </Link>
               </li>
-              <li classNmae="py-1">
+              <li className="py-1">
                 <a
                   href="#"
-                  classNmae="flex justify-end gap-2 items-center"
+                  className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
                   <span>Learn more</span>

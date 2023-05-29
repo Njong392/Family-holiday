@@ -5,22 +5,29 @@ import Home from "./pages/home/Home";
 import Profile from "./pages/profile/userProfile";
 import Footer from "./layouts/FooterLayout";
 import UserDetails from "./pages/forms/main/UserDetails.jsx";
-import { useAuthContext } from "./hooks/useAuthContext.jsx";
+import { useUserContext } from "./hooks/useUserContext.jsx";
+import { useAccommodationContext } from "./hooks/useAccommodationContext";
 import Navbar from "./Layouts/NavLayout";
 import Accommodation from "./pages/accommodation/accommodation";
 import DetailsNavLayout from "./layouts/DetailsNavLayout";
 import Edit from "./pages/forms/edit/Edit";
+import Host from "./pages/Forms/host/host";
 // import ErrorPage from "./pages/Error/404.jsx";
 
 function App() {
   const {
     state: { user, userDetails, hosts, host },
-  } = useAuthContext();
+  } = useUserContext();
+
+  // const {
+  //   state: {accommodations}
+  // } = useAccommodationContext()
 
   console.log("user: ", user);
   console.log("userdetails: ", userDetails);
   console.log("hosts: ", hosts);
   console.log("host: ", host);
+  //console.log("accommodations:", accommodations)
 
   return (
     <div className="App">
@@ -35,7 +42,6 @@ function App() {
             path="/login"
             element={!user ? <Login /> : <Navigate to="/" />}
           />
-          <Route path="/edit/profile" element={<Edit />} />
 
           <Route path="/" element={<DetailsNavLayout />}>
             <Route
@@ -54,6 +60,10 @@ function App() {
               {/* <Route path="/404" element={( hosts.length === 0 ) ? <ErrorPage /> : <Navigate to="/"/>} /> */}
 
               <Route path="/profile/:id" element={<Profile />} />
+
+              <Route path="/edit/profile" element={<Edit />} />
+
+              <Route path="/host" element={<Host />}/>
 
               <Route path="/accommodation" element={<Accommodation />} />
             </Route>
