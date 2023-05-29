@@ -63,7 +63,7 @@ function App() {
 
               <Route path="/edit/profile" element={<Edit />} />
 
-              <Route path="/host" element={<Host />}/>
+              <Route path="/host" element={<Host />} />
 
               <Route path="/accommodation" element={<Accommodation />} />
             </Route>

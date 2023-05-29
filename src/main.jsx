@@ -8,9 +8,9 @@ import AccommodationContextProvider from "./context/AccommodationContext";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <UserContextProvider>
-     <AccommodationContextProvider>
-      <App />
-     </AccommodationContextProvider>
+      <AccommodationContextProvider>
+        <App />
+      </AccommodationContextProvider>
     </UserContextProvider>
   </React.StrictMode>
 );

@@ -6,108 +6,108 @@ import { useCreateAccommodation } from "./useCreateAccommodation";
 import { useAccommodationContext } from "../../../hooks/useAccommodationContext";
 
 const Host = () => {
-    const {state: { user }} = useUserContext();
-    const {dispatch} = useAccommodationContext();
-    const { createAccommodation, error, isLoading, success} = useCreateAccommodation()
+  const {
+    state: { user },
+  } = useUserContext();
+  const { dispatch } = useAccommodationContext();
+  const { createAccommodation, error, isLoading, success } =
+    useCreateAccommodation();
 
-    const [country, setCountry] = useState("");
-    const [city, setCity] = useState("");
-    const [bedrooms, setBedrooms] = useState("");
-    const [beds, setBeds] = useState("");
-    const [bathrooms, setBathrooms] = useState("");
-    const [arrivalDate, setArrivalDate] = useState("");
-    const [departureDate, setDepartureDate] = useState("");
-    const [maxOfGuests, setMaxOfGuests] = useState("");
-    const [pricePerNight, setPricePerNight] = useState("");
-    const [houseRulesInput, setHouseRulesInput] = useState("");
-    const [houseRules, setHouseRules] = useState([]);
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [bedrooms, setBedrooms] = useState("");
+  const [beds, setBeds] = useState("");
+  const [bathrooms, setBathrooms] = useState("");
+  const [arrivalDate, setArrivalDate] = useState("");
+  const [departureDate, setDepartureDate] = useState("");
+  const [maxOfGuests, setMaxOfGuests] = useState("");
+  const [pricePerNight, setPricePerNight] = useState("");
+  const [houseRulesInput, setHouseRulesInput] = useState("");
+  const [houseRules, setHouseRules] = useState([]);
 
-    //to handle adding and deleting house rules
-    function getHouseRules(e) {
-        e.preventDefault();
-        setHouseRules(houseRules.concat(houseRulesInput));
-        setHouseRulesInput("");
-      }
-    
-      function deleteHouseRules(id) {
-        setHouseRules((oldHouseRules) => oldHouseRules.filter((_, i) => i !== id));
-      }
+  //to handle adding and deleting house rules
+  function getHouseRules(e) {
+    e.preventDefault();
+    setHouseRules(houseRules.concat(houseRulesInput));
+    setHouseRulesInput("");
+  }
 
-    //handle form submission for creating accommodation
-    const handleSubmit = async (e) => { 
-        e.preventDefault();
+  function deleteHouseRules(id) {
+    setHouseRules((oldHouseRules) => oldHouseRules.filter((_, i) => i !== id));
+  }
 
-        if(!user){
-            setError('Ypu must be logged in to perform this action')
-            return
-        }
+  //handle form submission for creating accommodation
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        const accommodation = {
-          country,
-          city,
-          bedrooms,
-          beds,
-          bathrooms,
-          maxOfGuests,
-          arrivalDate,
-          departureDate,
-          pricePerNight,
-          houseRules,
-      }
+    if (!user) {
+      setError("Ypu must be logged in to perform this action");
+      return;
+    }
 
-      const response = await fetch("http://localhost:4000/api/accommodation", {
-          method: "POST",
-          body: JSON.stringify(accommodation),
-          headers: { 
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${user.token}`
-           }
-      });
-      const json = await response.json();
+    const accommodation = {
+      country,
+      city,
+      bedrooms,
+      beds,
+      bathrooms,
+      maxOfGuests,
+      arrivalDate,
+      departureDate,
+      pricePerNight,
+      houseRules,
+    };
 
-      if (!response.ok) {
-        // setIsLoading(false);
-        // setError(json.error);
-        // setSuccess("");
+    const response = await fetch("http://localhost:4000/api/accommodation", {
+      method: "POST",
+      body: JSON.stringify(accommodation),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+    const json = await response.json();
+
+    if (!response.ok) {
+      // setIsLoading(false);
+      // setError(json.error);
+      // setSuccess("");
     }
 
     if (response.ok) {
-        // update the auth context
-        dispatch({ type: "CREATE_ACCOMMODATION", payload: json });
+      // update the auth context
+      dispatch({ type: "CREATE_ACCOMMODATION", payload: json });
 
-        // update loading state
-        // setIsLoading(false);
-        // setError(false);
-        // if (setError) {
-        //     setSuccess("Accommodation created succesfully");
-        // }
+      // update loading state
+      // setIsLoading(false);
+      // setError(false);
+      // if (setError) {
+      //     setSuccess("Accommodation created succesfully");
+      // }
     }
 
-      //await createAccommodation()
-    }
-
+    //await createAccommodation()
+  };
 
   return (
-   <main aria-label="Main Section" className="font-poppins">
-    <div className="mx-auto max-w-screen-xl py-16 rounded mt-5 lg:grid lg:min-h-screen lg:grid-cols-12">
+    <main aria-label="Main Section" className="font-poppins">
+      <div className="mx-auto max-w-screen-xl py-16 rounded mt-5 lg:grid lg:min-h-screen lg:grid-cols-12">
         <main className="grid col-span-8 lg:border-2 lg:shadow-xl lg:border-blue rounded pb-7 py-5 px-8">
-            <div className="max-w-xl lg:max-w-3xl">
-
+          <div className="max-w-xl lg:max-w-3xl">
             <h3 className="text-3xl font-bold text-blue mt-4">
               Tell Guests About Your Home
             </h3>
             <p className="text-sm text-lightgray">
-             This is where you enter details about your property.
+              This is where you enter details about your property.
             </p>
             <p className="text-sm text-blue mt-4">
               *Please fill in all fields correctly and carefully
             </p>
 
-        <form
+            <form
               className="mt-2 grid grid-cols-6 gap-6"
               onSubmit={handleSubmit}
             >
-
               <div className="col-span-6 md:col-span-3">
                 <label
                   htmlFor="Country"
@@ -116,7 +116,7 @@ const Host = () => {
                   Country
                 </label>
                 <p className="text-xs text-lightgray">
-                    This is the country where your property is located
+                  This is the country where your property is located
                 </p>
 
                 <CountryDropdown
@@ -134,7 +134,7 @@ const Host = () => {
                   City
                 </label>
                 <p className="text-xs text-lightgray">
-                    This is the city where your property is located
+                  This is the city where your property is located
                 </p>
 
                 <input
@@ -143,7 +143,7 @@ const Host = () => {
                   name="city"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
                   value={city}
-                    onChange={e => setCity(e.target.value)}
+                  onChange={(e) => setCity(e.target.value)}
                 />
               </div>
 
@@ -164,7 +164,7 @@ const Host = () => {
                   name="bedrooms"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
                   value={bedrooms}
-                    onChange={e => setBedrooms(e.target.value)}
+                  onChange={(e) => setBedrooms(e.target.value)}
                 />
               </div>
 
@@ -185,7 +185,7 @@ const Host = () => {
                   name="beds"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
                   value={beds}
-                    onChange={e => setBeds(e.target.value)}
+                  onChange={(e) => setBeds(e.target.value)}
                 />
               </div>
 
@@ -194,7 +194,7 @@ const Host = () => {
                   htmlFor="bathrooms"
                   className="block font-medium text-deepgray"
                 >
-                    Bathrooms
+                  Bathrooms
                 </label>
                 <p className="text-xs text-lightgray">
                   These are the number of bathrooms availaible for guests
@@ -206,7 +206,7 @@ const Host = () => {
                   name="bathrooms"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
                   value={bathrooms}
-                    onChange={e => setBathrooms(e.target.value)}
+                  onChange={(e) => setBathrooms(e.target.value)}
                 />
               </div>
 
@@ -224,7 +224,7 @@ const Host = () => {
                   name="arrivalDate"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
                   value={arrivalDate}
-                    onChange={e => setArrivalDate(e.target.value)}
+                  onChange={(e) => setArrivalDate(e.target.value)}
                 />
               </div>
 
@@ -242,7 +242,7 @@ const Host = () => {
                   name="departureDate"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
                   value={departureDate}
-                    onChange={e => setDepartureDate(e.target.value)}
+                  onChange={(e) => setDepartureDate(e.target.value)}
                 />
               </div>
 
@@ -260,7 +260,7 @@ const Host = () => {
                   name="maxOfGuests"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
                   value={maxOfGuests}
-                    onChange={e => setMaxOfGuests(e.target.value)}
+                  onChange={(e) => setMaxOfGuests(e.target.value)}
                 />
               </div>
 
@@ -269,7 +269,10 @@ const Host = () => {
                   htmlFor="pricePerNight"
                   className="block  font-medium text-deepgray"
                 >
-                  Price per night <span className="text-xs text-lightgray">(The currency is dollars)</span>
+                  Price per night{" "}
+                  <span className="text-xs text-lightgray">
+                    (The currency is dollars)
+                  </span>
                 </label>
 
                 <input
@@ -278,7 +281,7 @@ const Host = () => {
                   name="pricePerNight"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
                   value={pricePerNight}
-                    onChange={e => setPricePerNight(e.target.value)}
+                  onChange={(e) => setPricePerNight(e.target.value)}
                 />
               </div>
 
@@ -290,7 +293,8 @@ const Host = () => {
                   Home rules
                 </label>
                 <p className="text-xs text-lightgray">
-                  Some rules that you would want guests to know beforehand. For each rule you add, click on the "+" button.
+                  Some rules that you would want guests to know beforehand. For
+                  each rule you add, click on the "+" button.
                 </p>
 
                 <div className="flex items-center gap-2">
@@ -337,15 +341,13 @@ const Host = () => {
                 ))}
               </div>
 
-
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                 <button
                   className="inline-block shrink-0 rounded-md bg-blue px-12 py-3  font-medium text-snow transition hover:bg-transparent hover:text-blue border-2 hover:border-blue focus:outline-none focus:ring active:text-blue-500 disabled:opacity-50"
-                  disabled = {isLoading}
+                  disabled={isLoading}
                 >
                   Create listing
                 </button>
-
               </div>
             </form>
             {error && (
@@ -354,10 +356,10 @@ const Host = () => {
             {success && (
               <p className="text-green text-sm mt-4 font-bold">{success}</p>
             )}
-            </div>
+          </div>
         </main>
-    </div>
-   </main>
+      </div>
+    </main>
   );
 };
 
