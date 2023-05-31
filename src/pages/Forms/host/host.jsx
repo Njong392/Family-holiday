@@ -18,6 +18,8 @@ const Host = () => {
   const [bedrooms, setBedrooms] = useState("");
   const [beds, setBeds] = useState("");
   const [bathrooms, setBathrooms] = useState("");
+  const [image, setImage] = useState(null);
+  const [imageBase64, setImageBase64] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [maxOfGuests, setMaxOfGuests] = useState("");
@@ -35,6 +37,24 @@ const Host = () => {
   function deleteHouseRules(id) {
     setHouseRules((oldHouseRules) => oldHouseRules.filter((_, i) => i !== id));
   }
+
+   // convert image file to base64
+   const setFileToBase64 = (file) => {
+    const reader = new FileReader();
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+    reader.onloadend = () => {
+      setImageBase64(reader.result);
+    };
+  };
+
+  // receive file from form
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
+    setFileToBase64(file);
+  };
 
   //handle form submission for creating accommodation
   const handleSubmit = async (e) => {
@@ -54,6 +74,7 @@ const Host = () => {
       maxOfGuests,
       arrivalDate,
       departureDate,
+      image: imageBase64,
       pricePerNight,
       houseRules,
     };
@@ -339,6 +360,25 @@ const Host = () => {
                     </button>
                   </div>
                 ))}
+              </div>
+
+              <div className="col-span-6">
+                <label
+                  htmlFor="profile_image"
+                  className="block font-medium text-deepgray"
+                >
+                  Upload your favourite family photo. We'll use this as your
+                  profile picture
+                </label>
+
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                  accept="image/*"
+                  onChange={handleImage}
+                />
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">

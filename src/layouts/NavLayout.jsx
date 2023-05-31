@@ -87,7 +87,7 @@ export default function Navbar() {
                     ? "text-deepgray active:text-blue hover:text-blue font-bold"
                     : "hidden"
                 }
-                to="/host_form"
+                to="/host"
               >
                 Become a host
               </NavLink>

@@ -46,7 +46,7 @@ function App() {
           <Route path="/" element={<DetailsNavLayout />}>
             <Route
               path="/details"
-              element={!userDetails ? <UserDetails /> : <Navigate to="/" />}
+              element={!host ? <UserDetails /> : <Navigate to="/" />}
             />
           </Route>
 
