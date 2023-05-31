@@ -160,32 +160,32 @@ export default function UserDetails() {
                 />
               </div>
 
-              <div className="col-span-6 md:col-span-3">
-                <label htmlFor="adults" className="block font-medium text-deepgray">
-                  Number of adults in the family (18+)
-                </label>
+              {/*<div className="col-span-6 md:col-span-3">*/}
+              {/*  <label htmlFor="adults" className="block font-medium text-deepgray">*/}
+              {/*    Number of adults in the family (18+)*/}
+              {/*  </label>*/}
 
-                <input
-                  type="number"
-                  id="adults"
-                  name="adults"
-                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
-                  
-                />
-              </div>
+              {/*  <input*/}
+              {/*    type="number"*/}
+              {/*    id="adults"*/}
+              {/*    name="adults"*/}
+              {/*    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"*/}
+              {/*    */}
+              {/*  />*/}
+              {/*</div>*/}
 
-              <div className="col-span-6 md:col-span-3">
-                <label htmlFor="city" className="block font-medium text-deepgray">
-                  City
-                </label>
+              {/*<div className="col-span-6 md:col-span-3">*/}
+              {/*  <label htmlFor="city" className="block font-medium text-deepgray">*/}
+              {/*    City*/}
+              {/*  </label>*/}
 
-                <input
-                  type="text"
-                  id="text"
-                  name="text"
-                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
-                />
-              </div>
+              {/*  <input*/}
+              {/*    type="text"*/}
+              {/*    id="text"*/}
+              {/*    name="text"*/}
+              {/*    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"*/}
+              {/*  />*/}
+              {/*</div>*/}
 
               <div className="col-span-6 md:col-span-3">
 
