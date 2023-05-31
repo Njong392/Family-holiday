@@ -1,37 +1,36 @@
-import { createContext, useReducer, useEffect } from 'react';
-import { redirect } from 'react-router-dom';
+import { createContext, useReducer, useEffect } from "react";
+import { redirect } from "react-router-dom";
 
-export const AuthContext = createContext();
+export const UserContext = createContext();
 
 export const authReducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN':
+    case "LOGIN":
       return {
         ...state,
         user: action.payload,
       };
-    case 'GET_HOSTS':
+    case "GET_HOSTS":
       return {
         ...state,
         hosts: action.payload,
       };
-    case 'GET_HOST':
+    case "GET_HOST":
       return {
         ...state,
         host: action.payload,
-
       };
-    case 'GET_USER_DETAILS':
+    case "GET_USER_DETAILS":
       return {
         ...state,
         userDetails: action.payload,
       };
-    case 'UPDATE_USER_DETAILS':
+    case "UPDATE_USER_DETAILS":
       return {
         ...state,
         userDetails: action.payload,
       };
-    case 'LOGOUT':
+    case "LOGOUT":
       return {
         ...state,
         userDetails: null,
@@ -45,7 +44,7 @@ export const authReducer = (state, action) => {
   }
 };
 
-export function AuthContextProvider({ children }) {
+export function UserContextProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
     userDetails: null,
@@ -55,20 +54,20 @@ export function AuthContextProvider({ children }) {
 
   // TODO: use cookies instead of localStorage
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (user) {
-      dispatch({ type: 'LOGIN', payload: user });
+      dispatch({ type: "LOGIN", payload: user });
     } else {
-      redirect('/login');
+      redirect("/login");
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ state, dispatch }}>
+    <UserContext.Provider value={{ state, dispatch }}>
       {children}
-    </AuthContext.Provider>
+    </UserContext.Provider>
   );
 }
 
-export default AuthContextProvider;
+export default UserContextProvider;

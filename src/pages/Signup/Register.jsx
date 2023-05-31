@@ -1,42 +1,78 @@
-import { Link } from 'react-router-dom';
-import { CountryDropdown } from 'react-country-region-selector';
-import { useState } from 'react';
-import { useRegister } from './useRegister';
+import { Link } from "react-router-dom";
+import { CountryDropdown } from "react-country-region-selector";
+import { useState } from "react";
+import { useRegister } from "./useRegister";
 
 export default function SignUp() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [country, setCountry] = useState('');
-  const [city, setCity] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [country, setCountry] = useState("");
+  const [city, setCity] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const {
-    register, isLoading, error, success,
-  } = useRegister();
+  const { register, isLoading, error, success } = useRegister();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await register(firstName, lastName, country, city, email, password, confirmPassword);
+    await register(
+      firstName,
+      lastName,
+      country,
+      city,
+      email,
+      password,
+      confirmPassword
+    );
   };
 
   return (
     <section className="bg-white font-poppins">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
-        <aside
-          className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6"
-        >
-          <svg id="patternId" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
+          <svg
+            id="patternId"
+            width="100%"
+            height="100%"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <defs>
-              <pattern id="a" patternUnits="userSpaceOnUse" width="80" height="80" patternTransform="scale(5) rotate(0)">
-                <rect x="0" y="0" width="100%" height="100%" fill="hsla(0,0%,100%,1)" />
-                <path d="M0 0l20 20L40 0H30L20 10 10 0H0zm0 10v10h10L0 10zm40 0L30 20h10V10zm0 10v10l10-10H40zm20 0L40 40l20 20 20-20-20-20zm10 0l10 10V20H70zM60 30l10 10-10 10-10-10 10-10zM40 50v10h10L40 50zm0 10H30l10 10V60zm40-10L70 60h10V50zM0 60v10l10-10H0zm20 0L0 80h10l10-10 10 10h10L20 60z" strokeWidth="1" stroke="none" fill="hsla(203, 100%, 37%, 1)" />
-                <path d="M40 0v10l10 10h10L40 0zm20 20h10l10-10V0L60 20zM50 0l10 10L70 0H50zM10 20L0 30v10l20-20H10zm10 0l20 20V30L30 20H20zm20 20L20 60h10l10-10V40zM20 60L0 40v10l10 10h10zm0-30L10 40l10 10 10-10-10-10zm30 30L40 70v10l20-20H50zm10 0l20 20V70L70 60H60zm0 10L50 80h20L60 70z" strokeWidth="1" stroke="none" fill="hsla(203, 100%, 37%, 1)" />
+              <pattern
+                id="a"
+                patternUnits="userSpaceOnUse"
+                width="80"
+                height="80"
+                patternTransform="scale(5) rotate(0)"
+              >
+                <rect
+                  x="0"
+                  y="0"
+                  width="100%"
+                  height="100%"
+                  fill="hsla(0,0%,100%,1)"
+                />
+                <path
+                  d="M0 0l20 20L40 0H30L20 10 10 0H0zm0 10v10h10L0 10zm40 0L30 20h10V10zm0 10v10l10-10H40zm20 0L40 40l20 20 20-20-20-20zm10 0l10 10V20H70zM60 30l10 10-10 10-10-10 10-10zM40 50v10h10L40 50zm0 10H30l10 10V60zm40-10L70 60h10V50zM0 60v10l10-10H0zm20 0L0 80h10l10-10 10 10h10L20 60z"
+                  strokeWidth="1"
+                  stroke="none"
+                  fill="hsla(203, 100%, 37%, 1)"
+                />
+                <path
+                  d="M40 0v10l10 10h10L40 0zm20 20h10l10-10V0L60 20zM50 0l10 10L70 0H50zM10 20L0 30v10l20-20H10zm10 0l20 20V30L30 20H20zm20 20L20 60h10l10-10V40zM20 60L0 40v10l10 10h10zm0-30L10 40l10 10 10-10-10-10zm30 30L40 70v10l20-20H50zm10 0l20 20V70L70 60H60zm0 10L50 80h20L60 70z"
+                  strokeWidth="1"
+                  stroke="none"
+                  fill="hsla(203, 100%, 37%, 1)"
+                />
               </pattern>
             </defs>
-            <rect width="800%" height="800%" transform="translate(0,0)" fill="url(#a)" />
+            <rect
+              width="800%"
+              height="800%"
+              transform="translate(0,0)"
+              fill="url(#a)"
+            />
           </svg>
         </aside>
 
@@ -44,7 +80,6 @@ export default function SignUp() {
           aria-label="Main"
           className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6"
         >
-
           <div className="max-w-xl lg:max-w-3xl">
             <Link
               className="rounded bg-blue px-8 py-3 text-sm font-medium text-snow transition hover:shadow-xl focus:outline-none focus:ring"
@@ -52,23 +87,29 @@ export default function SignUp() {
             >
               Home
             </Link>
-            <h1
-              className="mt-6 text-2xl font-bold text-deepgray sm:text-3xl md:text-4xl"
-            >
+            <h1 className="mt-6 text-2xl font-bold text-deepgray sm:text-3xl md:text-4xl">
               Welcome to Family Holiday with Family
             </h1>
 
             <p className="mt-4 leading-relaxed text-lightgray">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi nam
-              dolorum aliquam, quibusdam aperiam voluptatum.
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi
+              nam dolorum aliquam, quibusdam aperiam voluptatum.
             </p>
 
-            {error && <p className="text-red text-sm mt-4 font-bold">{error}</p>}
+            {error && (
+              <p className="text-red text-sm mt-4 font-bold">{error}</p>
+            )}
 
-            {success && <p className="text-green text-sm mt-4 font-bold">Registered successfully</p>}
+            {success && (
+              <p className="text-green text-sm mt-4 font-bold">
+                Registered successfully
+              </p>
+            )}
 
-            <form className="mt-2 grid grid-cols-6 gap-6" onSubmit={handleSubmit}>
-
+            <form
+              className="mt-2 grid grid-cols-6 gap-6"
+              onSubmit={handleSubmit}
+            >
               <div className="col-span-6 md:col-span-3">
                 <label
                   htmlFor="firstName"
@@ -106,7 +147,10 @@ export default function SignUp() {
               </div>
 
               <div className="col-span-6">
-                <label htmlFor="Country" className="block font-medium text-deepgray">
+                <label
+                  htmlFor="Country"
+                  className="block font-medium text-deepgray"
+                >
                   Country
                 </label>
 
@@ -118,7 +162,10 @@ export default function SignUp() {
               </div>
 
               <div className="col-span-6">
-                <label htmlFor="City" className="block font-medium text-deepgray">
+                <label
+                  htmlFor="City"
+                  className="block font-medium text-deepgray"
+                >
                   City
                 </label>
 
@@ -133,7 +180,10 @@ export default function SignUp() {
               </div>
 
               <div className="col-span-6">
-                <label htmlFor="Email" className="block text-sm font-medium text-deepgray">
+                <label
+                  htmlFor="Email"
+                  className="block text-sm font-medium text-deepgray"
+                >
                   Email
                 </label>
 
@@ -190,7 +240,10 @@ export default function SignUp() {
                     terms and conditions
                   </a>
                   and
-                  <a href="#" className="text-deepgray underline"> privacy policy</a>
+                  <a href="#" className="text-deepgray underline">
+                    {" "}
+                    privacy policy
+                  </a>
                   .
                 </p>
               </div>
@@ -205,16 +258,16 @@ export default function SignUp() {
 
                 <p className="mt-4 text-sm text-lightgray sm:mt-0">
                   Already have an account?
-                  <Link to="/login" className="text-deepgray underline">Log in</Link>
+                  <Link to="/login" className="text-deepgray underline">
+                    Log in
+                  </Link>
                   .
                 </p>
-
               </div>
             </form>
           </div>
         </main>
       </div>
     </section>
-
   );
 }

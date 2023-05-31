@@ -1,12 +1,15 @@
-import { useEffect } from 'react';
-import DiscoverPage from '../../components/DiscoverPage';
-import { useAuthContext } from '../../hooks/useAuthContext';
+import { useEffect } from "react";
+import DiscoverPage from "../../components/DiscoverPage";
+import { useUserContext } from "../../hooks/useUserContext";
 
 export default function Home() {
-  const { state: { user, hosts }, dispatch } = useAuthContext();
+  const {
+    state: { user, hosts },
+    dispatch,
+  } = useUserContext();
 
   const fetchHosts = async () => {
-    const response = await fetch('http://localhost:4000/api/user', {
+    const response = await fetch("http://localhost:4000/api/user", {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
@@ -14,7 +17,7 @@ export default function Home() {
     const json = await response.json();
 
     if (response.ok) {
-      dispatch({ type: 'GET_HOSTS', payload: json });
+      dispatch({ type: "GET_HOSTS", payload: json });
     }
   };
 
@@ -23,7 +26,5 @@ export default function Home() {
     console.log(hosts);
   }, []);
 
-  return (
-    <DiscoverPage hostFamily={hosts} />
-  );
+  return <DiscoverPage hostFamily={hosts} />;
 }
