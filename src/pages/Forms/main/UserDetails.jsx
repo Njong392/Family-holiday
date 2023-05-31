@@ -101,11 +101,11 @@ export default function UserDetails() {
     // } else if (pet.length === 0) {
     //   setError('If you have no pets, enter "none"');
     // } 
-    if (!cuisine || !bio || !image || !adults || !children) {
-      setError(
-        "Oops. You left out a field. Please fill in everything in one go."
-      );
-    } else {
+    // if (!cuisine || !bio || !image || !adults || !children) {
+    //   setError(
+    //     "Oops. You left out a field. Please fill in everything in one go."
+    //   );
+    //} else {
       await updateUser({
         hobby,
         allergy,
@@ -128,7 +128,7 @@ export default function UserDetails() {
       setLanguage([]);
       setPet([]);
     }
-  };
+  //};
 
   return (
     <main aria-label="Main Section" className="font-poppins">
