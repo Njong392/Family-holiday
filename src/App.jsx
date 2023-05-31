@@ -1,30 +1,33 @@
-import {
-  BrowserRouter, Routes, Route, Navigate,
-} from 'react-router-dom';
-import SignUp from './pages/signup/Register';
-import Login from './pages/login/Login';
-import Home from './pages/home/Home';
-import Profile from './pages/profile/userProfile';
-import Footer from './layouts/FooterLayout';
-import UserDetails from './pages/forms/main/UserDetails.jsx';
-import { useAuthContext } from './hooks/useAuthContext.jsx';
-import Navbar from './layouts/NavLayout';
-import Accommodation from './pages/accommodation/accommodation';
-import DetailsNavLayout from './layouts/DetailsNavLayout';
-import Edit from './pages/forms/edit/Edit';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import SignUp from "./pages/signup/Register";
+import Login from "./pages/login/Login";
+import Home from "./pages/home/Home";
+import Profile from "./pages/profile/userProfile";
+import Footer from "./layouts/FooterLayout";
+import UserDetails from "./pages/forms/main/UserDetails.jsx";
+import { useUserContext } from "./hooks/useUserContext.jsx";
+import { useAccommodationContext } from "./hooks/useAccommodationContext";
+import Navbar from "./Layouts/NavLayout";
+import Accommodation from "./pages/accommodation/accommodation";
+import DetailsNavLayout from "./layouts/DetailsNavLayout";
+import Edit from "./pages/forms/edit/Edit";
+import Host from "./pages/Forms/host/host";
 // import ErrorPage from "./pages/Error/404.jsx";
 
 function App() {
   const {
-    state: {
-      user, userDetails, hosts, host,
-    },
-  } = useAuthContext();
+    state: { user, userDetails, hosts, host },
+  } = useUserContext();
 
-  console.log('user: ', user);
-  console.log('userdetails: ', userDetails);
-  console.log('hosts: ', hosts);
-  console.log('host: ', host);
+  const {
+    accommodations
+  } = useAccommodationContext()
+
+  console.log("user: ", user);
+  console.log("userdetails: ", userDetails);
+  console.log("hosts: ", hosts);
+  console.log("host: ", host);
+  console.log("accommodations:", accommodations)
 
   return (
     <div className="App">
@@ -40,12 +43,14 @@ function App() {
             element={!user ? <Login /> : <Navigate to="/" />}
           />
 
-          
-          <Route path='/' element={<DetailsNavLayout />}>
-            <Route path="/details" element={!userDetails ? <UserDetails /> : <Navigate to="/" />} />
+          <Route path="/" element={<DetailsNavLayout />}>
+            <Route
+              path="/details"
+              element={!host ? <UserDetails /> : <Navigate to="/" />}
+            />
           </Route>
 
-          <Route path="/" element={<Navbar/>}>
+          <Route path="/" element={<Navbar />}>
             <Route path="/" element={<Footer />}>
               <Route
                 index
@@ -56,9 +61,11 @@ function App() {
 
               <Route path="/profile/:id" element={<Profile />} />
 
-              <Route path="/accommodation" element={<Accommodation />} />
+              <Route path="/edit/profile" element={<Edit />} />
 
-              <Route path='/edit/profile' element={<Edit />} />
+              <Route path="/host" element={<Host />} />
+
+              <Route path="/accommodation" element={<Accommodation />} />
             </Route>
           </Route>
         </Routes>
