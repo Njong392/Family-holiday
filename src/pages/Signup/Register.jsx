@@ -31,49 +31,8 @@ export default function SignUp() {
   return (
     <section className="bg-white font-poppins">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
-        <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
-          <svg
-            id="patternId"
-            width="100%"
-            height="100%"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <pattern
-                id="a"
-                patternUnits="userSpaceOnUse"
-                width="80"
-                height="80"
-                patternTransform="scale(5) rotate(0)"
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="100%"
-                  height="100%"
-                  fill="hsla(0,0%,100%,1)"
-                />
-                <path
-                  d="M0 0l20 20L40 0H30L20 10 10 0H0zm0 10v10h10L0 10zm40 0L30 20h10V10zm0 10v10l10-10H40zm20 0L40 40l20 20 20-20-20-20zm10 0l10 10V20H70zM60 30l10 10-10 10-10-10 10-10zM40 50v10h10L40 50zm0 10H30l10 10V60zm40-10L70 60h10V50zM0 60v10l10-10H0zm20 0L0 80h10l10-10 10 10h10L20 60z"
-                  strokeWidth="1"
-                  stroke="none"
-                  fill="hsla(203, 100%, 37%, 1)"
-                />
-                <path
-                  d="M40 0v10l10 10h10L40 0zm20 20h10l10-10V0L60 20zM50 0l10 10L70 0H50zM10 20L0 30v10l20-20H10zm10 0l20 20V30L30 20H20zm20 20L20 60h10l10-10V40zM20 60L0 40v10l10 10h10zm0-30L10 40l10 10 10-10-10-10zm30 30L40 70v10l20-20H50zm10 0l20 20V70L70 60H60zm0 10L50 80h20L60 70z"
-                  strokeWidth="1"
-                  stroke="none"
-                  fill="hsla(203, 100%, 37%, 1)"
-                />
-              </pattern>
-            </defs>
-            <rect
-              width="800%"
-              height="800%"
-              transform="translate(0,0)"
-              fill="url(#a)"
-            />
-          </svg>
+        <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6 place-content-end">
+          <img src="https://images.pexels.com/photos/6190862/pexels-photo-6190862.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" className="absolute inset-0 h-full w-full object-cover" />
         </aside>
 
         <main

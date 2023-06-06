@@ -19,6 +19,20 @@ const DetailsNavLayout = () => {
             >
               <NavLink
                 className="text-deepgray active:text-blue hover:text-blue font-bold"
+                to="/signup"
+              >
+                Sign up
+              </NavLink>
+
+              <NavLink
+                className="text-deepgray active:text-blue hover:text-blue font-bold"
+                to="/login"
+              >
+                Login
+              </NavLink>
+
+              <NavLink
+                className="text-deepgray active:text-blue hover:text-blue font-bold"
                 to="/"
               >
                 Learn more

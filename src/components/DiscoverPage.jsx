@@ -90,6 +90,8 @@ export default function DiscoverPage({ hostFamily }) {
                     <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
                       {host.form[0].bio}
                     </p>
+
+                    <button className="text-blue text-sm underline">Read more</button>
                   </div>
                 </Link>
               ) : (

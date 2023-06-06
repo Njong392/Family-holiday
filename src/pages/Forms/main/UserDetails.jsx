@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useUpdateUser } from "./useUpdateUser";
+import { Link } from "react-router-dom";
 
 export default function UserDetails() {
   const [hobby, setHobby] = useState([]);
@@ -422,12 +423,9 @@ export default function UserDetails() {
                   <option value="">--Please choose an option--</option>
                   <option value="African">African</option>
                   <option value="American">American</option>
-                  <option value="Italian">Italian</option>
-                  <option value="French">French</option>
-                  <option value="Japanese">Japanese</option>
-                  <option value="Chinese">Chinese</option>
-                  <option value="Thai">Thai</option>
-                  <option value="Indian">Indian</option>
+                  <option value="South American">South American</option>
+                  <option value="European">European</option>
+                  <option value="Asian">Asian</option>
                   <option value="Other">Other</option>
                 </select>
               </div>
@@ -475,42 +473,6 @@ export default function UserDetails() {
                   />
               </div>
 
-              {/* <div className="col-span-6">
-                                <label htmlFor="more_info" className="block font-medium text-deepgray">What other information would you like to provide to the guest?</label>
-
-                                <ul className="text-deepgray">
-                                    <li>
-                                        <input type="checkbox" id="option1" name="option1" value="smoking"/>
-                                        <label htmlFor="smoking"> No smoking</label>
-                                    </li>
-
-                                    <li>
-                                        <input type="checkbox" id="option2" name="option2" value="cleaning" />
-                                        <label htmlFor="cleaning"> Host must clean up after themselves</label>
-                                    </li>
-
-                                    <li>
-                                        <input type="checkbox" id="option3" name="option3" value="meals" />
-                                        <label htmlFor="meals"> Additional cost will be incurred for home cooked meals</label>
-                                    </li>
-
-                                    <li>
-                                        <input type="checkbox" id="option4" name="option4" value="tour" />
-                                        <label htmlFor="tour"> Additional cost will be incurred for city tours</label>
-                                    </li>
-
-                                    <li>
-                                        <input type="checkbox" id="option5" name="option5" value="pets" />
-                                        <label htmlFor="pets"> No pets</label>
-                                    </li>
-
-                                    <li>
-                                        <input type="checkbox" id="option6" name="option6" value="pets" />
-                                        <label htmlFor="pets"> Additional costs will be incurred for pets</label>
-                                    </li>
-                                </ul>
-                            </div> */}
-
               <div className="col-span-6">
                 <p className="text-sm text-lightgray">
                   *This information will be made public for potential guests to
@@ -520,13 +482,14 @@ export default function UserDetails() {
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <button
+                <Link
+                  to="/"
                   className="inline-block shrink-0 rounded-md bg-blue px-12 py-3 text-sm font-medium text-snow transition hover:bg-transparent hover:text-blue border-2 hover:border-blue focus:outline-none focus:ring active:text-blue-500
                                 active:text-blue-500 disabled:opacity-50"
                   disabled={isLoading}
                 >
                   Submit
-                </button>
+                </Link>
               </div>
             </form>
             {error && (

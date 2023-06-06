@@ -5,7 +5,7 @@ export default function AccomodationList() {
     <>
       <h3 className="text-3xl font-bold text-blue mt-12">Accommodations</h3>
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-8 mt-4">
-        <Link className="group" to="/host_details">
+        <Link className="group" to="/">
           <img
             alt="Lava"
             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8aG91c2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
@@ -61,7 +61,7 @@ export default function AccomodationList() {
           </div>
         </Link>
 
-        <Link className="group" to="/host_details">
+        <Link className="group" to="/">
           <img
             alt="Lava"
             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8aG91c2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
@@ -117,7 +117,7 @@ export default function AccomodationList() {
           </div>
         </Link>
 
-        <Link className="group" to="/host_details">
+        <Link className="group" to="/">
           <img
             alt="Lava"
             src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8aG91c2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"

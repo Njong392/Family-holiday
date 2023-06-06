@@ -10,6 +10,15 @@ export const authReducer = (state, action) => {
         ...state,
         user: action.payload,
       };
+    case 'VERIFY_USER':
+      return {
+        ...state,
+        verifiedUser: action.payload
+      }
+    case 'UPDATE_VERIFIED_USER':
+      return {
+        user: action.payload
+      }
     case "GET_HOSTS":
       return {
         ...state,
@@ -37,6 +46,7 @@ export const authReducer = (state, action) => {
         user: null,
         hosts: null,
         host: null,
+        verifiedUser: null
       };
 
     default:
@@ -50,6 +60,7 @@ export function UserContextProvider({ children }) {
     userDetails: null,
     hosts: null,
     host: null,
+    verifiedUser: null
   });
 
   // TODO: use cookies instead of localStorage

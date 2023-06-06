@@ -5,6 +5,7 @@ import { useUserContext } from "../../../hooks/useUserContext";
 export const useUpdateUser = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [success, setSuccess] = useState(null);
   const {
     state: { user },
@@ -58,6 +59,7 @@ export const useUpdateUser = () => {
       setIsLoading(false);
       setError(false);
       setIsSubmitted(true);
+      setIsLoggedIn(true)
       if (setError) {
         setSuccess("We got your profile information ready!");
       }
@@ -68,6 +70,7 @@ export const useUpdateUser = () => {
   return {
     updateUser,
     setError,
+    isLoggedIn,
     error,
     isLoading,
     success,

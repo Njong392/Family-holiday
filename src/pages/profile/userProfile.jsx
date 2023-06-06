@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AccomodationList from "../../components/AccommodationList";
 import { useUserContext } from "../../hooks/useUserContext";
 
@@ -8,15 +8,16 @@ export default function UserProfile() {
     state: { user, host, userDetails },
     dispatch,
   } = useUserContext();
+  const [hideText, setHideText] = useState(false);
 
   const { id } = useParams();
 
+  const showText = () => {
+    setHideText(!hideText);
+  }
+
   const fetchHost = async () => {
-    const response = await fetch(`http://localhost:4000/api/user/${id}`, {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    });
+    const response = await fetch(`http://localhost:4000/api/user/${id}`);
 
     const json = await response.json();
 
@@ -29,7 +30,7 @@ export default function UserProfile() {
   useEffect(() => {
     fetchHost();
     console.log(id);
-  }, [user?.id, host?.id, userDetails]);
+  }, [host?.id, userDetails]);
 
   return (
     <main aria-label="Main Section" className="font-poppins">
@@ -41,7 +42,7 @@ export default function UserProfile() {
               <img
                 alt="Lava"
                 src={host.form[0].image.url}
-                className="h-full w-full rounded-xl object-cover shadow-xl"
+                className="w-full md:h-96 h-full rounded-xl object-cover shadow-xl"
               />
             )}
           </div>
@@ -115,13 +116,18 @@ export default function UserProfile() {
             <div className="mt-4">
               <h3 className="text-xl font-bold text-blue">About Us</h3>
               {host && (
-                <p className="leading-relaxed line-clamp-3">
+                <p 
+                onClick={showText}
+                className={hideText ? "leading-relaxed cursor-pointer" : "leading-relaxed cursor-pointer line-clamp-3"
+                } >
                   {host.form[0].bio}
                 </p>
+
               )}
+              
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 mt-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 mt-6 gap-5">
               <div className="parent border-2 border-blue rounded-lg p-2 relative">
                 {host && (
                   <p className="text-sm">

@@ -12,11 +12,14 @@ import Accommodation from "./pages/accommodation/accommodation";
 import DetailsNavLayout from "./layouts/DetailsNavLayout";
 import Edit from "./pages/forms/edit/Edit";
 import Host from "./pages/Forms/host/host";
+import VerifyEmail from "./pages/Error/VerifyEmail.jsx";
+import Verification from "./components/Verification";
+
 // import ErrorPage from "./pages/Error/404.jsx";
 
 function App() {
   const {
-    state: { user, userDetails, hosts, host },
+    state: { user, userDetails, hosts, host, verifiedUser },
   } = useUserContext();
 
   const {
@@ -28,6 +31,7 @@ function App() {
   console.log("hosts: ", hosts);
   console.log("host: ", host);
   console.log("accommodations:", accommodations)
+  console.log("verifiedUser:", verifiedUser)
 
   return (
     <div className="App">
@@ -35,7 +39,7 @@ function App() {
         <Routes>
           <Route
             path="/signup"
-            element={!user ? <SignUp /> : <Navigate to="/details" />}
+            element={!user ? <SignUp /> : <Navigate to="/verify-email" />}
           />
 
           <Route
@@ -50,7 +54,9 @@ function App() {
             />
           </Route>
 
-          <Route path="/" element={<Navbar />}>
+          <Route path="/verify-email" element={<VerifyEmail />} />
+
+          <Route path="/" element={user ? <Navbar /> : <DetailsNavLayout />}>
             <Route path="/" element={<Footer />}>
               <Route
                 index

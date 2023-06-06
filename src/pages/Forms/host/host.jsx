@@ -41,9 +41,7 @@ const Host = () => {
    // convert image file to base64
    const setFileToBase64 = (file) => {
     const reader = new FileReader();
-    if (file) {
       reader.readAsDataURL(file);
-    }
     reader.onloadend = () => {
       setImageBase64(reader.result);
     };
@@ -376,6 +374,7 @@ const Host = () => {
                   id="image"
                   name="image"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                  multiple
                   accept="image/*"
                   onChange={handleImage}
                 />
