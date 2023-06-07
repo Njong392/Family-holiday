@@ -2,12 +2,15 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import AccomodationList from "../../components/AccommodationList";
 import { useUserContext } from "../../hooks/useUserContext";
+import { useFetchAccommodations } from "./useFetchAccommodations";
 
 export default function UserProfile() {
   const {
     state: { user, host, userDetails },
     dispatch,
   } = useUserContext();
+
+  const { fetchAccommodations, isLoading, error, accommodations } = useFetchAccommodations();
 
   const { id } = useParams();
 
@@ -26,10 +29,14 @@ export default function UserProfile() {
     }
   };
 
+  
   useEffect(() => {
     fetchHost();
+    fetchAccommodations()
     console.log(id);
   }, [user?.id, host?.id, userDetails]);
+
+  
 
   return (
     <main aria-label="Main Section" className="font-poppins">
@@ -196,7 +203,11 @@ export default function UserProfile() {
           </div>
         </div>
 
-        <AccomodationList />
+        <div>
+          {accommodations && accommodations.filter(acc => acc.user_id === id).map(acc => (
+            <AccomodationList key={acc._id} acc={acc} />
+          ))}
+        </div>
 
         {/* <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 md:gap-8 mt-12 text-deepgray">
 
