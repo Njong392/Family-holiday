@@ -17,6 +17,7 @@ export const authReducer = (state, action) => {
       }
     case 'UPDATE_VERIFIED_USER':
       return {
+        ...state,
         user: action.payload
       }
     case "GET_HOSTS":

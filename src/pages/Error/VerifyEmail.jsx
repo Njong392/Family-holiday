@@ -50,8 +50,8 @@ const VerifyEmail = () => {
 
                         // update user state
                         const newUser = {
-                            ...user,
-                            isVerified: true
+                            ...user
+                            //isVerified: true
                         }
                         dispatch({ type: 'UPDATE_VERIFIED_USER', payload: newUser })
                     }
