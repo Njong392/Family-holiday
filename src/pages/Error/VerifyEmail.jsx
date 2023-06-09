@@ -13,10 +13,6 @@ const VerifyEmail = () => {
     const emailToken = searchParams.get('emailToken')
     
 
-    // const updateUser = useCallback((response) => {
-    //     localStorage.setItem('user', JSON.stringify(response))
-    // }, [])
-
     const isUserVerified = async () => {
             if(user?.isVerified) {
                 setTimeout(() => {
@@ -33,7 +29,7 @@ const VerifyEmail = () => {
                         body: JSON.stringify({emailToken})
                     })
 
-                    setIsLoading(false)
+                    //setIsLoading(false)
                     //console.log('res', response)
 
                     const json = await response.json()
@@ -50,10 +46,12 @@ const VerifyEmail = () => {
 
                         // update user state
                         const newUser = {
-                            ...user
-                            //isVerified: true
+                            ...user,
+                            isVerified: true
                         }
                         dispatch({ type: 'UPDATE_VERIFIED_USER', payload: newUser })
+
+                        localStorage.setItem('user', JSON.stringify(newUser))
                     }
                 } 
             }
@@ -67,7 +65,7 @@ const VerifyEmail = () => {
             console.log("verifiedUser",verifiedUser)
         }
         
-    }, [emailToken])
+    }, [emailToken, user])
 
   return (
     <div>

@@ -507,14 +507,14 @@ export default function UserDetails() {
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <Link
-                  to="/"
+                <button
+                  
                   className="inline-block shrink-0 rounded-md bg-blue px-12 py-3 text-sm font-medium text-snow transition hover:bg-transparent hover:text-blue border-2 hover:border-blue focus:outline-none focus:ring active:text-blue-500
                                 active:text-blue-500 disabled:opacity-50"
                   disabled={isLoading}
                 >
                   Submit
-                </Link>
+                </button>
               </div>
             </form>
             {error && (

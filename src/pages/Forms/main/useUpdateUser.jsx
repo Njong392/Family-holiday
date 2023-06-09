@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../../hooks/useUserContext";
 
 export const useUpdateUser = () => {
@@ -12,6 +12,7 @@ export const useUpdateUser = () => {
     dispatch,
   } = useUserContext();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const updateUser = async ({
     hobby,
@@ -63,7 +64,7 @@ export const useUpdateUser = () => {
       if (setError) {
         setSuccess("We got your profile information ready!");
       }
-      return redirect("/");
+      return navigate("/");
     }
   };
 
