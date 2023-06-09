@@ -5,8 +5,6 @@ import moment from 'moment'
 
 export default function AccomodationList({acc}) {
 
-  const formattedDate = moment(acc.createdAt).format('MMMM D')
-
 
   return (
     <>
