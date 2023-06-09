@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from "react-router-dom"
 import Verification from "../../components/Verification"
 
 const VerifyEmail = () => {
-    const { user, verifiedUser, dispatch} = useUserContext()
+    const { state:{user, verifiedUser},  dispatch} = useUserContext()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
@@ -62,7 +62,7 @@ const VerifyEmail = () => {
 
     useEffect(() => {
         
-        if(emailToken){
+        if(emailToken && user){
             isUserVerified()
             console.log("verifiedUser",verifiedUser)
         }
