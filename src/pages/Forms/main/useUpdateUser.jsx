@@ -28,7 +28,8 @@ export const useUpdateUser = () => {
     setIsLoading(false);
     setError(null);
 
-    const response = await fetch(`http://localhost:4000/api/user/${user.id}`, {
+    if(user?.isVerified){
+      const response = await fetch(`http://localhost:4000/api/user/${user.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +52,7 @@ export const useUpdateUser = () => {
 
     if (!response.ok) {
       setIsLoading(false);
-      setError(json.error);
+      setError("Some error occured. Please try again later.");
       setSuccess("");
       setIsSubmitted(false);
     }
@@ -65,6 +66,10 @@ export const useUpdateUser = () => {
         setSuccess("We got your profile information ready!");
       }
       return navigate("/");
+    } 
+    else{
+      setError("Whoops! You cannot perform this action until your email is verified.")
+    }
     }
   };
 
@@ -74,7 +79,7 @@ export const useUpdateUser = () => {
     isLoggedIn,
     error,
     isLoading,
-    success,
+    setSuccess,
     isSubmitted,
   };
 };

@@ -1,17 +1,14 @@
 import { CountryDropdown } from "react-country-region-selector";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useUserContext } from "../../../hooks/useUserContext";
-import { useCreateAccommodation } from "./useCreateAccommodation";
 import { useAccommodationContext } from "../../../hooks/useAccommodationContext";
+import moment from "moment";
 
 const Host = () => {
   const {
     state: { user },
   } = useUserContext();
   const { dispatch } = useAccommodationContext();
-  const { createAccommodation, error, isLoading, success } =
-    useCreateAccommodation();
 
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
@@ -26,12 +23,19 @@ const Host = () => {
   const [pricePerNight, setPricePerNight] = useState("");
   const [houseRulesInput, setHouseRulesInput] = useState("");
   const [houseRules, setHouseRules] = useState([]);
+  const [description, setDescription] = useState("");
+
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const date = moment().format("DD-MM-YYYY");
 
   //to handle adding and deleting house rules
   function getHouseRules(e) {
     e.preventDefault();
     setHouseRules(houseRules.concat(houseRulesInput));
     setHouseRulesInput("");
+    console.log(date)
   }
 
   function deleteHouseRules(id) {
@@ -58,10 +62,8 @@ const Host = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!user) {
-      setError("Ypu must be logged in to perform this action");
-      return;
-    }
+    setIsLoading(true);
+    setError("");
 
     const accommodation = {
       country,
@@ -72,41 +74,60 @@ const Host = () => {
       maxOfGuests,
       arrivalDate,
       departureDate,
+      description,
       image: imageBase64,
       pricePerNight,
       houseRules,
     };
 
-    const response = await fetch("http://localhost:4000/api/accommodation", {
-      method: "POST",
-      body: JSON.stringify(accommodation),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-    });
-    const json = await response.json();
 
-    if (!response.ok) {
-      // setIsLoading(false);
-      // setError(json.error);
-      // setSuccess("");
-    }
+    if (!user?.isVerified) {
+      setError("You must verify your email before creating an accommodation");
+      setSuccess("");
+    } else {
+      if(!country || !city || !bedrooms || !beds || !bathrooms || !maxOfGuests || !pricePerNight || !houseRules || !image) {
+        setError("Please fill in all the fields");
+        setSuccess("");
+      } else if(!(arrivalDate < departureDate)){
+        setError("Expected date of arrival must be before expected date of departure");
+        setSuccess("");
+      } else if(arrivalDate < date){
+        setError("Expected date of arrival must be later than today");
+        setSuccess("");
+      }
+       else {
 
-    if (response.ok) {
-      // update the auth context
-      dispatch({ type: "CREATE_ACCOMMODATION", payload: json });
+        const response = await fetch("http://localhost:4000/api/accommodation", {
+          method: "POST",
+          body: JSON.stringify(accommodation),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+        const json = await response.json();
+    
+        if (!response.ok) {
+          setIsLoading(false);
+          setError(json.error);
+          setSuccess("");
+        }
+    
+        if (response.ok) {
+          // update the auth context
+          dispatch({ type: "CREATE_ACCOMMODATION", payload: json });
+          setIsLoading(false);
+          setSuccess("Accommodation created successfully");
+          setError("");
+    
+        }
+        
+      }
 
-      // update loading state
-      // setIsLoading(false);
-      // setError(false);
-      // if (setError) {
-      //     setSuccess("Accommodation created succesfully");
-      // }
-    }
+      }
+    } 
 
-    //await createAccommodation()
-  };
+  
 
   return (
     <main aria-label="Main Section" className="font-poppins">
@@ -304,6 +325,8 @@ const Host = () => {
                 />
               </div>
 
+              
+
               <div className="col-span-6 md:col-span-3">
                 <label
                   htmlFor="Hobbies"
@@ -339,6 +362,7 @@ const Host = () => {
                 </div>
               </div>
 
+
               <div className="col-span-6 lg:col-span-3 flex gap-2 flex-wrap border-b border-lightgray pb-1">
                 {houseRules.map((h, id) => (
                   <div
@@ -358,6 +382,26 @@ const Host = () => {
                     </button>
                   </div>
                 ))}
+              </div>
+
+              <div className="col-span-6">
+                <label
+                  htmlFor="about"
+                  className="block font-medium text-deepgray"
+                >
+                  A description about the property
+                </label>
+                <p className="text-lightgray text-xs">
+                 Use this chance to write about the accommodation your families will be staying at, and what makes it special. What should guests expect from spending the holidays under your roof?
+                </p>
+
+                <textarea
+                  id="description"
+                  name="description"
+                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </div>
 
               <div className="col-span-6">

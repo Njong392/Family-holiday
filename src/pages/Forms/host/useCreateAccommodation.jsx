@@ -11,26 +11,38 @@ export const useCreateAccommodation = () => {
     state: { user },
   } = useUserContext();
 
-  const createAccommodation = async () => {
+  const createAccommodation = async (country,
+    city,
+    bedrooms,
+    beds,
+    bathrooms,
+    maxOfGuests,
+    arrivalDate,
+    departureDate,
+    pricePerNight,
+    description,
+    houseRules,
+    image) => {
     setIsLoading(true);
     setError(null);
 
-    const accommodation = {
-      country,
-      city,
-      bedrooms,
-      beds,
-      bathrooms,
-      maxOfGuests,
-      arrivalDate,
-      departureDate,
-      pricePerNight,
-      houseRules,
-    };
-
-    const response = await fetch("http://localhost:4000/api/accommodation", {
+    if(user?.isVerified){
+      const response = await fetch("http://localhost:4000/api/accommodation", {
       method: "POST",
-      body: JSON.stringify(accommodation),
+      body: JSON.stringify({
+        country,
+        city,
+        bedrooms,
+        beds,
+        bathrooms,
+        maxOfGuests,
+        arrivalDate,
+        departureDate,
+        pricePerNight,
+        description,
+        houseRules,
+        image
+      }),
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${user.token}`,
@@ -40,7 +52,7 @@ export const useCreateAccommodation = () => {
 
     if (!response.ok) {
       setIsLoading(false);
-      setError(json.error);
+      setError("Some error occured. Please try again later.");
       setSuccess("");
     }
 
@@ -54,6 +66,9 @@ export const useCreateAccommodation = () => {
       if (setError) {
         setSuccess("Accommodation created succesfully");
       }
+    } else{
+      setError("Whoops! You cannot perform this action until your email is verified")
+    }
     }
   };
 

@@ -51,7 +51,7 @@ export default function DiscoverPage({ hostFamily }) {
               host.form.length !== 0 ? (
                 <Link
                   className="group"
-                  to={`/profile/${host._id}`}
+                  to={`/profile/?userId=${host._id}`}
                   key={host._id}
                   id={host._id}
                 >

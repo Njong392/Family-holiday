@@ -1,6 +1,7 @@
 import { useAccommodationContext } from "../../hooks/useAccommodationContext";
 import { useUserContext } from "../../hooks/useUserContext";
 import { useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 
 export const useFetchAccommodations = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -8,11 +9,18 @@ export const useFetchAccommodations = () => {
     const { accommodations, dispatch } = useAccommodationContext()
     const { state:{user} } = useUserContext()
 
+    
+
+    const [searchParams] = useSearchParams();
+
+
+  const id = searchParams.get('userId');
+
     const fetchAccommodations = async () => {
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch('http://localhost:4000/api/accommodation', {
+        const response = await fetch(`http://localhost:4000/api/accommodation/?userId=${id}`, {
           headers:{
             'Authorization': `Bearer ${user.token}`
           }

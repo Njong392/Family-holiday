@@ -21,7 +21,7 @@ export default function UserDetails() {
   const [bio, setBio] = useState("");
   const [image, setImage] = useState(null);
   const [imageBase64, setImageBase64] = useState("");
-  const { updateUser, setError, error, isLoading, success } = useUpdateUser();
+  const { updateUser, setError, error, isLoading, setSuccess } = useUpdateUser();
 
   // convert image file to base64
   const setFileToBase64 = (file) => {
@@ -85,47 +85,52 @@ export default function UserDetails() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (adults < 1 || NaN) {
-      setError("There must be at least one adult in the family");
-    } else if (children < 0 || NaN) {
-      setError("Number of children must be greater than 0");
-    } else if (hobby.length === 0) {
-      setError(
-        'There must be at least one hobby. If there are none, enter "none"'
-      );
-    } else if (language.length === 0) {
-      setError("There must be at least one language set");
-    } else if (allergy.length === 0) {
-      setError('If there are no allergies, enter "none"');
-    } else if (pet.length === 0) {
-      setError('If you have no pets, enter "none"');
-    } 
-    if (!cuisine || !bio || !image || !adults || !children) {
-      setError(
-        "Oops. You left out a field. Please fill in everything in one go."
-      );
+    if(!user?.isVerified){
+      setError("Please verify your email first")
+      
     } else {
-      await updateUser({
-        hobby,
-        allergy,
-        language,
-        adults,
-        children,
-        pet,
-        cuisine,
-        bio,
-        image: imageBase64,
-      });
-      setCuisine("");
-      setChildren("");
-      setAdults("");
-      setBio("");
-      setImage("");
-      setImageBase64("");
-      setAllergy([]);
-      setHobby([]);
-      setLanguage([]);
-      setPet([]);
+      if (adults < 1 || NaN) {
+        setError("There must be at least one adult in the family");
+      } else if (children < 0 || NaN) {
+        setError("Number of children must be greater than 0");
+      } else if (hobby.length === 0) {
+        setError(
+          'There must be at least one hobby. If there are none, enter "none"'
+        );
+      } else if (language.length === 0) {
+        setError("There must be at least one language set");
+      } else if (allergy.length === 0) {
+        setError('If there are no allergies, enter "none"');
+      } else if (pet.length === 0) {
+        setError('If you have no pets, enter "none"');
+      } 
+      if (!cuisine || !bio || !image || !adults || !children) {
+        setError(
+          "Oops. You left out a field. Please fill in everything in one go."
+        );
+      } else {
+        await updateUser({
+          hobby,
+          allergy,
+          language,
+          adults,
+          children,
+          pet,
+          cuisine,
+          bio,
+          image: imageBase64,
+        });
+        setCuisine("");
+        setChildren("");
+        setAdults("");
+        setBio("");
+        setImage("");
+        setImageBase64("");
+        setAllergy([]);
+        setHobby([]);
+        setLanguage([]);
+        setPet([]);
+      }
     }
   };
 
