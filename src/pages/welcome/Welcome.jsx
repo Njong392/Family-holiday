@@ -1,14 +1,27 @@
+import { useEffect } from "react"
+import { useUserContext } from "../../hooks/useUserContext"
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { useUserContext } from "../hooks/useUserContext";
 
-
-export default function DiscoverPage({ hostFamily }) {
-  const {
-    state: { user },
-  } = useUserContext();
-
-
+const Welcome = () => {
+    const {
+        state: { hosts },
+        dispatch,
+      } = useUserContext();
+      
+    
+      const fetchHosts = async () => {
+        const response = await fetch("http://localhost:4000/api/user");
+        const json = await response.json();
+    
+        if (response.ok) {
+          dispatch({ type: "GET_HOSTS", payload: json });
+        }
+      };
+    
+      useEffect(() => {
+        fetchHosts();
+        console.log(hosts);
+      }, []);
   return (
     <main aria-label="Main Section" className="font-poppins">
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 rounded lg:bg-snow mt-5 lg:shadow-md ">
@@ -44,9 +57,9 @@ export default function DiscoverPage({ hostFamily }) {
         </section>
 
         <section className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-8">
-          {user &&
-            hostFamily &&
-            hostFamily.filter(host => host._id !== user.id).map((host) =>
+          {
+            hosts &&
+            hosts.map((host) =>
               host.form.length !== 0 ? (
                 <Link
                   className="group"
@@ -109,5 +122,7 @@ export default function DiscoverPage({ hostFamily }) {
         </div>
       </div>
     </main>
-  );
+  )
 }
+
+export default Welcome

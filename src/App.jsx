@@ -14,6 +14,8 @@ import Edit from "./pages/forms/edit/Edit";
 import Host from "./pages/Forms/host/host";
 import VerifyEmail from "./pages/Error/VerifyEmail.jsx";
 import Verification from "./components/Verification";
+import Filter from "./pages/filter/Filter";
+import Welcome from "./pages/Welcome/Welcome";
 
 // import ErrorPage from "./pages/Error/404.jsx";
 
@@ -54,6 +56,8 @@ function App() {
               path="/details"
               element={!host ? <UserDetails /> : <Navigate to="/" />}
             />
+
+            <Route path="/welcome" element={<Welcome />} />
           </Route>
 
           <Route path="/verify-email" element={<VerifyEmail />} />
@@ -68,6 +72,8 @@ function App() {
               {/* <Route path="/404" element={( hosts.length === 0 ) ? <ErrorPage /> : <Navigate to="/"/>} /> */}
 
               <Route path="/profile" element={<Profile />} />
+
+              <Route path="/filter/" element={<Filter />} />
 
               <Route path="/edit/profile" element={<Edit />} />
 

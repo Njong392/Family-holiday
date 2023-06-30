@@ -20,11 +20,7 @@ export const useFetchAccommodations = () => {
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch(`http://localhost:4000/api/accommodation/?userId=${id}`, {
-          headers:{
-            'Authorization': `Bearer ${user.token}`
-          }
-        })
+        const response = await fetch(`http://localhost:4000/api/accommodation/?userId=${id}`)
     
         const json = await response.json()
 

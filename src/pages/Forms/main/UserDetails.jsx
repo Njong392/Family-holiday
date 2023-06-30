@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUpdateUser } from "./useUpdateUser";
 import { Link } from "react-router-dom";
+import { useUserContext } from "../../../hooks/useUserContext";
 
 export default function UserDetails() {
   const [hobby, setHobby] = useState([]);
@@ -21,7 +22,9 @@ export default function UserDetails() {
   const [bio, setBio] = useState("");
   const [image, setImage] = useState(null);
   const [imageBase64, setImageBase64] = useState("");
-  const { updateUser, setError, error, isLoading, setSuccess } = useUpdateUser();
+  const { updateUser, setError, error, isLoading, success } = useUpdateUser();
+
+  const {state: {user}} = useUserContext()
 
   // convert image file to base64
   const setFileToBase64 = (file) => {
@@ -86,7 +89,7 @@ export default function UserDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if(!user?.isVerified){
-      setError("Please verify your email first")
+      setError("Please sign up and/or verify your email first")
       
     } else {
       if (adults < 1 || NaN) {

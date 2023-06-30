@@ -35,7 +35,6 @@ const Host = () => {
     e.preventDefault();
     setHouseRules(houseRules.concat(houseRulesInput));
     setHouseRulesInput("");
-    console.log(date)
   }
 
   function deleteHouseRules(id) {
@@ -82,7 +81,7 @@ const Host = () => {
 
 
     if (!user?.isVerified) {
-      setError("You must verify your email before creating an accommodation");
+      setError("You must verify your email and/or be logged in before creating an accommodation");
       setSuccess("");
     } else {
       if(!country || !city || !bedrooms || !beds || !bathrooms || !maxOfGuests || !pricePerNight || !houseRules || !image) {

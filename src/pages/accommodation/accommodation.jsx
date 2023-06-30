@@ -53,11 +53,7 @@ export default function Accommodation() {
 
 
   const fetchAccommodation = async () => {
-    const response = await fetch(`http://localhost:4000/api/accommodation/${id}`, {
-      headers:{
-        'Authorization': `Bearer ${user.token}`
-      }
-    });
+    const response = await fetch(`http://localhost:4000/api/accommodation/${id}`);
 
     const json = await response.json();
 
