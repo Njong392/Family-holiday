@@ -16,6 +16,8 @@ import VerifyEmail from "./pages/Error/VerifyEmail.jsx";
 import Verification from "./components/Verification";
 import Filter from "./pages/filter/Filter";
 import Welcome from "./pages/Welcome/Welcome";
+import Chat from "./pages/chat/Chat";
+import { useChatContext } from "./hooks/useChatContext";
 
 // import ErrorPage from "./pages/Error/404.jsx";
 
@@ -23,6 +25,7 @@ function App() {
   const {
     state: { user, userDetails, hosts, host, verifiedUser },
   } = useUserContext();
+  const { chats } = useChatContext();
 
   const {
     accommodations, accommodation, savedAccommodations
@@ -36,6 +39,7 @@ function App() {
   console.log("accommodation:", accommodation)
   console.log("verifiedUser:", verifiedUser)
   console.log("savedAccommodations:", savedAccommodations)
+  console.log("chats:", chats)
 
   return (
     <div className="App">
@@ -78,6 +82,8 @@ function App() {
               <Route path="/edit/profile" element={<Edit />} />
 
               <Route path="/host" element={<Host />} />
+
+              <Route path="/chat" element={<Chat />} />
 
               <Route path="/accommodations/:id" element={<Accommodation />} />
             </Route>

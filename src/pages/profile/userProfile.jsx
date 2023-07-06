@@ -1,16 +1,19 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AccomodationList from "../../components/accommodation/AccommodationList";
 import { useUserContext } from "../../hooks/useUserContext";
+import { useChatContext } from "../../hooks/useChatContext";
+import {stringify} from 'flatted'
 
 
 export default function UserProfile() {
   const {
-    state: { host, userDetails },
+    state: { user, host, userDetails },
     dispatch,
   } = useUserContext();
   const [hideText, setHideText] = useState(false);
   const [searchParams] = useSearchParams();
+  const {chats} = useChatContext()
 
 
   const id = searchParams.get('userId');
@@ -30,9 +33,29 @@ export default function UserProfile() {
     }
   };
 
+  const accessChat = async(id) => {
+    const response = await fetch('http://localhost:4000/api/chat/', {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
+
+      },
+      body: stringify(id)
+    })
+
+    const json = await response.json()
+
+    if(response.ok){
+      dispatch({type: 'GET_CHATS', payload: json})
+      
+    }
+  }
+
   
   useEffect(() => {
     fetchHost();
+  
     // const url = window.location.pathname.split('/')[2]
     // console.log('url:', url)
   }, [host?.id, userDetails, id]);
@@ -63,7 +86,8 @@ export default function UserProfile() {
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-9 h-9 text-deepgray"
+                className="w-9 h-9 text-deepgray cursor-pointer"
+                onClick={accessChat} 
               >
                 <path
                   strokeLinecap="round"
@@ -80,13 +104,15 @@ export default function UserProfile() {
             )}
 
             <div className="flex items-center gap-1">
-              <svg
+              
+                <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
                 className="w-4 h-4 text-blue"
+                
               >
                 <path
                   strokeLinecap="round"
@@ -99,6 +125,7 @@ export default function UserProfile() {
                   d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                 />
               </svg>
+              
               {host && (
                 <p className="text-sm font-bold text-blue">
                   {host.city}, <span>{host.country}</span>
