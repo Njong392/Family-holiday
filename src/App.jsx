@@ -4,7 +4,7 @@ import Login from "./pages/login/Login";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/userProfile";
 import Footer from "./layouts/FooterLayout";
-import UserDetails from "./pages/forms/main/UserDetails.jsx";
+import UserDetails from "./pages/Forms/main/UserDetails.jsx";
 import { useUserContext } from "./hooks/useUserContext.jsx";
 import { useAccommodationContext } from "./hooks/useAccommodationContext";
 import Navbar from "./Layouts/NavLayout";
@@ -12,15 +12,20 @@ import Accommodation from "./pages/accommodation/accommodation";
 import DetailsNavLayout from "./layouts/DetailsNavLayout";
 import Edit from "./pages/forms/edit/Edit";
 import Host from "./pages/Forms/host/host";
+import VerifyEmail from "./pages/Error/VerifyEmail.jsx";
+import Verification from "./components/Verification";
+import Filter from "./pages/filter/Filter";
+import Welcome from "./pages/Welcome/Welcome";
+
 // import ErrorPage from "./pages/Error/404.jsx";
 
 function App() {
   const {
-    state: { user, userDetails, hosts, host },
+    state: { user, userDetails, hosts, host, verifiedUser },
   } = useUserContext();
 
   const {
-    accommodations
+    accommodations, accommodation, savedAccommodations
   } = useAccommodationContext()
 
   console.log("user: ", user);
@@ -28,6 +33,9 @@ function App() {
   console.log("hosts: ", hosts);
   console.log("host: ", host);
   console.log("accommodations:", accommodations)
+  console.log("accommodation:", accommodation)
+  console.log("verifiedUser:", verifiedUser)
+  console.log("savedAccommodations:", savedAccommodations)
 
   return (
     <div className="App">
@@ -35,7 +43,7 @@ function App() {
         <Routes>
           <Route
             path="/signup"
-            element={!user ? <SignUp /> : <Navigate to="/details" />}
+            element={!user ? <SignUp /> : <Navigate to="/verify-email" />}
           />
 
           <Route
@@ -48,9 +56,13 @@ function App() {
               path="/details"
               element={!host ? <UserDetails /> : <Navigate to="/" />}
             />
+
+            <Route path="/welcome" element={<Welcome />} />
           </Route>
 
-          <Route path="/" element={<Navbar />}>
+          <Route path="/verify-email" element={<VerifyEmail />} />
+
+          <Route path="/" element={user ? <Navbar /> : <DetailsNavLayout />}>
             <Route path="/" element={<Footer />}>
               <Route
                 index
@@ -59,13 +71,15 @@ function App() {
 
               {/* <Route path="/404" element={( hosts.length === 0 ) ? <ErrorPage /> : <Navigate to="/"/>} /> */}
 
-              <Route path="/profile/:id" element={<Profile />} />
+              <Route path="/profile" element={<Profile />} />
+
+              <Route path="/filter/" element={<Filter />} />
 
               <Route path="/edit/profile" element={<Edit />} />
 
               <Route path="/host" element={<Host />} />
 
-              <Route path="/accommodation" element={<Accommodation />} />
+              <Route path="/accommodations/:id" element={<Accommodation />} />
             </Route>
           </Route>
         </Routes>

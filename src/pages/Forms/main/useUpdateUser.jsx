@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../../hooks/useUserContext";
 
 export const useUpdateUser = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [success, setSuccess] = useState(null);
   const {
     state: { user },
     dispatch,
   } = useUserContext();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const updateUser = async ({
     hobby,
@@ -26,7 +28,8 @@ export const useUpdateUser = () => {
     setIsLoading(false);
     setError(null);
 
-    const response = await fetch(`http://localhost:4000/api/user/${user.id}`, {
+    if(user?.isVerified){
+      const response = await fetch(`http://localhost:4000/api/user/${user.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +52,7 @@ export const useUpdateUser = () => {
 
     if (!response.ok) {
       setIsLoading(false);
-      setError(json.error);
+      setError("Some error occured. Please try again later.");
       setSuccess("");
       setIsSubmitted(false);
     }
@@ -58,19 +61,25 @@ export const useUpdateUser = () => {
       setIsLoading(false);
       setError(false);
       setIsSubmitted(true);
+      setIsLoggedIn(true)
       if (setError) {
         setSuccess("We got your profile information ready!");
       }
-      return redirect("/");
+      return navigate("/");
+    } 
+    else{
+      setError("Whoops! You cannot perform this action until your email is verified.")
+    }
     }
   };
 
   return {
     updateUser,
     setError,
+    isLoggedIn,
     error,
     isLoading,
-    success,
+    setSuccess,
     isSubmitted,
   };
 };

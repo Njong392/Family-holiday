@@ -2,7 +2,7 @@ import { CountryDropdown } from "react-country-region-selector";
 import { useParams } from "react-router-dom";
 import { useUserContext } from "../../../hooks/useUserContext";
 import { useEffect, useState, useRef } from "react";
-import UserDetails from "../main/UserDetails";
+//import UserDetails from "../main/UserDetails";
 
 const Edit = () => {
   const {

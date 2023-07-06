@@ -46,6 +46,12 @@ export default function Navbar() {
 
     const json = await response.json();
 
+    if (!response.ok) {
+      setIsLoading(false);
+      setError("Some error occured. Please try again later.");
+      setSuccess("");
+    }
+
     if (response.ok) {
       dispatch({ type: "GET_USER_DETAILS", payload: json });
     }
@@ -57,7 +63,7 @@ export default function Navbar() {
     } else {
       console.log("no user");
     }
-  }, [user, id]);
+  }, []);
 
   return (
     <div>
@@ -132,7 +138,7 @@ export default function Navbar() {
 
             <button className="md:block shrink-0 hidden" onClick={showModal}>
               <span className="sr-only">Profile</span>
-              {user && userDetails ? (
+              {userDetails ? (
                 <img
                   alt="Man"
                   src={userDetails.form[0].image.url}
@@ -165,7 +171,7 @@ export default function Navbar() {
                     <path d="M14.2558 21.7442L12 24L9.74416 21.7442C5.30941 20.7204 2 16.7443 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12C22 16.7443 18.6906 20.7204 14.2558 21.7442ZM6.02332 15.4163C7.49083 17.6069 9.69511 19 12.1597 19C14.6243 19 16.8286 17.6069 18.2961 15.4163C16.6885 13.9172 14.5312 13 12.1597 13C9.78821 13 7.63095 13.9172 6.02332 15.4163ZM12 11C13.6569 11 15 9.65685 15 8C15 6.34315 13.6569 5 12 5C10.3431 5 9 6.34315 9 8C9 9.65685 10.3431 11 12 11Z" />
                   </svg>
                   {user && (
-                    <NavLink to={`/profile/${user.id}`}>
+                    <NavLink to={`/profile/?userId=${user.id}`}>
                       View your profile
                     </NavLink>
                   )}
@@ -237,6 +243,7 @@ export default function Navbar() {
                 <NavLink
                   className="flex justify-end gap-2 items-center"
                   id="nav-item"
+                  to="/profile"
                 >
                   <span>Become a host</span>
                   <svg
@@ -250,7 +257,7 @@ export default function Navbar() {
               </li>
               <li className="py-1">
                 <a
-                  href="#"
+                  href="/"
                   className="flex justify-end gap-2 items-center"
                   id="nav-item2"
                 >
@@ -266,7 +273,7 @@ export default function Navbar() {
               </li>
               <li className="py-1">
                 <a
-                  href="#"
+                  href="/"
                   className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
@@ -281,8 +288,8 @@ export default function Navbar() {
                 </a>
               </li>
               <li className="py-1">
-                <a
-                  href="#"
+                <NavLink
+                  to={`/profile/?userId=${user.id}`}
                   className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
@@ -295,11 +302,11 @@ export default function Navbar() {
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path d="M14.2558 21.7442L12 24L9.74416 21.7442C5.30941 20.7204 2 16.7443 2 12C2 6.48 6.48 2 12 2C17.52 2 22 6.48 22 12C22 16.7443 18.6906 20.7204 14.2558 21.7442ZM6.02332 15.4163C7.49083 17.6069 9.69511 19 12.1597 19C14.6243 19 16.8286 17.6069 18.2961 15.4163C16.6885 13.9172 14.5312 13 12.1597 13C9.78821 13 7.63095 13.9172 6.02332 15.4163ZM12 11C13.6569 11 15 9.65685 15 8C15 6.34315 13.6569 5 12 5C10.3431 5 9 6.34315 9 8C9 9.65685 10.3431 11 12 11Z" />
                   </svg>
-                </a>
+                </NavLink>
               </li>
               <li className="py-1">
                 <a
-                  href="#"
+                  href="/"
                   className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
@@ -333,7 +340,7 @@ export default function Navbar() {
               </li>
               <li className="py-1">
                 <a
-                  href="#"
+                  href="/"
                   className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
