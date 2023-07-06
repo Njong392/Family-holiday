@@ -7,7 +7,7 @@ import Footer from "./layouts/FooterLayout";
 import UserDetails from "./pages/Forms/main/UserDetails.jsx";
 import { useUserContext } from "./hooks/useUserContext.jsx";
 import { useAccommodationContext } from "./hooks/useAccommodationContext";
-import Navbar from "./Layouts/NavLayout";
+import Navbar from "./layouts/NavLayout";
 import Accommodation from "./pages/accommodation/accommodation";
 import DetailsNavLayout from "./layouts/DetailsNavLayout";
 import Edit from "./pages/forms/edit/Edit";
