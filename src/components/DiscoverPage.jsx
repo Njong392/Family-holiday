@@ -2,12 +2,10 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useUserContext } from "../hooks/useUserContext";
 
-
 export default function DiscoverPage({ hostFamily }) {
   const {
     state: { user },
   } = useUserContext();
-
 
   return (
     <main aria-label="Main Section" className="font-poppins">
@@ -23,7 +21,10 @@ export default function DiscoverPage({ hostFamily }) {
             </p>
           </div>
 
-          <Link className="flex gap-2 items-center rounded bg-blue text-snow px-3 py-2 mt-3 lg:mt-0" to="/filter">
+          <Link
+            className="flex gap-2 items-center rounded bg-blue text-snow px-3 py-2 mt-3 lg:mt-0"
+            to="/filter"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -46,60 +47,64 @@ export default function DiscoverPage({ hostFamily }) {
         <section className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-8">
           {user &&
             hostFamily &&
-            hostFamily.filter(host => host._id !== user.id).map((host) =>
-              host.form.length !== 0 ? (
-                <Link
-                  className="group"
-                  to={`/profile/?userId=${host._id}`}
-                  key={host._id}
-                  id={host._id}
-                >
-                  <img
-                    alt="Lava"
-                    src={host.form[0].image.url}
-                    className="w-full h-56 rounded-xl object-cover shadow-xl transition"
-                  />
+            hostFamily
+              .filter((host) => host._id !== user.id)
+              .map((host) =>
+                host.form.length !== 0 ? (
+                  <Link
+                    className="group"
+                    to={`/profile/?userId=${host._id}`}
+                    key={host._id}
+                    id={host._id}
+                  >
+                    <img
+                      alt="Lava"
+                      src={host.form[0].image.url}
+                      className="w-full h-56 rounded-xl object-cover shadow-xl transition"
+                    />
 
-                  <div className="py-4">
-                    <h3 className="text-2xl font-bold text-blue">
-                      {host.first_name} <span>{host.last_name}</span>
-                    </h3>
-                    <div className="flex items-center gap-1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="currentColor"
-                        className="w-4 h-4 text-blue"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                        />
-                      </svg>
-                      <p className="text-sm font-bold text-blue">
-                        New York, USA
+                    <div className="py-4">
+                      <h3 className="text-2xl font-bold text-blue">
+                        {host.first_name} <span>{host.last_name}</span>
+                      </h3>
+                      <div className="flex items-center gap-1">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                          stroke="currentColor"
+                          className="w-4 h-4 text-blue"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                          />
+                        </svg>
+                        <p className="text-sm font-bold text-blue">
+                          New York, USA
+                        </p>
+                      </div>
+
+                      <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
+                        {host.form[0].bio}
                       </p>
+
+                      <button className="text-blue text-sm underline">
+                        Read more
+                      </button>
                     </div>
-
-                    <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
-                      {host.form[0].bio}
-                    </p>
-
-                    <button className="text-blue text-sm underline">Read more</button>
-                  </div>
-                </Link>
-              ) : (
-                <p key={host._id} className="hidden" />
-              )
-            )}
+                  </Link>
+                ) : (
+                  <p key={host._id} className="hidden" />
+                )
+              )}
         </section>
 
         <div className="text-center">

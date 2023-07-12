@@ -24,7 +24,9 @@ export default function UserDetails() {
   const [imageBase64, setImageBase64] = useState("");
   const { updateUser, setError, error, isLoading, success } = useUpdateUser();
 
-  const {state: {user}} = useUserContext()
+  const {
+    state: { user },
+  } = useUserContext();
 
   // convert image file to base64
   const setFileToBase64 = (file) => {
@@ -88,9 +90,8 @@ export default function UserDetails() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!user?.isVerified){
-      setError("Please sign up and/or verify your email first")
-      
+    if (!user?.isVerified) {
+      setError("Please sign up and/or verify your email first");
     } else {
       if (adults < 1 || NaN) {
         setError("There must be at least one adult in the family");
@@ -106,7 +107,7 @@ export default function UserDetails() {
         setError('If there are no allergies, enter "none"');
       } else if (pet.length === 0) {
         setError('If you have no pets, enter "none"');
-      } 
+      }
       if (!cuisine || !bio || !image || !adults || !children) {
         setError(
           "Oops. You left out a field. Please fill in everything in one go."
@@ -172,7 +173,7 @@ export default function UserDetails() {
                   name="adults"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
                   value={adults}
-                  onChange={e => setAdults(e.target.value)}
+                  onChange={(e) => setAdults(e.target.value)}
                 />
               </div>
 
@@ -190,7 +191,7 @@ export default function UserDetails() {
                   name="children"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
                   value={children}
-                  onChange={e => setChildren(e.target.value)}
+                  onChange={(e) => setChildren(e.target.value)}
                 />
               </div>
 
@@ -222,8 +223,10 @@ export default function UserDetails() {
               {/*</div>*/}
 
               <div className="col-span-6 md:col-span-3">
-
-                <label htmlFor="Hobbies" className="block font-medium text-deepgray">
+                <label
+                  htmlFor="Hobbies"
+                  className="block font-medium text-deepgray"
+                >
                   What hobbies does your family enjoy?
                 </label>
                 <p className="text-xs text-lightgray">
@@ -495,15 +498,15 @@ export default function UserDetails() {
                 </label>
 
                 <input
-                    name="image"
-                    className="w-full rounded-lg border-gray-200 p-3 text-sm"
-                    placeholder="Image"
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    id="image"
-                    onChange={handleImage}
-                  />
+                  name="image"
+                  className="w-full rounded-lg border-gray-200 p-3 text-sm"
+                  placeholder="Image"
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  id="image"
+                  onChange={handleImage}
+                />
               </div>
 
               <div className="col-span-6">
@@ -516,7 +519,6 @@ export default function UserDetails() {
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                 <button
-                  
                   className="inline-block shrink-0 rounded-md bg-blue px-12 py-3 text-sm font-medium text-snow transition hover:bg-transparent hover:text-blue border-2 hover:border-blue focus:outline-none focus:ring active:text-blue-500
                                 active:text-blue-500 disabled:opacity-50"
                   disabled={isLoading}

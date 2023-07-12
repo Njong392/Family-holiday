@@ -11,7 +11,8 @@ export const useCreateAccommodation = () => {
     state: { user },
   } = useUserContext();
 
-  const createAccommodation = async (country,
+  const createAccommodation = async (
+    country,
     city,
     bedrooms,
     beds,
@@ -22,53 +23,56 @@ export const useCreateAccommodation = () => {
     pricePerNight,
     description,
     houseRules,
-    image) => {
+    image
+  ) => {
     setIsLoading(true);
     setError(null);
 
-    if(user?.isVerified){
+    if (user?.isVerified) {
       const response = await fetch("http://localhost:4000/api/accommodation", {
-      method: "POST",
-      body: JSON.stringify({
-        country,
-        city,
-        bedrooms,
-        beds,
-        bathrooms,
-        maxOfGuests,
-        arrivalDate,
-        departureDate,
-        pricePerNight,
-        description,
-        houseRules,
-        image
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-    });
-    const json = await response.json();
+        method: "POST",
+        body: JSON.stringify({
+          country,
+          city,
+          bedrooms,
+          beds,
+          bathrooms,
+          maxOfGuests,
+          arrivalDate,
+          departureDate,
+          pricePerNight,
+          description,
+          houseRules,
+          image,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const json = await response.json();
 
-    if (!response.ok) {
-      setIsLoading(false);
-      setError("Some error occured. Please try again later.");
-      setSuccess("");
-    }
-
-    if (response.ok) {
-      // update the auth context
-      dispatch({ type: "CREATE_ACCOMMODATION", payload: json });
-
-      // update loading state
-      setIsLoading(false);
-      setError(false);
-      if (setError) {
-        setSuccess("Accommodation created succesfully");
+      if (!response.ok) {
+        setIsLoading(false);
+        setError("Some error occured. Please try again later.");
+        setSuccess("");
       }
-    } else{
-      setError("Whoops! You cannot perform this action until your email is verified")
-    }
+
+      if (response.ok) {
+        // update the auth context
+        dispatch({ type: "CREATE_ACCOMMODATION", payload: json });
+
+        // update loading state
+        setIsLoading(false);
+        setError(false);
+        if (setError) {
+          setSuccess("Accommodation created succesfully");
+        }
+      } else {
+        setError(
+          "Whoops! You cannot perform this action until your email is verified"
+        );
+      }
     }
   };
 

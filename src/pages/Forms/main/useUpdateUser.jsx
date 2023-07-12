@@ -28,48 +28,52 @@ export const useUpdateUser = () => {
     setIsLoading(false);
     setError(null);
 
-    if(user?.isVerified){
-      const response = await fetch(`http://localhost:4000/api/user/${user.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-      body: JSON.stringify({
-        hobby,
-        allergy,
-        language,
-        adults,
-        children,
-        pet,
-        cuisine,
-        bio,
-        image,
-      }),
-    });
+    if (user?.isVerified) {
+      const response = await fetch(
+        `http://localhost:4000/api/user/${user.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({
+            hobby,
+            allergy,
+            language,
+            adults,
+            children,
+            pet,
+            cuisine,
+            bio,
+            image,
+          }),
+        }
+      );
 
-    const json = await response.json();
+      const json = await response.json();
 
-    if (!response.ok) {
-      setIsLoading(false);
-      setError("Some error occured. Please try again later.");
-      setSuccess("");
-      setIsSubmitted(false);
-    }
-    if (response.ok) {
-      dispatch({ type: "UPDATE_USER_DETAILS", payload: json });
-      setIsLoading(false);
-      setError(false);
-      setIsSubmitted(true);
-      setIsLoggedIn(true)
-      if (setError) {
-        setSuccess("We got your profile information ready!");
+      if (!response.ok) {
+        setIsLoading(false);
+        setError("Some error occured. Please try again later.");
+        setSuccess("");
+        setIsSubmitted(false);
       }
-      return navigate("/");
-    } 
-    else{
-      setError("Whoops! You cannot perform this action until your email is verified.")
-    }
+      if (response.ok) {
+        dispatch({ type: "UPDATE_USER_DETAILS", payload: json });
+        setIsLoading(false);
+        setError(false);
+        setIsSubmitted(true);
+        setIsLoggedIn(true);
+        if (setError) {
+          setSuccess("We got your profile information ready!");
+        }
+        return navigate("/");
+      } else {
+        setError(
+          "Whoops! You cannot perform this action until your email is verified."
+        );
+      }
     }
   };
 

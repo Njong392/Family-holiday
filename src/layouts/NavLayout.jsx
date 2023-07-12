@@ -124,7 +124,10 @@ export default function Navbar() {
                 </svg>
               </a>
 
-              <NavLink to="/chat" className="block shrink-0 p-2.5 text-deepgray">
+              <NavLink
+                to="/chats"
+                className="block shrink-0 p-2.5 text-deepgray"
+              >
                 <span className="sr-only">Messages</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -16,8 +16,10 @@ import VerifyEmail from "./pages/Error/VerifyEmail.jsx";
 import Verification from "./components/Verification";
 import Filter from "./pages/filter/Filter";
 import Welcome from "./pages/Welcome/Welcome";
-import Chat from "./pages/chat/Chat";
+import Chat from "./layouts/Chat";
 import { useChatContext } from "./hooks/useChatContext";
+import ChatBox from "./pages/chat/ChatBox";
+import ChatHome from "./pages/chat/ChatHome";
 
 // import ErrorPage from "./pages/Error/404.jsx";
 
@@ -25,21 +27,21 @@ function App() {
   const {
     state: { user, userDetails, hosts, host, verifiedUser },
   } = useUserContext();
-  const { chats } = useChatContext();
+  const { chat, chats } = useChatContext();
 
-  const {
-    accommodations, accommodation, savedAccommodations
-  } = useAccommodationContext()
+  const { accommodations, accommodation, savedAccommodations } =
+    useAccommodationContext();
 
   console.log("user: ", user);
   console.log("userdetails: ", userDetails);
   console.log("hosts: ", hosts);
   console.log("host: ", host);
-  console.log("accommodations:", accommodations)
-  console.log("accommodation:", accommodation)
-  console.log("verifiedUser:", verifiedUser)
-  console.log("savedAccommodations:", savedAccommodations)
-  console.log("chats:", chats)
+  console.log("accommodations:", accommodations);
+  console.log("accommodation:", accommodation);
+  console.log("verifiedUser:", verifiedUser);
+  console.log("savedAccommodations:", savedAccommodations);
+  console.log("chat:", chat);
+  console.log("chats:", chats);
 
   return (
     <div className="App">
@@ -83,7 +85,10 @@ function App() {
 
               <Route path="/host" element={<Host />} />
 
-              <Route path="/chat" element={<Chat />} />
+              <Route path="/" element={<Chat />}>
+                <Route path="/chats/:id" element={<ChatBox />} />
+                <Route path="/chats" element={<ChatHome />} />
+              </Route>
 
               <Route path="/accommodations/:id" element={<Accommodation />} />
             </Route>

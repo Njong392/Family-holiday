@@ -1,27 +1,26 @@
-import { useEffect } from "react"
-import { useUserContext } from "../../hooks/useUserContext"
+import { useEffect } from "react";
+import { useUserContext } from "../../hooks/useUserContext";
 import { Link } from "react-router-dom";
 
 const Welcome = () => {
-    const {
-        state: { hosts },
-        dispatch,
-      } = useUserContext();
-      
-    
-      const fetchHosts = async () => {
-        const response = await fetch("http://localhost:4000/api/user");
-        const json = await response.json();
-    
-        if (response.ok) {
-          dispatch({ type: "GET_HOSTS", payload: json });
-        }
-      };
-    
-      useEffect(() => {
-        fetchHosts();
-        console.log(hosts);
-      }, []);
+  const {
+    state: { hosts },
+    dispatch,
+  } = useUserContext();
+
+  const fetchHosts = async () => {
+    const response = await fetch("http://localhost:4000/api/user");
+    const json = await response.json();
+
+    if (response.ok) {
+      dispatch({ type: "GET_HOSTS", payload: json });
+    }
+  };
+
+  useEffect(() => {
+    fetchHosts();
+    console.log(hosts);
+  }, []);
   return (
     <main aria-label="Main Section" className="font-poppins">
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 rounded lg:bg-snow mt-5 lg:shadow-md ">
@@ -36,7 +35,10 @@ const Welcome = () => {
             </p>
           </div>
 
-          <Link className="flex gap-2 items-center rounded bg-blue text-snow px-3 py-2 mt-3 lg:mt-0" to="/filter">
+          <Link
+            className="flex gap-2 items-center rounded bg-blue text-snow px-3 py-2 mt-3 lg:mt-0"
+            to="/filter"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -57,8 +59,7 @@ const Welcome = () => {
         </section>
 
         <section className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-8">
-          {
-            hosts &&
+          {hosts &&
             hosts.map((host) =>
               host.form.length !== 0 ? (
                 <Link
@@ -106,7 +107,9 @@ const Welcome = () => {
                       {host.form[0].bio}
                     </p>
 
-                    <button className="text-blue text-sm underline">Read more</button>
+                    <button className="text-blue text-sm underline">
+                      Read more
+                    </button>
                   </div>
                 </Link>
               ) : (
@@ -122,7 +125,7 @@ const Welcome = () => {
         </div>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default Welcome
+export default Welcome;

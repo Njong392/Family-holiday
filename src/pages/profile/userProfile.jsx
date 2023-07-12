@@ -1,10 +1,13 @@
-import { useParams, useSearchParams, NavLink } from "react-router-dom";
+import {
+  useParams,
+  useSearchParams,
+  NavLink,
+  useNavigate,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 import AccomodationList from "../../components/accommodation/AccommodationList";
 import { useUserContext } from "../../hooks/useUserContext";
 import { useChatContext } from "../../hooks/useChatContext";
-import {stringify} from 'flatted'
-
 
 export default function UserProfile() {
   const {
@@ -13,54 +16,49 @@ export default function UserProfile() {
   } = useUserContext();
   const [hideText, setHideText] = useState(false);
   const [searchParams] = useSearchParams();
-  const {chats} = useChatContext()
-
-
-  const id = searchParams.get('userId');
+  const { chat, chats, dispatch: dispatchChat } = useChatContext();
+  const sender_id = searchParams.get("userId");
+  const navigateTo = useNavigate();
 
   const showText = () => {
     setHideText(!hideText);
-  }
+  };
 
   const fetchHost = async () => {
-    const response = await fetch(`http://localhost:4000/api/user/${id}`);
+    const response = await fetch(`http://localhost:4000/api/user/${sender_id}`);
 
     const json = await response.json();
 
     if (response.ok) {
-      dispatch({ type: "GET_HOST", payload: json });
-      console.log(host);
+      if (!chats.find((c) => c._id === json._id))
+        dispatch({ type: "GET_HOST", payload: json });
     }
   };
 
-  const accessChat = async(id) => {
-    const response = await fetch('http://localhost:4000/api/chat/', {
-      method: 'POST',
-      headers:{
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user.token}`
-
+  const accessChat = async () => {
+    const response = await fetch("http://localhost:4000/api/chat/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
       },
-      body: stringify(id)
-    })
+      body: JSON.stringify({ sender_id }),
+    });
 
-    const json = await response.json()
+    const json = await response.json();
 
-    if(response.ok){
-      dispatch({type: 'GET_CHATS', payload: json})
-      
+    if (response.ok) {
+      dispatchChat({ type: "SELECTED_CHAT", payload: json });
+      navigateTo(`/chats/${json._id}`);
     }
-  }
+  };
 
-  
   useEffect(() => {
     fetchHost();
-  
+
     // const url = window.location.pathname.split('/')[2]
     // console.log('url:', url)
-  }, [host?.id, userDetails, id]);
-
-  
+  }, [host?.id, userDetails, sender_id]);
 
   return (
     <main aria-label="Main Section" className="font-poppins">
@@ -79,7 +77,6 @@ export default function UserProfile() {
 
           <div>
             <div className="flex gap-2 justify-end">
-
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -87,7 +84,7 @@ export default function UserProfile() {
                 strokeWidth={1.5}
                 stroke="currentColor"
                 className="w-9 h-9 text-deepgray cursor-pointer"
-                onClick={accessChat} 
+                onClick={accessChat}
               >
                 <path
                   strokeLinecap="round"
@@ -104,15 +101,13 @@ export default function UserProfile() {
             )}
 
             <div className="flex items-center gap-1">
-              
-                <svg
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={2}
                 stroke="currentColor"
                 className="w-4 h-4 text-blue"
-                
               >
                 <path
                   strokeLinecap="round"
@@ -125,7 +120,7 @@ export default function UserProfile() {
                   d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                 />
               </svg>
-              
+
               {host && (
                 <p className="text-sm font-bold text-blue">
                   {host.city}, <span>{host.country}</span>
@@ -136,15 +131,17 @@ export default function UserProfile() {
             <div className="mt-4">
               <h3 className="text-xl font-bold text-blue">About Us</h3>
               {host && (
-                <p 
-                onClick={showText}
-                className={hideText ? "leading-relaxed cursor-pointer" : "leading-relaxed cursor-pointer line-clamp-3"
-                } >
+                <p
+                  onClick={showText}
+                  className={
+                    hideText
+                      ? "leading-relaxed cursor-pointer"
+                      : "leading-relaxed cursor-pointer line-clamp-3"
+                  }
+                >
                   {host.form[0].bio}
                 </p>
-
               )}
-              
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 mt-6 gap-5">
@@ -229,8 +226,6 @@ export default function UserProfile() {
         </div> */}
 
         <AccomodationList />
-
-        
       </div>
     </main>
   );
