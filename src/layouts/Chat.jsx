@@ -38,13 +38,12 @@ const Chat = () => {
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 font-poppins">
       <div className="flex text-deepgray">
-        <div className="flex flex-row h-full w-full overflow-x-hidden">
-          <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0">
-            <div className="flex flex-col">
-              <div className="flex flex-row items-center justify-between text-xs">
-                <span className="font-bold">Active Conversations</span>
-              </div>
-              <div className="flex flex-col space-y-1 mt-4 -mx-2 overflow-y-auto">
+        <div className="flex flex-row h-full overflow-x-hidden overflow-auto">
+          <div class="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0 h-full">
+            <div class="flex flex-col mt-8">
+              <span class="font-bold">Active Conversations</span>
+
+              <div class="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
                 {chats &&
                   chats.map((chat) => (
                     <NavLink

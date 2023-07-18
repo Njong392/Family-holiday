@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useUserContext } from "../../hooks/useUserContext";
-import ScrollableFeed from "react-scrollable-feed";
-import {io} from "socket.io-client";
+import io from "socket.io-client";
+import { useChatContext } from "../../hooks/useChatContext";
 
 const ENDPOINT = "http://localhost:4000";
-var socket, selectChatCompare
+var socket, selectedChatCompare;
 
-const ChatBox = () => {
+const Chat = () => {
   const {
     state: { user },
   } = useUserContext();
@@ -15,29 +15,51 @@ const ChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [socketConnected, setSocketConnected] = useState(false);
   const { id } = useParams();
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const { notifications, setNotifications } = useChatContext();
 
   const typingHandler = (e) => {
     setMessageInput(e.target.value);
 
     //typing indicator logic
+    if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", id);
+    }
+
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 4000;
+
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
 
-  const isSameSenderMargin = (msgs, m, i, userId) => {
-    if (
-      i < msgs.length - 1 &&
-      msgs[i + 1].sender._id === m.sender._id &&
-      msgs[i].sender._id !== userId
-    )
-      return 0;
-    else if (
-      (i < msgs.length - 1 &&
-        msgs[i + 1].sender._id !== m.sender._id &&
-        msgs[i].sender._id !== userId) ||
-      (i === msgs.length - 1 && msgs[i].sender._id !== userId)
-    )
-      return 0;
-    else return "auto";
-  };
+  // const isSameSenderMargin = (msgs, m, i, userId) => {
+  //   if (
+  //     i < msgs.length - 1 &&
+  //     msgs[i + 1].sender._id === m.sender._id &&
+  //     msgs[i].sender._id !== userId
+  //   )
+  //     return 0;
+  //   else if (
+  //     (i < msgs.length - 1 &&
+  //       msgs[i + 1].sender._id !== m.sender._id &&
+  //       msgs[i].sender._id !== userId) ||
+  //     (i === msgs.length - 1 && msgs[i].sender._id !== userId)
+  //   )
+  //     return 0;
+  //   else return "710px";
+  // };
 
   // const isSameSender = (msgs, m, i, userId) => {
   //   return (
@@ -60,7 +82,9 @@ const ChatBox = () => {
 
     if (response.ok) {
       setMessages(json);
-      console.log(json);
+      //console.log(json);
+
+      socket.emit("join chat", id);
     }
   };
 
@@ -68,6 +92,7 @@ const ChatBox = () => {
   const sendMessage = async (e) => {
     e.preventDefault();
 
+    socket.emit("stop typing", id);
     setMessageInput("");
     const response = await fetch("http://localhost:4000/api/message", {
       method: "POST",
@@ -82,111 +107,127 @@ const ChatBox = () => {
 
     if (response.ok) {
       setMessages([...messages, json]);
+      socket.emit("new message", json);
       console.log(json);
     }
   };
 
   useEffect(() => {
-    fetchMessages();
-  }, [id]);
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
+  }, []);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit('setup', user)
-    socket.on('connection', ()=> setSocketConnected(true))
-  }, [])
+    fetchMessages();
+
+    selectedChatCompare = id;
+  }, [id]);
+
+  console.log(notifications, "--------");
+
+  useEffect(() => {
+    socket.on("message received", (newMessageReceived) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chat._id
+      ) {
+        //notifications logic
+        if (!notifications.include(newMessageReceived.chat._id)) {
+          setNotifications([newMessageReceived, ...notifications]);
+        }
+      } else {
+        setMessages([...messages, newMessageReceived]);
+      }
+    });
+  });
 
   return (
-    <div className="flex flex-col flex-auto p-6 border-l-2 border-deepgray">
-      <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl h-full p-4 overflow-x-auto">
-        <div className="w-full border py-3 px-7 rounded-lg bg-snow">
-          <p>Henry Boyd</p>
-        </div>
-        <ScrollableFeed className="flex flex-col h-full mb-4">
-          <div className="flex flex-col h-full ">
-            <div className="grid grid-cols-12 gap-y-2 ">
-              {messages &&
-                messages.map((m, i) => (
-                  <div className="col-start-1 col-end-8 p-2 rounded-lg"
-                  style={{marginLeft: isSameSenderMargin(messages, m, i, user.id)}}
-                  >
-                    <div className="flex flex-row items-center "
-                     >
+    <div class="flex h-screen antialiased text-deepgray">
+      <div class="flex flex-row h-full w-full overflow-x-hidden ">
+        <div class="flex flex-col flex-auto h-full p-6 border-l-2 border-deepgray">
+          <div class="flex flex-col flex-auto flex-shrink-0 rounded-2xl h-full p-4">
+            <div class="flex flex-col h-full overflow-x-auto mb-4">
+              <div class="flex flex-col h-full">
+                <div class="grid grid-cols-12 gap-y-2">
+                  {messages &&
+                    messages.map((m, i) => (
                       <div
                         className={
                           m.sender._id === user.id
-                            ? "relative ml-3 text-sm bg-blue text-white py-2 px-4 shadow rounded-xl "
-                            : "relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
+                            ? "col-start-6 col-end-13 rounded-lg"
+                            : "col-start-1 col-end-8 rounded-lg"
                         }
-                       
                       >
-                        <div>{m.content}</div>
+                        <div
+                          className={
+                            m.sender._id === user.id
+                              ? "flex flex-row-reverse justify-start items-center "
+                              : "flex flex-row justify-start items-center"
+                          }
+                        >
+                          <div
+                            className={
+                              m.sender._id === user.id
+                                ? "relative ml-3 text-sm bg-blue text-white py-2 px-4 shadow rounded-xl "
+                                : "relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl"
+                            }
+                          >
+                            <div className="w-auto">{m.content}</div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                ))}
-        
+                    ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </ScrollableFeed>
-        <form
-          className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
-          onSubmit={sendMessage}
-        >
-          <div className="flex-grow ml-4">
-            <div className="relative w-full">
-              <input
-                type="text"
-                className="flex w-full border rounded-xl focus:outline-none focus:border-blue pl-4 h-10"
-                onChange={typingHandler}
-                value={messageInput}
-              />
-              <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-lightgray hover:text-deepgray">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div className="ml-4">
-            <button
-              className="flex items-center justify-center bg-blue rounded-xl text-white px-4 py-1 flex-shrink-0"
-              type="submit"
+            <form
+              class="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4"
+              onSubmit={sendMessage}
             >
-              <span>Send</span>
-              <span className="ml-2">
-                <svg
-                  className="w-4 h-4 transform rotate-45 -mt-px"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
+              {isTyping ? <p className="text-sm">Typing...</p> : <></>}
+              <div class="flex-grow ml-4">
+                <div class="relative w-full">
+                  <input
+                    type="text"
+                    class="flex w-full border rounded-xl focus:outline-none pl-4 h-10"
+                    onChange={typingHandler}
+                    value={messageInput}
+                  />
+                </div>
+              </div>
+              <div class="ml-4">
+                <button
+                  class="flex items-center justify-center bg-blue rounded-xl text-white px-4 py-1 flex-shrink-0"
+                  type="submit"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                  ></path>
-                </svg>
-              </span>
-            </button>
+                  <span>Send</span>
+                  <span class="ml-2">
+                    <svg
+                      class="w-4 h-4 transform rotate-45 -mt-px"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                      ></path>
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ChatBox;
+export default Chat;

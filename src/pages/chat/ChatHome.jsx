@@ -1,6 +1,6 @@
 const ChatHome = () => {
   return (
-    <div className="border-deepgray w-full border-l-2 flex items-center justify-center flex-col">
+    <div className="border-deepgray w-full border-l-2 flex items-center justify-center flex-col pl-10">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -16,7 +16,7 @@ const ChatHome = () => {
         />
       </svg>
       <p className="text-lg  text-deepgray">
-        Welcome to your inbox! Start connecting with families
+        Welcome to your inbox! Start connecting with families.
       </p>
     </div>
   );

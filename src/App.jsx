@@ -32,16 +32,16 @@ function App() {
   const { accommodations, accommodation, savedAccommodations } =
     useAccommodationContext();
 
-  console.log("user: ", user);
-  console.log("userdetails: ", userDetails);
-  console.log("hosts: ", hosts);
-  console.log("host: ", host);
-  console.log("accommodations:", accommodations);
-  console.log("accommodation:", accommodation);
-  console.log("verifiedUser:", verifiedUser);
-  console.log("savedAccommodations:", savedAccommodations);
-  console.log("chat:", chat);
-  console.log("chats:", chats);
+  // console.log("user: ", user);
+  // console.log("userdetails: ", userDetails);
+  // console.log("hosts: ", hosts);
+  // console.log("host: ", host);
+  // console.log("accommodations:", accommodations);
+  // console.log("accommodation:", accommodation);
+  // console.log("verifiedUser:", verifiedUser);
+  // console.log("savedAccommodations:", savedAccommodations);
+  // console.log("chat:", chat);
+  // console.log("chats:", chats);
 
   return (
     <div className="App">

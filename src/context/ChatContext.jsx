@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useState } from "react";
 
 export const ChatContext = createContext();
 
@@ -7,10 +7,6 @@ export const authReducer = (state, action) => {
     case "GET_CHATS":
       return {
         chats: action.payload,
-      };
-    case "GET_NOTIFICATIONS":
-      return {
-        notifications: [...state.notifications, action.payload],
       };
     case "SELECTED_CHAT":
       return {
@@ -24,12 +20,14 @@ export const authReducer = (state, action) => {
 export const ChatContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
     chats: [],
-    notifications: [],
     chat: null,
   });
+  const [notifications, setNotifications] = useState([]);
 
   return (
-    <ChatContext.Provider value={{ ...state, dispatch }}>
+    <ChatContext.Provider
+      value={{ ...state, dispatch, notifications, setNotifications }}
+    >
       {children}
     </ChatContext.Provider>
   );
