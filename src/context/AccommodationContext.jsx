@@ -3,7 +3,6 @@ import { createContext, useReducer } from "react";
 export const AccommodationContext = createContext();
 
 export const accommodationReducer = (state, action) => {
-
   switch (action.type) {
     case "SET_ACCOMMODATION":
       return {
@@ -19,12 +18,12 @@ export const accommodationReducer = (state, action) => {
       };
     case "SAVE_ACCOMMODATION":
       return {
-        savedAccommodations: action.payload
-      }
+        savedAccommodations: action.payload,
+      };
     case "UNSAVE_ACCOMMODATION":
       return {
-        savedAccommodations: action.payload
-      }
+        savedAccommodations: action.payload,
+      };
     case "DELETE_ACCOMMODATION":
       return {
         accommodations: state.accommodations.filter(

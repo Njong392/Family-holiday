@@ -32,7 +32,11 @@ export default function SignUp() {
     <section className="bg-white font-poppins">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
         <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6 place-content-end">
-          <img src="https://images.pexels.com/photos/6190862/pexels-photo-6190862.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" className="absolute inset-0 h-full w-full object-cover" />
+          <img
+            src="https://images.pexels.com/photos/6190862/pexels-photo-6190862.jpeg?auto=compress&cs=tinysrgb&w=600"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
         </aside>
 
         <main

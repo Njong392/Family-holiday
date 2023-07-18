@@ -41,10 +41,10 @@ const Host = () => {
     setHouseRules((oldHouseRules) => oldHouseRules.filter((_, i) => i !== id));
   }
 
-   // convert image file to base64
-   const setFileToBase64 = (file) => {
+  // convert image file to base64
+  const setFileToBase64 = (file) => {
     const reader = new FileReader();
-      reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
     reader.onloadend = () => {
       setImageBase64(reader.result);
     };
@@ -79,54 +79,63 @@ const Host = () => {
       houseRules,
     };
 
-
     if (!user?.isVerified) {
-      setError("You must verify your email and/or be logged in before creating an accommodation");
+      setError(
+        "You must verify your email and/or be logged in before creating an accommodation"
+      );
       setSuccess("");
     } else {
-      if(!country || !city || !bedrooms || !beds || !bathrooms || !maxOfGuests || !pricePerNight || !houseRules || !image) {
+      if (
+        !country ||
+        !city ||
+        !bedrooms ||
+        !beds ||
+        !bathrooms ||
+        !maxOfGuests ||
+        !pricePerNight ||
+        !houseRules ||
+        !image
+      ) {
         setError("Please fill in all the fields");
         setSuccess("");
-      } else if(!(arrivalDate < departureDate)){
-        setError("Expected date of arrival must be before expected date of departure");
+      } else if (!(arrivalDate < departureDate)) {
+        setError(
+          "Expected date of arrival must be before expected date of departure"
+        );
         setSuccess("");
-      } else if(arrivalDate < date){
+      } else if (arrivalDate < date) {
         setError("Expected date of arrival must be later than today");
         setSuccess("");
-      }
-       else {
-
-        const response = await fetch("http://localhost:4000/api/accommodation", {
-          method: "POST",
-          body: JSON.stringify(accommodation),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+      } else {
+        const response = await fetch(
+          "http://localhost:4000/api/accommodation",
+          {
+            method: "POST",
+            body: JSON.stringify(accommodation),
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         const json = await response.json();
-    
+
         if (!response.ok) {
           setIsLoading(false);
           setError(json.error);
           setSuccess("");
         }
-    
+
         if (response.ok) {
           // update the auth context
           dispatch({ type: "CREATE_ACCOMMODATION", payload: json });
           setIsLoading(false);
           setSuccess("Accommodation created successfully");
           setError("");
-    
         }
-        
       }
-
-      }
-    } 
-
-  
+    }
+  };
 
   return (
     <main aria-label="Main Section" className="font-poppins">
@@ -324,8 +333,6 @@ const Host = () => {
                 />
               </div>
 
-              
-
               <div className="col-span-6 md:col-span-3">
                 <label
                   htmlFor="Hobbies"
@@ -361,7 +368,6 @@ const Host = () => {
                 </div>
               </div>
 
-
               <div className="col-span-6 lg:col-span-3 flex gap-2 flex-wrap border-b border-lightgray pb-1">
                 {houseRules.map((h, id) => (
                   <div
@@ -391,7 +397,9 @@ const Host = () => {
                   A description about the property
                 </label>
                 <p className="text-lightgray text-xs">
-                 Use this chance to write about the accommodation your families will be staying at, and what makes it special. What should guests expect from spending the holidays under your roof?
+                  Use this chance to write about the accommodation your families
+                  will be staying at, and what makes it special. What should
+                  guests expect from spending the holidays under your roof?
                 </p>
 
                 <textarea

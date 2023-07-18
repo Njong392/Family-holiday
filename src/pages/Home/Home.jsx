@@ -7,7 +7,6 @@ export default function Home() {
     state: { hosts },
     dispatch,
   } = useUserContext();
-  
 
   const fetchHosts = async () => {
     const response = await fetch("http://localhost:4000/api/user");
