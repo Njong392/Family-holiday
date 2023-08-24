@@ -36,12 +36,12 @@ function App() {
   // console.log("userdetails: ", userDetails);
   // console.log("hosts: ", hosts);
   // console.log("host: ", host);
-  // console.log("accommodations:", accommodations);
+  console.log("accommodations:", accommodations);
   // console.log("accommodation:", accommodation);
   // console.log("verifiedUser:", verifiedUser);
-  // console.log("savedAccommodations:", savedAccommodations);
-  // console.log("chat:", chat);
-  // console.log("chats:", chats);
+  //console.log("savedAccommodations:", savedAccommodations);
+  //console.log("chat:", chat);
+  //console.log("chats:", chats);
 
   return (
     <div className="App">

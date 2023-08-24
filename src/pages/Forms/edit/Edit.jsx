@@ -33,7 +33,7 @@ const Edit = () => {
     } else {
       console.log("no user");
     }
-  }, [user, id]);
+  }, []);
 
   return (
     <main aria-label="Main Section" className="font-poppins">

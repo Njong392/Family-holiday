@@ -12,6 +12,7 @@ export const useCreateAccommodation = () => {
   } = useUserContext();
 
   const createAccommodation = async (
+    title,
     country,
     city,
     bedrooms,
@@ -32,6 +33,7 @@ export const useCreateAccommodation = () => {
       const response = await fetch("http://localhost:4000/api/accommodation", {
         method: "POST",
         body: JSON.stringify({
+          title,
           country,
           city,
           bedrooms,

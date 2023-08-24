@@ -66,7 +66,7 @@ const VerifyEmail = () => {
       isUserVerified();
       console.log("verifiedUser", verifiedUser);
     }
-  }, [emailToken, user]);
+  }, [emailToken]);
 
   return (
     <div>

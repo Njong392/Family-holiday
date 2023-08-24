@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CountryDropdown } from "react-country-region-selector";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { useState } from "react";
 import { useRegister } from "./useRegister";
 
@@ -132,14 +132,12 @@ export default function SignUp() {
                   City
                 </label>
 
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
-                  onChange={(e) => setCity(e.target.value)}
+               <RegionDropdown
+                 className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
+                  disableWhenEmpty={true}
+                  country={country}
                   value={city}
-                />
+                  onChange={(city) => setCity(city)} />
               </div>
 
               <div className="col-span-6">

@@ -1,4 +1,4 @@
-import { CountryDropdown } from "react-country-region-selector";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { useState } from "react";
 import { useUserContext } from "../../../hooks/useUserContext";
 import { useAccommodationContext } from "../../../hooks/useAccommodationContext";
@@ -24,6 +24,7 @@ const Host = () => {
   const [houseRulesInput, setHouseRulesInput] = useState("");
   const [houseRules, setHouseRules] = useState([]);
   const [description, setDescription] = useState("");
+  const [title, setTitle] = useState("");
 
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
@@ -65,6 +66,7 @@ const Host = () => {
     setError("");
 
     const accommodation = {
+      title,
       country,
       city,
       bedrooms,
@@ -86,7 +88,7 @@ const Host = () => {
       setSuccess("");
     } else {
       if (
-        !country ||
+        !country || !title ||
         !city ||
         !bedrooms ||
         !beds ||
@@ -156,6 +158,27 @@ const Host = () => {
               className="mt-2 grid grid-cols-6 gap-6"
               onSubmit={handleSubmit}
             >
+              <div className="col-span-6">
+                <label
+                  htmlFor="about"
+                  className="block font-medium text-deepgray"
+                >
+                 Property title
+                </label>
+                <p className="text-lightgray text-xs">
+                 "Apartment complex with a pool" is a good example of a title
+                </p>
+
+                <input
+                type="text"
+                  id="title"
+                  name="title"
+                  className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
+
               <div className="col-span-6 md:col-span-3">
                 <label
                   htmlFor="Country"
@@ -185,14 +208,12 @@ const Host = () => {
                   This is the city where your property is located
                 </p>
 
-                <input
-                  type="text"
-                  id="city"
-                  name="city"
-                  className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
+                <RegionDropdown
+                 className="mt-1 w-full rounded-md border-gray-200 bg-white  text-deepgray shadow-sm"
+                  disableWhenEmpty={true}
+                  country={country}
                   value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                />
+                  onChange={(city) => setCity(city)} />
               </div>
 
               <div className="col-span-6 md:col-span-2">

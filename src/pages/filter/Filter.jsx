@@ -105,7 +105,7 @@ const Filter = () => {
 
           <div className="col-span-6 md:col-span-3">
             <label htmlFor="budget" className="block font-medium text-deepgray">
-              Estimated budget
+             Maximum estimated budget
               <span className="text-xs text-lightgray">
                 (The currency is dollars)
               </span>
@@ -155,59 +155,6 @@ const Filter = () => {
               value={departureDate}
               onChange={(e) => setDepartureDate(e.target.value)}
             />
-          </div>
-
-          <div className="col-span-6 ">
-            <label
-              htmlFor="Languages"
-              className="block font-medium text-deepgray"
-            >
-              What language(s) do you speak or do you wish to learn from the
-              host family?
-            </label>
-
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                id="languages"
-                name="languages"
-                value={languageInput}
-                onChange={(e) => setLanguageInput(e.target.value)}
-                className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
-              />
-
-              <button onClick={getLanguages}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  className="h-8 w-8 fill-blue"
-                >
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 11H7V13H11V17H13V13H17V11H13V7H11V11Z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div className="col-span-6 flex gap-2 flex-wrap border-b border-lightgray pb-1">
-            {language.map((l, language_id) => (
-              <div
-                className="bg-blue rounded p-2 text-white flex gap-1 items-center h-9"
-                key={l}
-              >
-                <p>{l} </p>
-                <button onClick={() => deleteLanguages(language_id)}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    className="w-5 h-5 fill-snow"
-                  >
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path d="M12.0007 10.5865L16.9504 5.63672L18.3646 7.05093L13.4149 12.0007L18.3646 16.9504L16.9504 18.3646L12.0007 13.4149L7.05093 18.3646L5.63672 16.9504L10.5865 12.0007L5.63672 7.05093L7.05093 5.63672L12.0007 10.5865Z" />
-                  </svg>
-                </button>
-              </div>
-            ))}
           </div>
 
           <div className="col-span-6">

@@ -1,25 +1,50 @@
-import { NavLink, Outlet, useParams, Link } from "react-router-dom";
+import { NavLink, Outlet, useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useUserContext } from "../hooks/useUserContext";
+import { useClickAway } from "@uidotdev/usehooks";
+import { useChatContext } from "../hooks/useChatContext";
+import NotificationBadge from "react-notification-badge/lib/components/NotificationBadge";
+import { Effect } from "react-notification-badge";
 
 export default function Navbar() {
   const [modal, setModal] = useState(false);
+  const[messagesModal, setMessagesModal] = useState(false);
   const [menu, setMenu] = useState(false);
-
-  const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { notifications, setNotifications } = useChatContext();
+  const ref = useClickAway(() => {
+    setModal(false)
+    setMessagesModal(false)
+  })
   const {
     state: { user, userDetails },
     dispatch,
   } = useUserContext();
+  const navigateTo = useNavigate();
+
+
+
+  const getSender = (loggedUser, users) => {
+    return users[0]?._id === loggedUser?._id ? users[1].first_name: users[0].first_name;
+  }
 
   //if modal is visible, hide it
   function handleModal() {
     setModal(false);
   }
 
+  function handleMessagesModal() {
+    setMessagesModal(false);
+  }
+
   //if modal is hidden, show it
   function showModal() {
     setModal(true);
+  }
+
+  function showMessagesModal() {
+    setMessagesModal(true)
   }
 
   //for the burger menu
@@ -38,7 +63,9 @@ export default function Navbar() {
 
   // fetch user from backend for navbar
   const fetchUser = async () => {
-    const response = await fetch(`http://localhost:4000/api/user/${user.id}`, {
+    setIsLoading(true)
+   
+      const response = await fetch(`http://localhost:4000/api/user/${user.id}`, {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
@@ -55,6 +82,7 @@ export default function Navbar() {
     if (response.ok) {
       dispatch({ type: "GET_USER_DETAILS", payload: json });
     }
+    
   };
 
   useEffect(() => {
@@ -113,7 +141,9 @@ export default function Navbar() {
                   : "items-center gap-4 sm:hidden"
               }
             >
-              <a href="#" className="block shrink-0 p-2.5 text-deepgray">
+              
+              <button className="block shrink-0 p-2.5 text-deepgray"  onClick={showMessagesModal}>
+                <NotificationBadge count={notifications.length} effect={Effect.SCALE} className="w-5 h-4"/>
                 <span className="sr-only">Notifications</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -122,11 +152,42 @@ export default function Navbar() {
                 >
                   <path d="M20 17H22V19H2V17H4V10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10V17ZM9 21H15V23H9V21Z"></path>
                 </svg>
-              </a>
+              </button>
+
+               <div
+              className={
+                messagesModal
+                  ? "absolute bg-white rounded p-2 right-52 -bottom-[70px] border-2 border-blue pt-4"
+                  : "hidden"
+              }
+            >
+              
+              {!notifications.length && (
+                 <p>No new messages</p>
+              )}
+              {notifications.map(notification => (
+                <Link 
+                to={`/chats/${notification.chat._id}`} 
+                key={notification._id} 
+                onClick={() => {
+                  setNotifications(notifications.filter((n) => n !== notification))
+                }}
+                className="flex flex-col items-center"
+                >New message from {getSender(user, notification.chat.users)}</Link>
+              ))}
+              <button
+                className="rounded-full p-1 border-2 mt-2 border-red text-red text-xs"
+                onClick={handleMessagesModal}
+              >
+                
+                Cancel
+              </button>
+            </div>
 
               <NavLink
                 to="/chats"
                 className="block shrink-0 p-2.5 text-deepgray"
+               
               >
                 <span className="sr-only">Messages</span>
                 <svg
@@ -139,13 +200,15 @@ export default function Navbar() {
               </NavLink>
             </div>
 
+            
+
             <button className="md:block shrink-0 hidden" onClick={showModal}>
               <span className="sr-only">Profile</span>
-              {userDetails ? (
+              { userDetails && (userDetails.form.length > 0) ? (
                 <img
                   alt="Man"
                   src={userDetails.form[0].image.url}
-                  className="h-10 w-10 rounded-full object-cover"
+                  className="h-10 w-10 rounded-full object-cover border border-blue"
                 />
               ) : (
                 <img
@@ -156,10 +219,10 @@ export default function Navbar() {
               )}
             </button>
 
-            <div
+            <div ref={ref}
               className={
                 modal
-                  ? "absolute bg-white rounded p-2 right-2 -bottom-24 border-2 border-blue pt-4"
+                  ? "absolute bg-white rounded p-2 right-12 -bottom-24 border-2 border-blue pt-4"
                   : "hidden"
               }
             >

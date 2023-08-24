@@ -1,12 +1,15 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAccommodationContext } from "../../hooks/useAccommodationContext";
 import { useUserContext } from "../../hooks/useUserContext";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import NonVerified from "../../components/NonVerified";
 
 export default function Accommodation() {
   const { id } = useParams();
+  const navigateTo = useNavigate();
+  
 
   const { accommodation, dispatch } = useAccommodationContext();
   const {
@@ -19,10 +22,21 @@ export default function Accommodation() {
   const [childrenCount, setChildrenCount] = useState(0);
   const [infantCount, setInfantCount] = useState(0);
   const [guestCount, setGuestCount] = useState(1);
+  const [disableAll, setDisableAll] = useState(false);
+  const [isNotVerified, setIsNotVerified] = useState(false)
 
   const adultDisabled = adultCount === 1;
   const childrenDisabled = childrenCount === 0;
   const infantDisabled = infantCount === 0;
+
+  
+// if(accommodation){
+  
+//  if(guestCount > accommodation.maxOfGuests){
+//     setDisableAll(true)
+//   }
+
+// }
 
   const incrementAdultCount = () => {
     setGuestCount(guestCount + 1);
@@ -64,6 +78,29 @@ export default function Accommodation() {
     }
   };
 
+  const deleteAccommodation = async () => {
+    if(!user?.isVerified){
+      setIsNotVerified(true)
+    } else{
+      const response = await fetch(
+      `http://localhost:4000/api/accommodation/${id}`,{
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
+      }
+    )
+
+    const json = await response.json()
+    if(response.ok){
+      dispatch({type: 'DELETE_ACCOMMODATION', payload: json})
+      navigateTo(`/profile/?userId=${user.id}`)
+    }
+
+    }
+
+  }
+
   const saveAccommodation = async () => {
     const response = await fetch(
       "http://localhost:4000/api/savedAccommodation",
@@ -82,12 +119,12 @@ export default function Accommodation() {
     if (response.ok) {
       dispatch({ type: "SAVE_ACCOMMODATION", payload: json });
 
-      setIsSaved(true);
-      localStorage.setItem("saved", true);
-      setMessage("You've saved this accommodation!");
-      setTimeout(() => {
-        setMessage("");
-      }, 4000);
+      // setIsSaved(true);
+      // localStorage.setItem("saved", true);
+      // setMessage("You've saved this accommodation!");
+      // setTimeout(() => {
+      //   setMessage("");
+      // }, 4000);
     }
 
     // else{
@@ -116,38 +153,51 @@ export default function Accommodation() {
 
   useEffect(() => {
     fetchAccommodation();
-    const saved = localStorage.getItem("saved");
-    console.log(saved);
+    // const saved = localStorage.getItem("saved");
+    // console.log(saved);
 
-    if (saved) {
-      setIsSaved(true);
-    } else {
-      setIsSaved(false);
-    }
+    // if (saved) {
+    //   setIsSaved(true);
+    // } else {
+    //   setIsSaved(false);
+    // }
   }, []);
 
   return (
     <main aria-label="Main Section" className="font-poppins">
+      
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 rounded lg:bg-snow mt-5 lg:shadow-md">
+        <NonVerified isNotVerified={isNotVerified} />
         <div className="flex justify-between items-center mt-12">
-          <div>
+          {accommodation && (
+            <div>
             <h3 className="text-3xl font-bold text-blue">
-              Apartment complex with pool
+             {accommodation.title}
             </h3>
-            {accommodation && (
+            
               <p className="text-sm text-deepgray font-bold">
                 {accommodation.city}, <span>{accommodation.country}</span>
               </p>
-            )}
+            
           </div>
+          )}
 
           <div>
-            <button
+            {(user && accommodation) && accommodation.user_id === user.id ? (
+                <button
+              className="bg-red text-snow rounded-lg p-2 hidden md:block"
+              onClick={deleteAccommodation}
+            >
+              Delete this accommodation
+            </button>
+            ): (
+              <button
               className="bg-blue text-snow rounded-lg p-2 hidden md:block"
               onClick={saveAccommodation}
             >
               {isSaved ? "Bookmarked!" : "Bookmark accommodation"}
             </button>
+            )}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -382,7 +432,7 @@ export default function Accommodation() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={decrementAdultCount}
-                      disabled={adultDisabled}
+                      disabled={adultDisabled || disableAll}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -559,7 +609,16 @@ export default function Accommodation() {
                     >
                       Expected departure date:
                     </label>
-                    <input type="date" name="departureDate" id="" />
+                    {accommodation && (
+                      <input type="date" name="departureDate"
+                    min={moment(accommodation.arrivalDate).format(
+                          "YYYY-MM-D"
+                        )}
+                        max={moment(accommodation.departureDate).format(
+                          "YYYY-MM-D"
+                        )}
+                     id="" />
+                    )}
                   </div>
                 </div>
               </div>

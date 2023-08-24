@@ -10,6 +10,7 @@ export default {
       blue: "#0072BB",
       transparent: "#FFFFFF",
       red: "#E23D28",
+      lightred: "#FFCCCC",
       green: "#177245",
     },
     screens: {
