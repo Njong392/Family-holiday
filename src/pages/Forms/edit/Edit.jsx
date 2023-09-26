@@ -10,6 +10,21 @@ const Edit = () => {
     dispatch,
   } = useUserContext();
   const [firstName, setFirstName] = useState({});
+  const [fields, setFields] = useState({});
+
+  const handleChange = (e) => {
+   const { name, value } = e.target;
+  setFields(prevFields => {
+    const newFields = { ...prevFields };
+    if (value) {
+      newFields[name] = value;
+    } else {
+      delete newFields[name];
+    }
+    return newFields;
+  });
+  console.log(fields);
+  }
 
   const { id } = useParams();
 
@@ -26,6 +41,23 @@ const Edit = () => {
       dispatch({ type: "GET_USER_DETAILS", payload: json });
     }
   };
+
+  const editProfile = async () => {
+    const response = await fetch("http://localhost:4000/api/user/", {
+      method: "PATCH",
+      headers:{
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify({fields}),
+    })
+
+    const json = await response.json()
+
+    if(response.ok){
+      console.log(json)
+    }
+  }
+  
 
   useEffect(() => {
     if (user) {
@@ -44,7 +76,7 @@ const Edit = () => {
               <h1 className="md:text-3xl text-snow font-bold text-lg">
                 Edit Profile
               </h1>
-              <button className="bg-snow rounded text-blue font-bold md:p-2 p-1 text-sm md:text-lg">
+              <button className="bg-snow rounded text-blue font-bold md:p-2 p-1 text-sm md:text-lg" onClick={editProfile}>
                 Save
               </button>
             </div>
@@ -98,8 +130,8 @@ const Edit = () => {
                     id="first_name"
                     name="first_name"
                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
-                    value={userDetails.first_name}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder={userDetails.first_name}
+                    onChange={handleChange}
                   />
                 )}
               </div>
@@ -119,6 +151,7 @@ const Edit = () => {
                     name="last_name"
                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
                     placeholder={userDetails.last_name}
+                    onChange={handleChange}
                   />
                 )}
               </div>

@@ -58,6 +58,7 @@ const Host = () => {
     setFileToBase64(file);
   };
 
+
   //handle form submission for creating accommodation
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,13 +103,15 @@ const Host = () => {
         setSuccess("");
       } else if (!(arrivalDate < departureDate)) {
         setError(
-          "Expected date of arrival must be before expected date of departure"
+          "Expected date of arrival must be after expected date of departure"
         );
         setSuccess("");
-      } else if (arrivalDate < date) {
-        setError("Expected date of arrival must be later than today");
-        setSuccess("");
-      } else {
+      } 
+      // else if (arrivalDate < date) {
+      //   setError("Expected date of arrival must be later than today");
+      //   setSuccess("");
+      // } 
+      else {
         const response = await fetch(
           "http://localhost:4000/api/accommodation",
           {
@@ -437,14 +440,13 @@ const Host = () => {
                   htmlFor="profile_image"
                   className="block font-medium text-deepgray"
                 >
-                  Upload your favourite family photo. We'll use this as your
-                  profile picture
+                 Upload photos of the property. Take photos from different angles to best capture how spacious the environment looks.
                 </label>
 
                 <input
                   type="file"
                   id="image"
-                  name="image"
+                  name="image[]"
                   className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-deepgray shadow-sm"
                   multiple
                   accept="image/*"

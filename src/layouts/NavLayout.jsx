@@ -5,6 +5,12 @@ import { useClickAway } from "@uidotdev/usehooks";
 import { useChatContext } from "../hooks/useChatContext";
 import NotificationBadge from "react-notification-badge/lib/components/NotificationBadge";
 import { Effect } from "react-notification-badge";
+import { useAccommodationContext } from "../hooks/useAccommodationContext";
+import { io } from "socket.io-client";
+
+
+const ENDPOINT = "http://localhost:4000";
+var socket;
 
 export default function Navbar() {
   const [modal, setModal] = useState(false);
@@ -13,20 +19,54 @@ export default function Navbar() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const { notifications, setNotifications } = useChatContext();
+   const [socketConnected, setSocketConnected] = useState(false);
   const ref = useClickAway(() => {
     setModal(false)
+    
+  })
+
+  const ref2 = useClickAway(() => {
     setMessagesModal(false)
   })
   const {
     state: { user, userDetails },
     dispatch,
   } = useUserContext();
+  const { reservationNotification, setReservationNotification, reservationId, setReservationId } = useAccommodationContext();
   const navigateTo = useNavigate();
 
 
 
   const getSender = (loggedUser, users) => {
-    return users[0]?._id === loggedUser?._id ? users[1].first_name: users[0].first_name;
+    if(users[0]?._id === loggedUser?._id) {
+      return `${users[1].first_name} ${users[1].last_name}`
+    } else{
+       return `${users[0].first_name} ${users[0].last_name}`
+    };
+  }
+
+   const acceptReservation = async() => {
+    const id = reservationId
+    console.log(id)
+    
+    const response = await fetch('http://localhost:4000/api/reservation/accept', {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify({id}),
+    })
+
+     const json = await response.json();
+    // const json = {
+    //   hostId: user.id,
+    //   guestId: reservationNotification.guest
+    // }
+
+    if(response.ok){
+      socket.emit("reservation accepted", json)
+    console.log("reservation has been sent in")
+    }
   }
 
   //if modal is visible, hide it
@@ -84,6 +124,13 @@ export default function Navbar() {
     }
     
   };
+
+  
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -143,7 +190,7 @@ export default function Navbar() {
             >
               
               <button className="block shrink-0 p-2.5 text-deepgray"  onClick={showMessagesModal}>
-                <NotificationBadge count={notifications.length} effect={Effect.SCALE} className="w-5 h-4"/>
+                <NotificationBadge count={notifications.length + reservationNotification.length} effect={Effect.SCALE} className="w-5 h-4"/>
                 <span className="sr-only">Notifications</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -154,7 +201,7 @@ export default function Navbar() {
                 </svg>
               </button>
 
-               <div
+               <div ref={ref2}
               className={
                 messagesModal
                   ? "absolute bg-white rounded p-2 right-52 -bottom-[70px] border-2 border-blue pt-4"
@@ -162,8 +209,15 @@ export default function Navbar() {
               }
             >
               
-              {!notifications.length && (
-                 <p>No new messages</p>
+              {(!notifications.length && !reservationNotification.length) && (
+                 <div className="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-deepgray">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M9.143 17.082a24.248 24.248 0 003.844.148m-3.844-.148a23.856 23.856 0 01-5.455-1.31 8.964 8.964 0 002.3-5.542m3.155 6.852a3 3 0 005.667 1.97m1.965-2.277L21 21m-4.225-4.225a23.81 23.81 0 003.536-1.003A8.967 8.967 0 0118 9.75V9A6 6 0 006.53 6.53m10.245 10.245L6.53 6.53M3 3l3.53 3.53" />
+</svg>
+                  <p>No new notifications</p>
+                 
+                 </div>
+
               )}
               {notifications.map(notification => (
                 <Link 
@@ -172,8 +226,37 @@ export default function Navbar() {
                 onClick={() => {
                   setNotifications(notifications.filter((n) => n !== notification))
                 }}
-                className="flex flex-col items-center"
-                >New message from {getSender(user, notification.chat.users)}</Link>
+                className="flex flex-col items-center border-b-2 border-snow pb-2 mt-2
+                "
+                >
+                  <div className="flex gap-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-deepgray">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+</svg>
+                    <p>New message from {getSender(user, notification.chat.users)}</p>
+  
+                  </div>
+                </Link>
+              ))}
+
+              {reservationNotification.map(reservationNotif => (
+                <div className="flex flex-col border-b-2 border-snow pb-2 mt-2">
+                  <div className="flex gap-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-deepgray">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+</svg>
+
+                  <div>
+                    <p >New reservation request for <span className="font-bold text-blue">{reservationNotif.id.title}</span></p>
+                  <div className="flex gap-2">
+                    <NavLink to={`/profile/?userId=${reservationNotif.guest}` } className="rounded-sm text-white bg-blue text-sm font-bold p-1">View guest</NavLink>
+                    <button className="rounded-sm text-white bg-green text-sm font-bold p-1" onClick={acceptReservation}>Accept</button>
+                    <button className="rounded-sm text-white bg-red text-sm font-bold p-1">Reject</button>
+                    
+                  </div>
+                  </div>
+                  </div>
+                </div>
               ))}
               <button
                 className="rounded-full p-1 border-2 mt-2 border-red text-red text-xs"
@@ -281,6 +364,7 @@ export default function Navbar() {
                 onClick={handleMenu}
               >
                 <span className="sr-only">Open menu</span>
+                <NotificationBadge count={notifications.length + reservationNotification.length} effect={Effect.SCALE} className={menu ? "w-5 h-4 invisible" : "w-5 h-4"}/>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -323,7 +407,7 @@ export default function Navbar() {
               </li>
               <li className="py-1">
                 <NavLink
-                  to="/chat"
+                  to="/chats"
                   className="flex justify-end gap-2 items-center"
                   id="nav-item2"
                 >
@@ -338,20 +422,25 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li className="py-1">
-                <a
-                  href="/"
+                <NavLink
+                  to="/notifications"
                   className="flex justify-end gap-2 items-center"
                   id="nav-item3"
                 >
+                  
                   <span>Notifications</span>
-                  <svg
+                  <div>
+                     <NotificationBadge count={notifications.length + reservationNotification.length} effect={Effect.SCALE} className="w-5 h-4"/>
+                     <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     className="w-6 h-6 fill-deepgray"
                   >
                     <path d="M20 17H22V19H2V17H4V10C4 5.58172 7.58172 2 12 2C16.4183 2 20 5.58172 20 10V17ZM9 21H15V23H9V21Z"></path>
                   </svg>
-                </a>
+                  </div>
+                       
+                </NavLink>
               </li>
               <li className="py-1">
                 <NavLink

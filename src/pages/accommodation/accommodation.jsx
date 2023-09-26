@@ -1,51 +1,74 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link} from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAccommodationContext } from "../../hooks/useAccommodationContext";
 import { useUserContext } from "../../hooks/useUserContext";
 import moment from "moment";
-import { Link } from "react-router-dom";
 import NonVerified from "../../components/NonVerified";
+import io from "socket.io-client";
+import DeleteAccommodationAlert from "../../components/DeleteAccommodationAlert";
+
+
+const ENDPOINT = "http://localhost:4000";
+var socket;
 
 export default function Accommodation() {
   const { id } = useParams();
   const navigateTo = useNavigate();
   
 
-  const { accommodation, dispatch } = useAccommodationContext();
+  const { accommodation, dispatch, reservationNotification, setReservationNotification, reservationId, setReservationId } = useAccommodationContext();
   const {
     state: { user },
   } = useUserContext();
   const [isSaved, setIsSaved] = useState(false);
   const [message, setMessage] = useState("");
+   const [hasClicked, setHasClicked] = useState(false)
 
   const [adultCount, setAdultCount] = useState(1);
   const [childrenCount, setChildrenCount] = useState(0);
   const [infantCount, setInfantCount] = useState(0);
   const [guestCount, setGuestCount] = useState(1);
+  const [arrivalDate, setArrivalDate] = useState()
+  const [departureDate, setDepartureDate] = useState()
   const [disableAll, setDisableAll] = useState(false);
   const [isNotVerified, setIsNotVerified] = useState(false)
+  const [finalPrice, setFinalPrice] = useState("")
+  const [newReservation, setNewReseration] = useState([])
+  const [diff, setDiff] = useState(1)
+   const [socketConnected, setSocketConnected] = useState(false);
+
 
   const adultDisabled = adultCount === 1;
   const childrenDisabled = childrenCount === 0;
   const infantDisabled = infantCount === 0;
 
-  
-// if(accommodation){
-  
-//  if(guestCount > accommodation.maxOfGuests){
-//     setDisableAll(true)
-//   }
 
-// }
 
   const incrementAdultCount = () => {
     setGuestCount(guestCount + 1);
     setAdultCount(adultCount + 1);
+
+    // const newArrivalDate = new Date(arrivalDate)
+    // const newDepartureDate = new Date(departureDate)
+
+    // var difference = (newDepartureDate.getTime() - newArrivalDate.getTime()) / (1000 * 3600 * 24)
+    // setDiff(difference)
+    // const newArrivalDate = String(arrivalDate).split("-").map(str => Number(str))
+    // const newDepartureDate = String(departureDate).split("-").map(str => Number(str))
+    // const diff = arrivalDate.diff(departureDate, "days");
+    //setFinalPrice(diff * guestCount)
+    // console.log(typeof arrivalDate)
   };
+
+  const handleDate = e => {
+    setDepartureDate(e.target.value)
+
+  }
 
   const decrementAdultCount = () => {
     setGuestCount(guestCount - 1);
     setAdultCount(adultCount - 1);
+  
   };
 
   const incrementChildrenCount = () => {
@@ -75,8 +98,26 @@ export default function Accommodation() {
 
     if (response.ok) {
       dispatch({ type: "GET_ACCOMMODATION", payload: json });
+      setFinalPrice(json.pricePerNight)
     }
   };
+
+  const reservation = () => {
+    if(accommodation){
+      const newSearchParams = new URLSearchParams()
+
+      newSearchParams.set("guestCount", guestCount)
+      newSearchParams.set("arrivalDate", arrivalDate)
+      newSearchParams.set("departureDate", departureDate)
+      newSearchParams.set("finalPrice", finalPrice)
+      newSearchParams.set("title", accommodation.title)
+      newSearchParams.set("id",accommodation._id)
+      newSearchParams.set("image", accommodation.image.url)
+
+      const url = `/payment/?guestCount=${guestCount}&arrivalDate=${arrivalDate}&departureDate=${departureDate}&title=${accommodation.title}&id=${accommodation._id}&image=${accommodation.image.url}&finalPrice=${finalPrice}`
+      navigateTo(url)
+    }
+  }
 
   const deleteAccommodation = async () => {
     if(!user?.isVerified){
@@ -101,6 +142,7 @@ export default function Accommodation() {
 
   }
 
+
   const saveAccommodation = async () => {
     const response = await fetch(
       "http://localhost:4000/api/savedAccommodation",
@@ -119,37 +161,81 @@ export default function Accommodation() {
     if (response.ok) {
       dispatch({ type: "SAVE_ACCOMMODATION", payload: json });
 
-      // setIsSaved(true);
-      // localStorage.setItem("saved", true);
-      // setMessage("You've saved this accommodation!");
-      // setTimeout(() => {
-      //   setMessage("");
-      // }, 4000);
+  
     }
 
-    // else{
-    //   const response = await fetch(`http://localhost:4000/api/savedAccommodation/${id}`, {
-    //   method: "DELETE",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${user.token}`,
-    //   }
-    //   })
-
-    //   const json = await response.json()
-
-    //   if(response.ok){
-    //     dispatch({type: 'UNSAVE_ACCOMMODATION', payload: json})
-
-    //     setIsSaved(false)
-    //     localStorage.setItem("saved", false)
-    //     setMessage("You've unsaved this accommodation")
-    //     setTimeout(() => {
-    //       setMessage("")
-    //     }, 4000)
-    //   }
-    // }
+   
   };
+
+  if(accommodation){
+    const hostId = accommodation.user_id
+    const pricePerNight = accommodation.pricePerNight
+    
+    var createReservation = async () => {
+      if(guestCount > accommodation.maxOfGuests){
+        console.log("too many guests")
+      } else{
+        const response = await fetch(
+      "http://localhost:4000/api/reservation/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ id, hostId, adultCount, childrenCount, infantCount, arrivalDate, departureDate, pricePerNight})
+      }
+    );
+
+    const json = await response.json();
+
+    if(!response.ok){
+      console.log(json.error)
+    } else{
+      //-p[console.log(json)
+      // setNewReseration([...newReservation, json])
+      setReservationId(json._id)
+      socket.emit("new reservation", json)
+      console.log("reservation sent in")
+    }
+      }
+
+    }
+  }
+
+ useEffect(() => {
+  if (arrivalDate && departureDate) {
+    const newArrivalDate = new Date(arrivalDate)
+    const newDepartureDate = new Date(departureDate)
+
+    const difference = (newDepartureDate.getTime() - newArrivalDate.getTime()) / (1000 * 3600 * 24)
+    setDiff(difference)
+  }
+}, [arrivalDate, departureDate])
+
+useEffect(() => {
+  if (diff && accommodation && accommodation.pricePerNight) {
+    const totalPrice = diff * accommodation.pricePerNight
+    setFinalPrice(totalPrice)
+  }
+}, [diff])
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
+  }, []);
+
+  useEffect(() => {
+    socket.on("reservation received", (newReservationReceived) => {
+      if(!reservationNotification.includes(newReservationReceived)){
+          setReservationNotification([newReservationReceived, ...reservationNotification])
+          console.log(reservationNotification)
+        }
+      
+       
+    })
+  })
 
   useEffect(() => {
     fetchAccommodation();
@@ -168,6 +254,7 @@ export default function Accommodation() {
       
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 rounded lg:bg-snow mt-5 lg:shadow-md">
         <NonVerified isNotVerified={isNotVerified} />
+        <DeleteAccommodationAlert deleteAccommodation={deleteAccommodation} hasClicked={hasClicked} setHasClicked={setHasClicked}/>
         <div className="flex justify-between items-center mt-12">
           {accommodation && (
             <div>
@@ -186,7 +273,7 @@ export default function Accommodation() {
             {(user && accommodation) && accommodation.user_id === user.id ? (
                 <button
               className="bg-red text-snow rounded-lg p-2 hidden md:block"
-              onClick={deleteAccommodation}
+              onClick={() => setHasClickedNo(true)}
             >
               Delete this accommodation
             </button>
@@ -204,7 +291,7 @@ export default function Accommodation() {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-12 h-12 text-deepgray cursor-pointer active:bg-blue md:hidden"
+              className="w-8 h-8 text-deepgray cursor-pointer active:bg-blue md:hidden"
             >
               <path
                 strokeLinecap="round"
@@ -413,7 +500,7 @@ export default function Accommodation() {
             <div className="border-2 p-4 rounded-xl border-blue shadow-xl">
               {accommodation && (
                 <h3 className="text-2xl font-bold">
-                  ${accommodation.pricePerNight}{" "}
+                  ${finalPrice}{" "}
                   <span className="text-sm ">night</span>
                 </h3>
               )}
@@ -423,6 +510,54 @@ export default function Accommodation() {
                 <p className="border-b border-lightgray">
                   {guestCount} guest(s), {infantCount} infant(s)
                 </p>
+
+                
+                <div className="lg:flex items-center mt-4 justify-between block gap-4">
+                  <div>
+                    <label
+                      htmlFor="arrivalDate"
+                      className="block  font-medium text-deepgray text-xs"
+                    >
+                      Expected arrival date:
+                    </label>
+                    {accommodation && (
+                      <input
+                        type="date"
+                        name="arrivalDate"
+                        id=""
+                        value={arrivalDate}
+                        onChange={(e) => setArrivalDate(e.target.value)}
+                        min={moment(accommodation.arrivalDate).format(
+                          "YYYY-MM-D"
+                        )}
+                        max={moment(accommodation.departureDate).format(
+                          "YYYY-MM-D"
+                        )}
+                      />
+                    )}
+                  </div>
+
+                  <div className="mt-2 lg:mt-0">
+                    <label
+                      htmlFor="arrivalDate"
+                      className="block  font-medium text-deepgray text-xs"
+                    >
+                      Expected departure date:
+                    </label>
+                    {accommodation && (
+                      <input type="date" name="departureDate"
+                      value={departureDate}
+                      onChange={handleDate}
+                    min={moment(accommodation.arrivalDate).format(
+                          "YYYY-MM-D"
+                        )}
+                        max={moment(accommodation.departureDate).format(
+                          "YYYY-MM-D"
+                        )}
+                     id="" />
+                    )}
+                  </div>
+                </div>
 
                 <div className="flex justify-between mt-4">
                   <div>
@@ -579,51 +714,11 @@ export default function Accommodation() {
                   </div>
                 </div>
 
-                <div className="lg:flex items-center mt-4 justify-between block">
-                  <div>
-                    <label
-                      htmlFor="arrivalDate"
-                      className="block  font-medium text-deepgray text-xs"
-                    >
-                      Expected arrival date:
-                    </label>
-                    {accommodation && (
-                      <input
-                        type="date"
-                        name="arrivalDate"
-                        id=""
-                        min={moment(accommodation.arrivalDate).format(
-                          "YYYY-MM-D"
-                        )}
-                        max={moment(accommodation.departureDate).format(
-                          "YYYY-MM-D"
-                        )}
-                      />
-                    )}
-                  </div>
-
-                  <div className="mt-2 lg:mt-0">
-                    <label
-                      htmlFor="arrivalDate"
-                      className="block  font-medium text-deepgray text-xs"
-                    >
-                      Expected departure date:
-                    </label>
-                    {accommodation && (
-                      <input type="date" name="departureDate"
-                    min={moment(accommodation.arrivalDate).format(
-                          "YYYY-MM-D"
-                        )}
-                        max={moment(accommodation.departureDate).format(
-                          "YYYY-MM-D"
-                        )}
-                     id="" />
-                    )}
-                  </div>
-                </div>
               </div>
 
-              <button className="bg-blue text-snow rounded-xl px-4 py-4 w-full mt-4 text-lg font-semibold">
+              <button className="bg-blue text-snow rounded-xl px-4 py-4 w-full mt-4 text-lg font-semibold disabled:bg-white disabled:text-blue disabled:opacity-50 disabled:border-blue disabled:border-2"
+              onClick={reservation}
+              disabled={(user && accommodation) && accommodation.user_id === user.id}>
                 Reserve
               </button>
             </div>

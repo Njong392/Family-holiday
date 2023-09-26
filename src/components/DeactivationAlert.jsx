@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Alert = ({deactivateUser, hasClickedNo, setHasClickedNo}) => {
+const DeactivationAlert = ({deactivateUser, hasClickedNo, setHasClickedNo}) => {
   return (
     <div className={!hasClickedNo ? "hidden" : "block"}>
         <p className="bg-lightred text-deepgray  rounded-lg px-3 py-2 border-2 border-red">Are you sure you want to delete your profile?
@@ -11,4 +11,4 @@ const Alert = ({deactivateUser, hasClickedNo, setHasClickedNo}) => {
   )
 }
 
-export default Alert
+export default DeactivationAlert

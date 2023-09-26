@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useState } from "react";
 
 export const AccommodationContext = createContext();
 
@@ -41,9 +41,11 @@ export const AccommodationContextProvider = ({ children }) => {
     savedAccommodations: [],
     accommodation: null,
   });
+  const [reservationNotification, setReservationNotification] = useState([])
+  const [reservationId, setReservationId] = useState("")
 
   return (
-    <AccommodationContext.Provider value={{ ...state, dispatch }}>
+    <AccommodationContext.Provider value={{ ...state, dispatch, reservationNotification, setReservationNotification, reservationId, setReservationId }}>
       {children}
     </AccommodationContext.Provider>
   );

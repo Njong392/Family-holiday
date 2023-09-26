@@ -9,7 +9,7 @@ import AccomodationList from "../../components/accommodation/AccommodationList";
 import { useUserContext } from "../../hooks/useUserContext";
 import { useChatContext } from "../../hooks/useChatContext";
 import NonVerified from "../../components/NonVerified";
-import Alert from "../../components/alert";
+import DeactivationAlert from "../../components/DeactivationAlert";
 
 export default function UserProfile() {
   const {
@@ -97,7 +97,7 @@ export default function UserProfile() {
     <main aria-label="Main Section" className="font-poppins">
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 rounded mt-5">
         <NonVerified isNotVerified={isNotVerified} />
-        <Alert deactivateUser={deactivateUser} hasClickedNo={hasClickedNo} setHasClickedNo={setHasClickedNo}/>
+        <DeactivationAlert deactivateUser={deactivateUser} hasClickedNo={hasClickedNo} setHasClickedNo={setHasClickedNo}/>
         <h3 className="text-3xl font-bold text-blue mt-12">Family Profile</h3>
         {isLoading ? <div className="text-center">
     <div role="status">

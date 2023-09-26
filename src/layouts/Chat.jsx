@@ -44,20 +44,20 @@ const Chat = () => {
    */
   const getSender = (loggedInUser, users) => {
     return users[0]._id === loggedInUser
-      ? users[1].last_name
-      : users[0].last_name;
+      ? `${users[1].first_name} ${users[1].last_name}`
+      : `${users[0].first_name} ${users[0].last_name}`
   };
 
   useEffect(() => {
     fetchChats();
-  }, [user.token]);
+  }, []);
 
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8 font-poppins">
       <div className="flex text-deepgray">
         <div className="flex flex-row h-full ">
           <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0 h-full">
-            <div className="flex flex-col mt-8">
+            <div className="flex flex-col ">
               <span className="font-bold">Active Conversations</span>
 
               {isLoading ? (

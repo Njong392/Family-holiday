@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import SignUp from "./pages/signup/Register";
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home";
@@ -10,7 +11,7 @@ import { useAccommodationContext } from "./hooks/useAccommodationContext";
 import Navbar from "./layouts/NavLayout";
 import Accommodation from "./pages/accommodation/accommodation";
 import DetailsNavLayout from "./layouts/DetailsNavLayout";
-import Edit from "./pages/forms/edit/Edit";
+import Edit from "./pages/Forms/edit/Edit";
 import Host from "./pages/Forms/host/host";
 import VerifyEmail from "./pages/Error/VerifyEmail.jsx";
 import Verification from "./components/Verification";
@@ -20,31 +21,48 @@ import Chat from "./layouts/Chat";
 import { useChatContext } from "./hooks/useChatContext";
 import ChatBox from "./pages/chat/ChatBox";
 import ChatHome from "./pages/chat/ChatHome";
+import { io } from "socket.io-client";
+import Notification from "./pages/notifications/Notification";
+import SavedAccommodations from "./pages/savedAccommodations/savedAccommodations";
+import Payment from "./pages/payment/Payment";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 // import ErrorPage from "./pages/Error/404.jsx";
+
+const ENDPOINT = "http://localhost:4000";
+var socket, selectedChatCompare;
 
 function App() {
   const {
     state: { user, userDetails, hosts, host, verifiedUser },
   } = useUserContext();
-  const { chat, chats } = useChatContext();
+  const { chat, chats, notifications, setNotifications } = useChatContext();
 
-  const { accommodations, accommodation, savedAccommodations } =
+  const { accommodations, accommodation, savedAccommodations, reservationNotification, setReservationNotification } =
     useAccommodationContext();
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [socketConnected, setSocketConnected] = useState(false);
 
   // console.log("user: ", user);
   // console.log("userdetails: ", userDetails);
   // console.log("hosts: ", hosts);
-  // console.log("host: ", host);
-  console.log("accommodations:", accommodations);
-  // console.log("accommodation:", accommodation);
+  //console.log("host: ", host);
+  //console.log("accommodations:", accommodations);
+  //console.log("accommodation:", accommodation);
   // console.log("verifiedUser:", verifiedUser);
   //console.log("savedAccommodations:", savedAccommodations);
   //console.log("chat:", chat);
   //console.log("chats:", chats);
 
+  const initialOptions = {
+    clientId: "AWAN_GYuMF4RVbB4F8b_X9FpluWXi3swuoXUk7TnyfnwDGaRnMukkbCWoHN9Yio9fKoYYxWVE1aIUugd",
+    currency: "USD",
+    intent: "capture",
+};
+
   return (
-    <div className="App">
+    <PayPalScriptProvider options={initialOptions}>
+      <div className="App">
       <BrowserRouter>
         <Routes>
           <Route
@@ -79,6 +97,8 @@ function App() {
 
               <Route path="/profile" element={<Profile />} />
 
+              <Route path="/notifications" element={<Notification />} />
+
               <Route path="/filter/" element={<Filter />} />
 
               <Route path="/edit/profile" element={<Edit />} />
@@ -91,11 +111,16 @@ function App() {
               </Route>
 
               <Route path="/accommodations/:id" element={<Accommodation />} />
+
+              <Route path="/bookmarked" element={<SavedAccommodations />}/>
+
+              <Route path="/payment/" element={<Payment />}/>
             </Route>
           </Route>
         </Routes>
       </BrowserRouter>
     </div>
+    </PayPalScriptProvider>
   );
 }
 

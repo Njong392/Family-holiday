@@ -21,6 +21,7 @@ const Chat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   const [fetchAgain, setFetchAgain] = useState(false);
+  const [sender, setSender] = useState("")
 
 
   const typingHandler = (e) => {
@@ -129,11 +130,23 @@ const Chat = () => {
   useEffect(() => {
     fetchMessages();
 
-    const selectedChat = chats.find((c) => c._id === id)
+    if(chats){
+      const selectedChat = chats.find((c) => c._id === id)
+    console.log(selectedChat)
     selectedChatCompare = setSelectedChat(selectedChat)
+        }
+
+  //   const getSender = (loggedInUser, users) => {
+  //   return users[0]._id === loggedInUser
+  //     ? setSender(`${users[1].first_name} ${users[1].last_name}`)
+  //     : setSender(`${users[0].first_name} ${users[0].last_name}`)
+  // };
+
+  //   getSender(user.id, selectedChatCompare.users)
 
   }, [selectedChat, id, fetchAgain]);
 
+  
 
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
@@ -145,8 +158,10 @@ const Chat = () => {
         //notification
         if(!notifications.includes(newMessageReceived)){
           setNotifications([newMessageReceived, ...notifications])
+
+          //fetchmessages all over to update
           setFetchAgain(!fetchAgain)
-          //fetchMessages()
+          
         }
         
       } else{
@@ -155,13 +170,12 @@ const Chat = () => {
     });
   });
 
-  console.log(notifications, "-----")
 
   return (
     <div className="flex h-screen antialiased text-deepgray">
       <div className="flex flex-row h-full w-full ">
         <div className="flex flex-col flex-auto p-6 border-l-2 border-deepgray">
-           <p className="border-2 px-4 py-2 rounded-lg border-blue ">hi</p>
+            <p className="border-2 px-4 py-2 rounded-lg border-blue ">sender</p>
           <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl h-full p-4 items-center justify-center">
            {isLoading ? <div>
     <div role="status">

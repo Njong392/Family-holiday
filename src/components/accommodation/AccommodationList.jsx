@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
 import { useAccommodationContext } from "../../hooks/useAccommodationContext";
-import { useEffect } from "react";
+import { useEffect} from "react";
 import moment from "moment";
 import { useFetchAccommodations } from "./useFetchAccommodations";
 import { useParams, useSearchParams } from "react-router-dom";
 
 export default function AccomodationList() {
   const [searchParams] = useSearchParams();
+  
 
-  //const id = searchParams.get("userId");
+  //  const id = searchParams.get("userId");
+
 
   const { fetchAccommodations, isLoading, error, accommodations } =
     useFetchAccommodations();
@@ -19,7 +21,7 @@ export default function AccomodationList() {
 
   return (
     <>
-     {accommodations.length > 0 && (
+     {accommodations && accommodations.length > 0 && (
        <h3 className="text-3xl font-bold text-blue mt-12">Accommodations</h3>
      )}
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-8 mt-4">
